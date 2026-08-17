@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Learner profile (pseudonymous, local only)",
+  "type": "object",
+  "required": ["alias", "schema-version", "created", "levels"],
+  "properties": {
+    "alias": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,32}$"},
+    "schema-version": {"type": "integer", "const": 1},
+    "created": {"type": "string", "format": "date"},
+    "updated": {"type": "string", "format": "date"},
+    "levels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["novice", "advanced-beginner", "competent", "proficient", "expert"]
+      }
+    },
+    "preferences": {"type": "object"}
+  },
+  "additionalProperties": false
+}

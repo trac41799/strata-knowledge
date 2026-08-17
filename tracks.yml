@@ -1,0 +1,76 @@
+# tracks.yml — track registry (hand-maintained; consumed by tools/*.py)
+# Convention: flat keys + flow arrays only (restricted YAML subset, see tools/_yaml_mini.py).
+
+tracks: [cs-foundations, programming, data, architecture-design, quality-testing, security, systems-software, hardware, engineering-process, operations, ai-ml, frontiers]
+
+track.cs-foundations.title: CS Foundations
+track.cs-foundations.swebok: [Computing Foundations, Mathematical Foundations]
+track.cs-foundations.cs2023: [Algorithmic Foundations, Logic and Computation, Systems Fundamentals]
+track.cs-foundations.bands: B0-B6
+track.cs-foundations.status: active
+
+track.programming.title: Programming & Languages
+track.programming.swebok: [Software Construction, Computing Foundations]
+track.programming.cs2023: [Foundations of Programming Languages, Software Development Fundamentals]
+track.programming.bands: B2-B4
+track.programming.status: active
+
+track.data.title: Data & Data Management
+track.data.swebok: [Computing Foundations]
+track.data.cs2023: [Data Management]
+track.data.bands: B3-B5
+track.data.status: active
+
+track.architecture-design.title: Architecture & Design
+track.architecture-design.swebok: [Software Architecture, Software Design, Software Engineering Models and Methods]
+track.architecture-design.cs2023: [Software Engineering, Software Development Fundamentals]
+track.architecture-design.bands: B4-B6
+track.architecture-design.status: active
+
+track.quality-testing.title: Quality & Testing
+track.quality-testing.swebok: [Software Quality, Software Testing]
+track.quality-testing.cs2023: [Software Engineering]
+track.quality-testing.bands: B3-B6
+track.quality-testing.status: active
+
+track.security.title: Security
+track.security.swebok: [Software Security]
+track.security.cs2023: [Security]
+track.security.bands: B1-B6
+track.security.status: active
+
+track.systems-software.title: Systems Software
+track.systems-software.swebok: [Software Engineering Operations, Computing Foundations]
+track.systems-software.cs2023: [Operating Systems, Networking and Communication, Parallel and Distributed Computing, Architecture and Organization]
+track.systems-software.bands: B1-B5
+track.systems-software.status: active
+
+track.hardware.title: Hardware & Architecture
+track.hardware.swebok: [Engineering Foundations, Computing Foundations]
+track.hardware.cs2023: [Architecture and Organization]
+track.hardware.bands: B0-B2
+track.hardware.status: active
+
+track.engineering-process.title: Engineering Process & Management
+track.engineering-process.swebok: [Software Engineering Process, Software Engineering Management, Software Engineering Economics, Software Configuration Management, Software Engineering Professional Practice]
+track.engineering-process.cs2023: [Software Engineering]
+track.engineering-process.bands: B4-B6
+track.engineering-process.status: active
+
+track.operations.title: Operations & Maintenance
+track.operations.swebok: [Software Engineering Operations, Software Maintenance, Software Configuration Management]
+track.operations.cs2023: [Software Engineering]
+track.operations.bands: B3-B6
+track.operations.status: active
+
+track.ai-ml.title: AI & Machine Learning
+track.ai-ml.swebok: [Computing Foundations]
+track.ai-ml.cs2023: [Artificial Intelligence]
+track.ai-ml.bands: B3-B6
+track.ai-ml.status: active
+
+track.frontiers.title: Frontiers (T4)
+track.frontiers.swebok: []
+track.frontiers.cs2023: []
+track.frontiers.bands: B1-B6
+track.frontiers.status: active

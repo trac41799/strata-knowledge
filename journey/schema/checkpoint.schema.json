@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Topic mastery checkpoint",
+  "type": "object",
+  "required": ["topic", "date", "verdict", "bloom_levels"],
+  "properties": {
+    "topic": {"type": "string"},
+    "date": {"type": "string", "format": "date"},
+    "verdict": {"type": "string", "enum": ["pass", "partial", "fail"]},
+    "bloom_levels": {
+      "type": "object",
+      "additionalProperties": {"type": "number", "minimum": 0, "maximum": 100}
+    },
+    "next_actions": {"type": "array", "items": {"type": "string"}},
+    "next_review": {"type": "string", "format": "date"},
+    "evidence": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

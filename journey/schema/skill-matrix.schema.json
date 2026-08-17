@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Per-topic skill matrix",
+  "type": "object",
+  "required": ["schema-version", "updated", "topics"],
+  "properties": {
+    "schema-version": {"type": "integer", "const": 1},
+    "updated": {"type": "string", "format": "date"},
+    "topics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["level", "validated", "score"],
+        "properties": {
+          "level": {"type": "string", "enum": ["novice", "advanced-beginner", "competent", "proficient", "expert"]},
+          "score": {"type": "number", "minimum": 0, "maximum": 100},
+          "validated": {"type": "boolean"},
+          "last_attempt": {"type": "string", "format": "date"},
+          "evidence": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

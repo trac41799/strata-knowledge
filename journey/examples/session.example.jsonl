@@ -1,0 +1,6 @@
+{"type": "session.started", "ts": "2026-08-16T10:00:00Z", "session_id": "s-example-001", "topic": "systems-software/http-caching", "payload": {"objective": "validate understanding of HTTP caching"}}
+{"type": "claim.submitted", "ts": "2026-08-16T10:02:00Z", "session_id": "s-example-001", "topic": "systems-software/http-caching", "payload": {"claim": "Cache-Control max-age makes a response reusable for that many seconds from origin"}}
+{"type": "claim.verdict", "ts": "2026-08-16T10:03:00Z", "session_id": "s-example-001", "topic": "systems-software/http-caching", "payload": {"verdict": "partial", "tier": "T2", "record": "S-0009", "note": "correct for shared caches when freshness from origin is unconstrained; age counters and stale-while-revalidate nuances missing"}}
+{"type": "quiz.attempted", "ts": "2026-08-16T10:20:00Z", "session_id": "s-example-001", "topic": "systems-software/http-caching", "payload": {"bank": "formative", "score": 80, "bloom_scores": {"understand": 100, "apply": 75}}}
+{"type": "matrix.updated", "ts": "2026-08-16T10:25:00Z", "session_id": "s-example-001", "topic": "systems-software/http-caching", "payload": {"level": "competent", "score": 80, "validated": false}}
+{"type": "session.completed", "ts": "2026-08-16T10:30:00Z", "session_id": "s-example-001", "topic": "systems-software/http-caching", "payload": {"next_review": "2026-08-19"}}

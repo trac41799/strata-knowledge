@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Spaced-repetition review queue",
+  "type": "object",
+  "required": ["schema-version", "updated", "items"],
+  "properties": {
+    "schema-version": {"type": "integer", "const": 1},
+    "updated": {"type": "string", "format": "date"},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "due", "interval_days", "reviews"],
+        "properties": {
+          "topic": {"type": "string"},
+          "due": {"type": "string", "format": "date"},
+          "interval_days": {"type": "integer", "minimum": 1},
+          "reviews": {"type": "integer", "minimum": 0},
+          "last_review": {"type": "string", "format": "date"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

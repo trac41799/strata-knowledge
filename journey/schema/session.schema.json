@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Session record (one per learning session)",
+  "type": "object",
+  "required": ["session_id", "status", "started", "events"],
+  "properties": {
+    "session_id": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["active", "completed"]},
+    "started": {"type": "string", "format": "date-time"},
+    "completed": {"type": "string", "format": "date-time"},
+    "objective": {"type": "string"},
+    "agent": {"type": "string"},
+    "events": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": false
+}

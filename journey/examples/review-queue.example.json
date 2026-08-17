@@ -1,0 +1,20 @@
+{
+  "schema-version": 1,
+  "updated": "2026-08-16",
+  "items": [
+    {
+      "topic": "systems-software/http-caching",
+      "due": "2026-08-19",
+      "interval_days": 3,
+      "reviews": 2,
+      "last_review": "2026-08-16"
+    },
+    {
+      "topic": "programming/garbage-collection",
+      "due": "2026-08-17",
+      "interval_days": 1,
+      "reviews": 1,
+      "last_review": "2026-08-16"
+    }
+  ]
+}

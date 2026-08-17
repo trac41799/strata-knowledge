@@ -1,0 +1,20 @@
+{
+  "schema-version": 1,
+  "updated": "2026-08-16",
+  "topics": {
+    "systems-software/http-caching": {
+      "level": "competent",
+      "score": 80,
+      "validated": true,
+      "last_attempt": "2026-08-16",
+      "evidence": ["S-0009"]
+    },
+    "programming/garbage-collection": {
+      "level": "advanced-beginner",
+      "score": 55,
+      "validated": false,
+      "last_attempt": "2026-08-10",
+      "evidence": []
+    }
+  }
+}

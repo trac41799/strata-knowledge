@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Journey event log line (one JSON object per line in .jsonl logs)",
+  "type": "object",
+  "required": ["type", "ts", "session_id", "topic"],
+  "properties": {
+    "type": {"type": "string"},
+    "ts": {"type": "string", "format": "date-time"},
+    "session_id": {"type": "string", "minLength": 1},
+    "topic": {"type": "string"},
+    "payload": {"type": "object"}
+  },
+  "oneOf": [
+    {"properties": {"type": {"const": "session.started"}}},
+    {"properties": {"type": {"const": "session.completed"}}},
+    {"properties": {"type": {"const": "claim.submitted"}}},
+    {"properties": {"type": {"const": "claim.verdict"}}},
+    {"properties": {"type": {"const": "quiz.attempted"}}},
+    {"properties": {"type": {"const": "review.due"}}},
+    {"properties": {"type": {"const": "review.completed"}}},
+    {"properties": {"type": {"const": "elaboration.submitted"}}},
+    {"properties": {"type": {"const": "project.submitted"}}},
+    {"properties": {"type": {"const": "project.reviewed"}}},
+    {"properties": {"type": {"const": "matrix.updated"}}},
+    {"properties": {"type": {"const": "calibration.updated"}}},
+    {"properties": {"type": {"const": "reflection.logged"}}}
+  ],
+  "additionalProperties": false
+}

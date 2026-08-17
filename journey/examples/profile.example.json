@@ -1,0 +1,15 @@
+{
+  "alias": "alex-dev",
+  "schema-version": 1,
+  "created": "2026-08-16",
+  "updated": "2026-08-16",
+  "levels": {
+    "cs-foundations": "advanced-beginner",
+    "systems-software": "novice",
+    "engineering-process": "competent"
+  },
+  "preferences": {
+    "review_interval_days": 1,
+    "language": "en"
+  }
+}

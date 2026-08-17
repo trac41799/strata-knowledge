@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Strata evidence record frontmatter",
+  "type": "object",
+  "required": ["id", "type", "title", "year", "hierarchy-level"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^S-\\d+$"},
+    "type": {"type": "string", "enum": ["proof", "meta-analysis", "systematic-review", "rct", "quasi-experiment", "observational", "standard", "practitioner", "anecdote"]},
+    "title": {"type": "string", "minLength": 3},
+    "authors": {"type": "string"},
+    "year": {"type": "integer", "minimum": 1800, "maximum": 2100},
+    "venue": {"type": "string"},
+    "standard": {"type": "string"},
+    "doi": {"type": "string"},
+    "url": {"type": "string"},
+    "claims-supported": {"type": "array", "items": {"type": "string"}},
+    "hierarchy-level": {"type": "integer", "minimum": 1, "maximum": 8}
+  },
+  "additionalProperties": false
+}

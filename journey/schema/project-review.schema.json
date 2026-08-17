@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project review record",
+  "type": "object",
+  "required": ["topic", "rubric", "verdict", "reviewed", "reviewer"],
+  "properties": {
+    "topic": {"type": "string"},
+    "rubric": {"type": "string"},
+    "artifact": {"type": "string"},
+    "verdict": {"type": "string", "enum": ["pass", "partial", "fail"]},
+    "reviewed": {"type": "string", "format": "date"},
+    "reviewer": {"type": "string"},
+    "standards-refs": {"type": "array", "items": {"type": "string"}},
+    "scores": {
+      "type": "object",
+      "additionalProperties": {"type": "number", "minimum": 0}
+    },
+    "evidence": {"type": "array", "items": {"type": "string"}},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}

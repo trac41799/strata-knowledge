@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Strata topic pack frontmatter (concept/validation/teaching/frontier)",
+  "type": "object",
+  "required": ["id", "title", "band", "track", "tier", "bloom_target", "prerequisites", "related", "status", "schema-version", "updated", "sources"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9-]*$"},
+    "title": {"type": "string", "minLength": 3},
+    "band": {"type": "string", "enum": ["B0", "B1", "B2", "B3", "B4", "B5", "B6"]},
+    "track": {"type": "string"},
+    "tier": {"type": "string", "enum": ["T0", "T1", "T2", "T3", "T4"]},
+    "bloom_target": {"type": "string", "enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"]},
+    "prerequisites": {"type": "array", "items": {"type": "string"}},
+    "related": {"type": "array", "items": {"type": "string"}},
+    "status": {"type": "string", "enum": ["draft", "validated", "published"]},
+    "schema-version": {"type": "integer", "const": 1},
+    "owner": {"type": "string"},
+    "reviewed-by": {"type": "array", "items": {"type": "string"}},
+    "updated": {"type": "string", "format": "date"},
+    "review_after": {"type": "string", "format": "date"},
+    "sources": {"type": "array", "items": {"type": "string", "pattern": "^S-\\d+$"}}
+  },
+  "additionalProperties": false
+}

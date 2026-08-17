@@ -1,0 +1,31 @@
+name: strata-ci
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 1 * *"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: lint (schema, claims, links, staleness, journey examples)
+        run: python tools/lint.py
+      - name: graph (cycles, prerequisites, wave assignment)
+        run: python tools/check-graph.py
+      - name: regenerate index
+        run: python tools/index.py
+      - name: coverage audit
+        run: python tools/coverage.py
+      - name: generated files must be committed (no drift)
+        run: git diff --exit-code
+      - name: upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: docs/coverage-report.md
