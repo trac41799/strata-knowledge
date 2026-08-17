@@ -716,8 +716,8 @@ topics:
     status: draft
     depth: 6
     prerequisites: [systems-software/distributed-systems-basics]
-    recommended: []
-    related: []
+    recommended: [data/distributed-databases]
+    related: [data/distributed-databases, systems-software/networking-basics]
   - id: ai-ml/llm-architectures
     title: LLM Architectures
     track: ai-ml
