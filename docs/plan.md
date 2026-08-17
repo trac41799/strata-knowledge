@@ -46,12 +46,13 @@
 ## Phase 1 — Knowledge Graph Backbone
 
 **Input:** frozen conventions. **Output:** graph skeleton, standards maps, evidence hierarchy. **Gate:** CI green (AC3 plumbing).
+**Status: COMPLETED 2026-08-17** (5 L1 research agents produced verified maps; 22 evidence records; 68-topic inventory; 8 waves; coverage 5% baseline).
 
-- [ ] **1.1 Standards maps** — write `standards/swebok-map.md` (18 KAs + subtopic lists, from v4.0/v4.0a), `cs2023-map.md` (17 KAs + knowledge units), `iso25010-map.md` (9 characteristics), `cmmi-map.md` (31 practice areas), `iso12207-map.md` (lifecycle processes). Each entry maps to intended topic ids (can be `TBD:<track>/<id>` placeholders that coverage.py reports as gaps — that is by design).
-- [ ] **1.2 Evidence hierarchy** — write `evidence/hierarchy.md` implementing spec §4.3 (8-level GRADE-style rubric with CS examples).
-- [ ] **1.3 Seed evidence records** — create records for the 4.1 learning-science papers and 4.2 standards used by the seed slices: Ebbinghaus 1885, Cepeda 2006, Roediger & Karpicke 2006, Dunlosky 2013, Rohrer & Taylor 2007, Chi 1994, Sweller & Cooper 1985, Ericsson 1993, Bjork 1994, Fitts & Posner 1967, Dreyfus 1980, Bloom 1956, Anderson & Krathwohl 2001, Flavell 1979; SWEBOK v4.0, CS2023, ISO 25010:2023, ISO 12207:2017, ISO 42010:2022, CMMI V3.0. IDs `S-0001…`.
-- [ ] **1.4 Topic inventory (L0 + L1)** — enumerate v1 topics per track (target 40–60 ids across bands B1–B6) with prerequisites; run `check-graph.py`; commit `knowledge-graph.yml`. This IS the graph plan; waves derive from it.
-- [ ] **1.5 Coverage baseline** — run `coverage.py`; commit first `docs/coverage-report.md` (~10–20% — honest baseline).
+- [x] **1.1 Standards maps** — write `standards/swebok-map.md` (18 KAs + subtopic lists, from v4.0/v4.0a), `cs2023-map.md` (17 KAs + knowledge units), `iso25010-map.md` (9 characteristics), `cmmi-map.md` (31 practice areas), `iso12207-map.md` (lifecycle processes). Each entry maps to intended topic ids (can be `TBD:<track>/<id>` placeholders that coverage.py reports as gaps — that is by design).
+- [x] **1.2 Evidence hierarchy** — write `evidence/hierarchy.md` implementing spec §4.3 (8-level GRADE-style rubric with CS examples).
+- [x] **1.3 Seed evidence records** — create records for the 4.1 learning-science papers and 4.2 standards used by the seed slices: Ebbinghaus 1885, Cepeda 2006, Roediger & Karpicke 2006, Dunlosky 2013, Rohrer & Taylor 2007, Chi 1994, Sweller & Cooper 1985, Ericsson 1993, Bjork 1994, Fitts & Posner 1967, Dreyfus 1980, Bloom 1956, Anderson & Krathwohl 2001, Flavell 1979; SWEBOK v4.0, CS2023, ISO 25010:2023, ISO 12207:2017, ISO 42010:2022, CMMI V3.0. IDs `S-0001…`.
+- [x] **1.4 Topic inventory (L0 + L1)** — enumerate v1 topics per track (68 ids across bands B1–B6) with prerequisites; run `check-graph.py`; commit `knowledge-graph.yml`. This IS the graph plan; waves derive from it (8 waves).
+- [x] **1.5 Coverage baseline** — run `coverage.py`; commit first `docs/coverage-report.md` (16/311 = 5% — honest baseline).
 
 **Gate 2 — HUMAN:** approve topic inventory + wave assignment.
 
