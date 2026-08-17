@@ -61,6 +61,7 @@
 ## Phase 2 — Vertical Slices (pipeline proof)
 
 **Input:** graph. **Output:** 5 published seed topics spanning bands B1→B4 + first journey records. **Gate:** human (AC1/AC2/AC4 proven on real content).
+**Status: COMPLETED 2026-08-18** — 5 L1 agents drafted packs; L2 review by `deepseek/deepseek-v4-pro` (report: `docs/reviews/l2-seed-review-2026-08-18.md`; verdicts pass/pass-with-fixes, all findings applied: S-0027 DOI correction, S-0042 provenance, wording fixes, tier convention documented, validation anatomy normalized); human publish approved. Coverage 16/311 (5%).
 
 Seed topics (one per band, chosen for breadth of techniques):
 

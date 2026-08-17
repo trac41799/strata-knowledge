@@ -3,15 +3,15 @@ id: systems-software/virtual-memory
 title: Virtual Memory & Paging
 band: B2
 track: systems-software
-tier: T1
+tier: T0
 bloom_target: apply
 prerequisites: [hardware/memory-hierarchy, systems-software/os-processes]
 related: [hardware/cache-coherence, systems-software/containers-isolation]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-virtual-memory
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0030, S-0031, S-0032]
 ---

@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [systems-software/http-basics]
 related: [architecture-design/caching-strategies]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-http-caching
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0009, S-0023, S-0024]
 ---

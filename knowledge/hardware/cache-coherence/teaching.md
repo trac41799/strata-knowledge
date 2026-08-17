@@ -3,15 +3,15 @@ id: hardware/cache-coherence
 title: Cache Coherence
 band: B1
 track: hardware
-tier: T1
+tier: T0
 bloom_target: analyze
 prerequisites: [hardware/memory-hierarchy, hardware/cpu-pipelining]
 related: [systems-software/virtual-memory]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-cache-coherence
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0038, S-0039, S-0040, S-0041]
 ---

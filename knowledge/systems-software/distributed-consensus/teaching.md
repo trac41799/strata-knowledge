@@ -3,17 +3,17 @@ id: systems-software/distributed-consensus
 title: Distributed Consensus
 band: B5
 track: systems-software
-tier: T1
+tier: T0
 bloom_target: analyze
 prerequisites: [systems-software/distributed-systems-basics]
 related: [data/distributed-databases, systems-software/networking-basics]
 recommended: [data/distributed-databases]
-status: draft
+status: published
 schema-version: 1
 owner: l1-distributed-consensus
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
-sources: [S-0034, S-0035, S-0036, S-0037]
+sources: [S-0034, S-0035, S-0036, S-0037, S-0042]
 ---
 
 # Distributed Consensus — teaching

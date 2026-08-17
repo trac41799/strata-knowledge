@@ -3,17 +3,17 @@ id: systems-software/distributed-consensus
 title: Distributed Consensus
 band: B5
 track: systems-software
-tier: T1
+tier: T0
 bloom_target: analyze
 prerequisites: [systems-software/distributed-systems-basics]
 related: [data/distributed-databases, systems-software/networking-basics]
 recommended: [data/distributed-databases]
-status: draft
+status: published
 schema-version: 1
 owner: l1-distributed-consensus
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
-sources: [S-0034, S-0035, S-0036, S-0037]
+sources: [S-0034, S-0035, S-0036, S-0037, S-0042]
 ---
 
 # Distributed Consensus — validation
@@ -55,10 +55,10 @@ evidence: [S-0035]
 topic: systems-software/distributed-consensus
 
 ### F5. Raft election analysis
-Q: A 5-node Raft cluster loses its leader. Two followers become candidates in the same term and each receives exactly 2 votes (no majority); the fifth server voted for one of them already and refuses further votes this term. What happens, and what mechanism resolves it?
+Q: A 5-node Raft cluster loses its leader. Two followers become candidates in the same term; each receives exactly 2 votes. A third follower also times out and becomes a candidate in that same term, receiving only its own vote. No candidate has a majority. What happens, and what mechanism resolves it?
 bloom: analyze
 bank: formative
-A: No candidate has a majority → no leader this term; the term ends with no election result. Resolution: randomized election timeouts make the next candidate-triggering timeout differ across servers, so in the next term one candidate is likely to time out first and win the majority before rivals start. Without randomization, split votes could repeat forever (a liveness failure — see FLP).
+A: No candidate has a majority → no leader this term; the term ends with no election result. Resolution: randomized election timeouts make the next candidate-triggering timeout differ across servers, so in the next term one candidate is likely to time out first and win the majority before rivals begin. Without randomization, split votes could repeat forever (a liveness failure — see FLP).
 evidence: [S-0036][S-0034]
 topic: systems-software/distributed-consensus
 

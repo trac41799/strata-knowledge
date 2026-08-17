@@ -270,7 +270,7 @@ topic.systems-software.os-processes.related: []
 
 topic.systems-software.virtual-memory.title: Virtual Memory & Paging
 topic.systems-software.virtual-memory.band: B2
-topic.systems-software.virtual-memory.tier: T1
+topic.systems-software.virtual-memory.tier: T0
 topic.systems-software.virtual-memory.bloom: apply
 topic.systems-software.virtual-memory.prereqs: [hardware/memory-hierarchy, systems-software/os-processes]
 topic.systems-software.virtual-memory.related: [hardware/cache-coherence, systems-software/containers-isolation]
@@ -298,7 +298,7 @@ topic.systems-software.distributed-systems-basics.related: []
 
 topic.systems-software.distributed-consensus.title: Distributed Consensus
 topic.systems-software.distributed-consensus.band: B5
-topic.systems-software.distributed-consensus.tier: T1
+topic.systems-software.distributed-consensus.tier: T0
 topic.systems-software.distributed-consensus.bloom: analyze
 topic.systems-software.distributed-consensus.prereqs: [systems-software/distributed-systems-basics]
 topic.systems-software.distributed-consensus.related: []
@@ -340,7 +340,7 @@ topic.hardware.cpu-pipelining.related: []
 
 topic.hardware.cache-coherence.title: Cache Coherence
 topic.hardware.cache-coherence.band: B1
-topic.hardware.cache-coherence.tier: T1
+topic.hardware.cache-coherence.tier: T0
 topic.hardware.cache-coherence.bloom: analyze
 topic.hardware.cache-coherence.prereqs: [hardware/memory-hierarchy, hardware/cpu-pipelining]
 topic.hardware.cache-coherence.related: [systems-software/virtual-memory]

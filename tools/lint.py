@@ -174,6 +174,41 @@ def check_links(path):
             error('%s: broken link -> %s' % (path, target))
 
 
+def check_validation_items(path):
+    lines = path.read_text(encoding='utf-8').splitlines()
+    for i, line in enumerate(lines):
+        if line.startswith('- Q: '):
+            block = lines[i:i + 9]
+            if not any(l.startswith('- topic:') for l in block):
+                warning('%s:%d: validation item lacks - topic: field' % (path, i + 1))
+
+
+def check_record_bijection():
+    if not KNOWLEDGE.exists() or not EVIDENCE_DIR.exists():
+        return
+    cited_by = {}
+    for concept in KNOWLEDGE.rglob('concept.md'):
+        fm, _ = parse_frontmatter(concept.read_text(encoding='utf-8'))
+        if not fm or not fm.get('id'):
+            continue
+        for rid in fm.get('sources', []):
+            cited_by.setdefault(rid, set()).add(fm['id'])
+    for rid, topics in sorted(cited_by.items()):
+        path = EVIDENCE_DIR / ('%s.md' % rid)
+        if not path.exists():
+            continue
+        fm, _ = parse_frontmatter(path.read_text(encoding='utf-8'))
+        if not fm:
+            continue
+        supported = set(fm.get('claims-supported') or [])
+        if not supported:
+            error('%s: cited by %s but claims-supported is empty (reverse bijection, K1)' % (
+                rid, ', '.join(sorted(topics))))
+        missing = sorted(topics - supported)
+        if missing:
+            error('%s: claims-supported missing citing topics: %s' % (rid, ', '.join(missing)))
+
+
 def check_topic_folders():
     if not KNOWLEDGE.exists():
         return
@@ -189,6 +224,7 @@ def check_topic_folders():
         has_teaching = (folder / 'teaching.md').exists()
         if has_validation:
             check_topic_file(folder / 'validation.md', expected_id, False)
+            check_validation_items(folder / 'validation.md')
         if has_teaching:
             check_topic_file(folder / 'teaching.md', expected_id, False)
         if (folder / 'frontier.md').exists():
@@ -252,6 +288,7 @@ def check_journey_examples():
 def main():
     check_topic_folders()
     check_evidence_records()
+    check_record_bijection()
     check_journey_examples()
     for w in WARNINGS:
         print('WARN: %s' % w)

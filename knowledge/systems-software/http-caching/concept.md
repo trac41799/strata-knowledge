@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [systems-software/http-basics]
 related: [architecture-design/caching-strategies]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-http-caching
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0009, S-0023, S-0024]
 ---
@@ -59,7 +59,7 @@ sources: [S-0009, S-0023, S-0024]
 ### Vary
 
 - `Vary` names request header fields whose values participate in the cache key; a stored response may be reused only when the current request's values for those fields match. [T2][S-0009]
-- `Vary: *` means the response varies on all request header fields, which in practice prevents cache reuse for most clients. [T2][S-0023]
+- `Vary: *` means the response varies on all request header fields, which in practice prevents cache reuse for most clients. [T2][S-0023][S-0009]
 
 ### Heuristics in practice
 

@@ -254,6 +254,10 @@ semantic/vector search over packs (MCP server).
 | `T4` | Frontier / volatile / not yet consensus | Agentic LLM architectures; WebGPU; post-quantum | MUST have `review_after` date + volatility flag; CI alerts on expiry |
 
 Tier is assigned by **Evidence & Fact-Check agents** (L2), not by authors.
+**Topic-level `tier` convention (v1.1):** a topic's tier is the *strongest* tier among its
+claims — an upper bound on the confidence available in that pack. Individual claims carry
+authoritative per-claim tiers; learner-facing displays and filters may use either, but must
+state which.
 
 ### 6.4 Learner levels (placement protocol)
 
@@ -353,8 +357,10 @@ Proving understanding, not claiming it. Three banks per topic in `validation.md`
 | **Summative** | Topic mastery checkpoint | ≥80% correct on items at `bloom_target` level |
 | **Review** | Spaced repetition | Mixed interleaved items from prerequisites + this topic, on due dates |
 
-Item anatomy: `Q: <question>` · `bloom: apply` · `bank: formative` · `A: <model answer>` ·
-`distractors:` · `evidence: [S-0047]` · `topic: os/virtual-memory`.
+Item anatomy: `Q: <question>` · `bloom: <level>` · `bank: formative|summative|review` ·
+`A: <model answer>` · `evidence: [S-####]` · `topic: <topic id>` (**required** on every
+item — machines use it to assemble interleaved sets) · `distractors:` (optional; only for
+multiple-choice style items).
 
 Bloom targets (Anderson & Krathwohl 2001): `remember → understand → apply → analyze →
 evaluate → create`. Per-topic default progression: concept quiz = understand; exercises =

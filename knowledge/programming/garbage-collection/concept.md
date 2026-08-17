@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [programming/memory-model-and-pointers]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-garbage-collection
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0026, S-0027, S-0028]
 ---

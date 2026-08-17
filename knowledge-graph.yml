@@ -295,7 +295,7 @@ topics:
     band: B3
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 3
     prerequisites: [programming/memory-model-and-pointers]
     recommended: []
@@ -317,7 +317,7 @@ topics:
     band: B4
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 3
     prerequisites: [systems-software/http-basics]
     recommended: []
@@ -436,9 +436,9 @@ topics:
     title: Cache Coherence
     track: hardware
     band: B1
-    tier: T1
+    tier: T0
     bloom_target: analyze
-    status: draft
+    status: published
     depth: 4
     prerequisites: [hardware/memory-hierarchy, hardware/cpu-pipelining]
     recommended: []
@@ -524,9 +524,9 @@ topics:
     title: Virtual Memory & Paging
     track: systems-software
     band: B2
-    tier: T1
+    tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [hardware/memory-hierarchy, systems-software/os-processes]
     recommended: []
@@ -711,9 +711,9 @@ topics:
     title: Distributed Consensus
     track: systems-software
     band: B5
-    tier: T1
+    tier: T0
     bloom_target: analyze
-    status: draft
+    status: published
     depth: 6
     prerequisites: [systems-software/distributed-systems-basics]
     recommended: [data/distributed-databases]
