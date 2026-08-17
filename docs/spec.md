@@ -86,6 +86,11 @@ Codename: **Strata**.
 
 ## 4. Foundational Evidence (the science the system is built on)
 
+> Axiomatic basis: `PRINCIPLES.md` — K0 (knowledge is claims with provenance), K1–K6
+> (confidence, verification, scarce context, retrieval-based learning, data ownership,
+> reproducibility) and theorem T1 (the knowledge graph is a DAG). Every section below
+> is a derivation of those axioms; parameters (tracks, cadences, thresholds) are tunable.
+
 The design decisions of this repo are themselves evidence-based. Every principle below maps
 to a section of this spec and to an evidence record in `evidence/records/`.
 

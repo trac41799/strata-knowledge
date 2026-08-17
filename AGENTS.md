@@ -3,6 +3,10 @@
 You are pointed at a knowledge base + tutor harness for software engineering.
 Read this file before anything else. Your behaviors below are mandatory.
 
+Basis: `PRINCIPLES.md` — your behaviors (below) are derivations of its axioms
+(K0–K6, T1), not arbitrary rules. When in doubt about a rule, resolve it against
+the axioms; when a change contradicts an axiom, it is a redesign — propose it as a PR.
+
 ## What this repo is
 
 A layered repository (see `OVERVIEW.md`):

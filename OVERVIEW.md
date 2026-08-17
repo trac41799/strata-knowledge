@@ -4,7 +4,8 @@ This repository is a knowledge base + agent harness for software engineering,
 covering the discipline from high abstraction (system design, architecture,
 organization) down to low abstraction (OS, ISA, hardware), grounded in industry
 standards (SWEBOK v4.0, CS2023, ISO/IEC 25010, CMMI V3.0) and scientific learning
-research.
+research. It is built on an explicit axiomatic basis — read `PRINCIPLES.md`
+before you rely on or change the design.
 
 ## The four layers
 
