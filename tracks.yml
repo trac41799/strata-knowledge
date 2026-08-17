@@ -5,7 +5,7 @@ tracks: [cs-foundations, programming, data, architecture-design, quality-testing
 
 track.cs-foundations.title: CS Foundations
 track.cs-foundations.swebok: [Computing Foundations, Mathematical Foundations]
-track.cs-foundations.cs2023: [Algorithmic Foundations, Logic and Computation, Systems Fundamentals]
+track.cs-foundations.cs2023: [Algorithmic Foundations, Mathematical and Statistical Foundations, Systems Fundamentals]
 track.cs-foundations.bands: B0-B6
 track.cs-foundations.status: active
 

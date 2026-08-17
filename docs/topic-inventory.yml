@@ -1,0 +1,479 @@
+# docs/topic-inventory.yml — Phase 1.4 graph plan (hand-maintained)
+# Consumed by tools/import-inventory.py. Flat keys only (restricted YAML subset).
+# id = <track>/<slug> · band B0-B6 · tier T0-T4 · bloom: remember..create
+
+topic.cs-foundations.logic-and-proof.title: Logic & Proof
+topic.cs-foundations.logic-and-proof.band: B3
+topic.cs-foundations.logic-and-proof.tier: T0
+topic.cs-foundations.logic-and-proof.bloom: apply
+topic.cs-foundations.logic-and-proof.prereqs: []
+topic.cs-foundations.logic-and-proof.related: [cs-foundations/discrete-mathematics]
+
+topic.cs-foundations.discrete-mathematics.title: Discrete Mathematics
+topic.cs-foundations.discrete-mathematics.band: B3
+topic.cs-foundations.discrete-mathematics.tier: T0
+topic.cs-foundations.discrete-mathematics.bloom: apply
+topic.cs-foundations.discrete-mathematics.prereqs: [cs-foundations/logic-and-proof]
+topic.cs-foundations.discrete-mathematics.related: []
+
+topic.cs-foundations.probability-statistics.title: Probability & Statistics
+topic.cs-foundations.probability-statistics.band: B2
+topic.cs-foundations.probability-statistics.tier: T1
+topic.cs-foundations.probability-statistics.bloom: apply
+topic.cs-foundations.probability-statistics.prereqs: [cs-foundations/discrete-mathematics]
+topic.cs-foundations.probability-statistics.related: []
+
+topic.cs-foundations.computability.title: Computability
+topic.cs-foundations.computability.band: B2
+topic.cs-foundations.computability.tier: T0
+topic.cs-foundations.computability.bloom: understand
+topic.cs-foundations.computability.prereqs: [cs-foundations/logic-and-proof]
+topic.cs-foundations.computability.related: []
+
+topic.cs-foundations.data-structures.title: Data Structures
+topic.cs-foundations.data-structures.band: B3
+topic.cs-foundations.data-structures.tier: T0
+topic.cs-foundations.data-structures.bloom: apply
+topic.cs-foundations.data-structures.prereqs: [cs-foundations/logic-and-proof]
+topic.cs-foundations.data-structures.related: [cs-foundations/algorithms]
+
+topic.cs-foundations.complexity-theory.title: Complexity Theory
+topic.cs-foundations.complexity-theory.band: B2
+topic.cs-foundations.complexity-theory.tier: T0
+topic.cs-foundations.complexity-theory.bloom: apply
+topic.cs-foundations.complexity-theory.prereqs: [cs-foundations/computability, cs-foundations/data-structures]
+topic.cs-foundations.complexity-theory.related: []
+
+topic.cs-foundations.algorithms.title: Algorithms
+topic.cs-foundations.algorithms.band: B3
+topic.cs-foundations.algorithms.tier: T1
+topic.cs-foundations.algorithms.bloom: apply
+topic.cs-foundations.algorithms.prereqs: [cs-foundations/data-structures, cs-foundations/complexity-theory]
+topic.cs-foundations.algorithms.related: []
+
+topic.programming.programming-paradigms.title: Programming Paradigms
+topic.programming.programming-paradigms.band: B3
+topic.programming.programming-paradigms.tier: T3
+topic.programming.programming-paradigms.bloom: apply
+topic.programming.programming-paradigms.prereqs: [cs-foundations/logic-and-proof]
+topic.programming.programming-paradigms.related: []
+
+topic.programming.functions-and-types.title: Functions & Types
+topic.programming.functions-and-types.band: B3
+topic.programming.functions-and-types.tier: T0
+topic.programming.functions-and-types.bloom: apply
+topic.programming.functions-and-types.prereqs: [programming/programming-paradigms]
+topic.programming.functions-and-types.related: []
+
+topic.programming.memory-model-and-pointers.title: Memory Model & Pointers
+topic.programming.memory-model-and-pointers.band: B3
+topic.programming.memory-model-and-pointers.tier: T1
+topic.programming.memory-model-and-pointers.bloom: apply
+topic.programming.memory-model-and-pointers.prereqs: [hardware/memory-hierarchy]
+topic.programming.memory-model-and-pointers.related: [systems-software/virtual-memory]
+
+topic.programming.concurrency-primitives.title: Concurrency Primitives
+topic.programming.concurrency-primitives.band: B3
+topic.programming.concurrency-primitives.tier: T1
+topic.programming.concurrency-primitives.bloom: apply
+topic.programming.concurrency-primitives.prereqs: [programming/memory-model-and-pointers, systems-software/os-processes]
+topic.programming.concurrency-primitives.related: []
+
+topic.programming.garbage-collection.title: Garbage Collection
+topic.programming.garbage-collection.band: B3
+topic.programming.garbage-collection.tier: T1
+topic.programming.garbage-collection.bloom: apply
+topic.programming.garbage-collection.prereqs: [programming/memory-model-and-pointers]
+topic.programming.garbage-collection.related: []
+
+topic.programming.compiler-pipeline.title: Compiler Pipeline
+topic.programming.compiler-pipeline.band: B3
+topic.programming.compiler-pipeline.tier: T3
+topic.programming.compiler-pipeline.bloom: apply
+topic.programming.compiler-pipeline.prereqs: [programming/functions-and-types, hardware/isa-basics]
+topic.programming.compiler-pipeline.related: []
+
+topic.data.relational-model.title: Relational Model
+topic.data.relational-model.band: B4
+topic.data.relational-model.tier: T2
+topic.data.relational-model.bloom: apply
+topic.data.relational-model.prereqs: [cs-foundations/discrete-mathematics, cs-foundations/logic-and-proof]
+topic.data.relational-model.related: []
+
+topic.data.sql-and-query-optimization.title: SQL & Query Optimization
+topic.data.sql-and-query-optimization.band: B4
+topic.data.sql-and-query-optimization.tier: T1
+topic.data.sql-and-query-optimization.bloom: apply
+topic.data.sql-and-query-optimization.prereqs: [data/relational-model]
+topic.data.sql-and-query-optimization.related: []
+
+topic.data.transactions-and-isolation.title: Transactions & Isolation
+topic.data.transactions-and-isolation.band: B4
+topic.data.transactions-and-isolation.tier: T0
+topic.data.transactions-and-isolation.bloom: apply
+topic.data.transactions-and-isolation.prereqs: [data/relational-model]
+topic.data.transactions-and-isolation.related: []
+
+topic.data.indexing-and-storage.title: Indexing & Storage
+topic.data.indexing-and-storage.band: B3
+topic.data.indexing-and-storage.tier: T2
+topic.data.indexing-and-storage.bloom: apply
+topic.data.indexing-and-storage.prereqs: [data/relational-model, hardware/memory-hierarchy]
+topic.data.indexing-and-storage.related: []
+
+topic.data.distributed-databases.title: Distributed Databases
+topic.data.distributed-databases.band: B5
+topic.data.distributed-databases.tier: T2
+topic.data.distributed-databases.bloom: apply
+topic.data.distributed-databases.prereqs: [data/transactions-and-isolation, systems-software/distributed-systems-basics]
+topic.data.distributed-databases.related: []
+
+topic.architecture-design.modularity.title: Modularity
+topic.architecture-design.modularity.band: B4
+topic.architecture-design.modularity.tier: T3
+topic.architecture-design.modularity.bloom: apply
+topic.architecture-design.modularity.prereqs: [programming/programming-paradigms]
+topic.architecture-design.modularity.related: []
+
+topic.architecture-design.design-patterns.title: Design Patterns
+topic.architecture-design.design-patterns.band: B4
+topic.architecture-design.design-patterns.tier: T3
+topic.architecture-design.design-patterns.bloom: apply
+topic.architecture-design.design-patterns.prereqs: [architecture-design/modularity]
+topic.architecture-design.design-patterns.related: []
+
+topic.architecture-design.architectural-styles.title: Architectural Styles
+topic.architecture-design.architectural-styles.band: B5
+topic.architecture-design.architectural-styles.tier: T2
+topic.architecture-design.architectural-styles.bloom: apply
+topic.architecture-design.architectural-styles.prereqs: [architecture-design/modularity]
+topic.architecture-design.architectural-styles.related: []
+
+topic.architecture-design.system-design-process.title: System Design Process
+topic.architecture-design.system-design-process.band: B5
+topic.architecture-design.system-design-process.tier: T2
+topic.architecture-design.system-design-process.bloom: analyze
+topic.architecture-design.system-design-process.prereqs: [architecture-design/architectural-styles, engineering-process/requirements-engineering]
+topic.architecture-design.system-design-process.related: []
+
+topic.architecture-design.caching-strategies.title: Caching Strategies
+topic.architecture-design.caching-strategies.band: B4
+topic.architecture-design.caching-strategies.tier: T3
+topic.architecture-design.caching-strategies.bloom: apply
+topic.architecture-design.caching-strategies.prereqs: [systems-software/http-caching]
+topic.architecture-design.caching-strategies.related: []
+
+topic.quality-testing.quality-models.title: Quality Models
+topic.quality-testing.quality-models.band: B5
+topic.quality-testing.quality-models.tier: T2
+topic.quality-testing.quality-models.bloom: understand
+topic.quality-testing.quality-models.prereqs: [engineering-process/requirements-engineering]
+topic.quality-testing.quality-models.related: []
+
+topic.quality-testing.software-testing-basics.title: Software Testing Basics
+topic.quality-testing.software-testing-basics.band: B4
+topic.quality-testing.software-testing-basics.tier: T2
+topic.quality-testing.software-testing-basics.bloom: apply
+topic.quality-testing.software-testing-basics.prereqs: [programming/programming-paradigms]
+topic.quality-testing.software-testing-basics.related: []
+
+topic.quality-testing.test-design-techniques.title: Test Design Techniques
+topic.quality-testing.test-design-techniques.band: B4
+topic.quality-testing.test-design-techniques.tier: T1
+topic.quality-testing.test-design-techniques.bloom: apply
+topic.quality-testing.test-design-techniques.prereqs: [quality-testing/software-testing-basics]
+topic.quality-testing.test-design-techniques.related: []
+
+topic.quality-testing.test-automation.title: Test Automation
+topic.quality-testing.test-automation.band: B4
+topic.quality-testing.test-automation.tier: T3
+topic.quality-testing.test-automation.bloom: apply
+topic.quality-testing.test-automation.prereqs: [quality-testing/test-design-techniques]
+topic.quality-testing.test-automation.related: []
+
+topic.quality-testing.code-review.title: Code Review
+topic.quality-testing.code-review.band: B4
+topic.quality-testing.code-review.tier: T1
+topic.quality-testing.code-review.bloom: apply
+topic.quality-testing.code-review.prereqs: [quality-testing/software-testing-basics]
+topic.quality-testing.code-review.related: []
+
+topic.quality-testing.performance-engineering.title: Performance Engineering
+topic.quality-testing.performance-engineering.band: B4
+topic.quality-testing.performance-engineering.tier: T1
+topic.quality-testing.performance-engineering.bloom: apply
+topic.quality-testing.performance-engineering.prereqs: [quality-testing/quality-models, systems-software/os-scheduling]
+topic.quality-testing.performance-engineering.related: []
+
+topic.security.cryptography-basics.title: Cryptography Basics
+topic.security.cryptography-basics.band: B2
+topic.security.cryptography-basics.tier: T0
+topic.security.cryptography-basics.bloom: apply
+topic.security.cryptography-basics.prereqs: [cs-foundations/probability-statistics, cs-foundations/logic-and-proof]
+topic.security.cryptography-basics.related: []
+
+topic.security.threat-modeling.title: Threat Modeling
+topic.security.threat-modeling.band: B5
+topic.security.threat-modeling.tier: T2
+topic.security.threat-modeling.bloom: apply
+topic.security.threat-modeling.prereqs: [architecture-design/architectural-styles, systems-software/networking-basics]
+topic.security.threat-modeling.related: []
+
+topic.security.authentication-authorization.title: Authentication & Authorization
+topic.security.authentication-authorization.band: B4
+topic.security.authentication-authorization.tier: T2
+topic.security.authentication-authorization.bloom: apply
+topic.security.authentication-authorization.prereqs: [security/threat-modeling, security/cryptography-basics]
+topic.security.authentication-authorization.related: []
+
+topic.security.web-security.title: Web Security
+topic.security.web-security.band: B4
+topic.security.web-security.tier: T2
+topic.security.web-security.bloom: apply
+topic.security.web-security.prereqs: [security/authentication-authorization, systems-software/http-basics]
+topic.security.web-security.related: []
+
+topic.security.secure-sdlc.title: Secure SDLC
+topic.security.secure-sdlc.band: B5
+topic.security.secure-sdlc.tier: T2
+topic.security.secure-sdlc.bloom: apply
+topic.security.secure-sdlc.prereqs: [security/threat-modeling, engineering-process/requirements-engineering]
+topic.security.secure-sdlc.related: []
+
+topic.systems-software.networking-basics.title: Networking Basics
+topic.systems-software.networking-basics.band: B2
+topic.systems-software.networking-basics.tier: T2
+topic.systems-software.networking-basics.bloom: apply
+topic.systems-software.networking-basics.prereqs: []
+topic.systems-software.networking-basics.related: []
+
+topic.systems-software.http-basics.title: HTTP Basics
+topic.systems-software.http-basics.band: B4
+topic.systems-software.http-basics.tier: T2
+topic.systems-software.http-basics.bloom: apply
+topic.systems-software.http-basics.prereqs: [systems-software/networking-basics]
+topic.systems-software.http-basics.related: []
+
+topic.systems-software.http-caching.title: HTTP Caching
+topic.systems-software.http-caching.band: B4
+topic.systems-software.http-caching.tier: T2
+topic.systems-software.http-caching.bloom: apply
+topic.systems-software.http-caching.prereqs: [systems-software/http-basics]
+topic.systems-software.http-caching.related: [architecture-design/caching-strategies]
+
+topic.systems-software.os-processes.title: OS Processes
+topic.systems-software.os-processes.band: B2
+topic.systems-software.os-processes.tier: T2
+topic.systems-software.os-processes.bloom: apply
+topic.systems-software.os-processes.prereqs: [programming/memory-model-and-pointers]
+topic.systems-software.os-processes.related: []
+
+topic.systems-software.virtual-memory.title: Virtual Memory & Paging
+topic.systems-software.virtual-memory.band: B2
+topic.systems-software.virtual-memory.tier: T1
+topic.systems-software.virtual-memory.bloom: apply
+topic.systems-software.virtual-memory.prereqs: [hardware/memory-hierarchy, systems-software/os-processes]
+topic.systems-software.virtual-memory.related: [hardware/cache-coherence, systems-software/containers-isolation]
+
+topic.systems-software.os-scheduling.title: OS Scheduling
+topic.systems-software.os-scheduling.band: B2
+topic.systems-software.os-scheduling.tier: T1
+topic.systems-software.os-scheduling.bloom: apply
+topic.systems-software.os-scheduling.prereqs: [systems-software/os-processes]
+topic.systems-software.os-scheduling.related: []
+
+topic.systems-software.containers-isolation.title: Containers & Isolation
+topic.systems-software.containers-isolation.band: B3
+topic.systems-software.containers-isolation.tier: T3
+topic.systems-software.containers-isolation.bloom: apply
+topic.systems-software.containers-isolation.prereqs: [systems-software/virtual-memory, systems-software/os-processes]
+topic.systems-software.containers-isolation.related: []
+
+topic.systems-software.distributed-systems-basics.title: Distributed Systems Basics
+topic.systems-software.distributed-systems-basics.band: B5
+topic.systems-software.distributed-systems-basics.tier: T2
+topic.systems-software.distributed-systems-basics.bloom: apply
+topic.systems-software.distributed-systems-basics.prereqs: [systems-software/networking-basics, programming/concurrency-primitives]
+topic.systems-software.distributed-systems-basics.related: []
+
+topic.systems-software.distributed-consensus.title: Distributed Consensus
+topic.systems-software.distributed-consensus.band: B5
+topic.systems-software.distributed-consensus.tier: T1
+topic.systems-software.distributed-consensus.bloom: analyze
+topic.systems-software.distributed-consensus.prereqs: [systems-software/distributed-systems-basics]
+topic.systems-software.distributed-consensus.related: []
+
+topic.systems-software.parallel-programming.title: Parallel Programming
+topic.systems-software.parallel-programming.band: B3
+topic.systems-software.parallel-programming.tier: T1
+topic.systems-software.parallel-programming.bloom: apply
+topic.systems-software.parallel-programming.prereqs: [programming/concurrency-primitives, hardware/cache-coherence]
+topic.systems-software.parallel-programming.related: []
+
+topic.hardware.memory-hierarchy.title: Memory Hierarchy
+topic.hardware.memory-hierarchy.band: B1
+topic.hardware.memory-hierarchy.tier: T2
+topic.hardware.memory-hierarchy.bloom: apply
+topic.hardware.memory-hierarchy.prereqs: []
+topic.hardware.memory-hierarchy.related: []
+
+topic.hardware.isa-basics.title: ISA Basics
+topic.hardware.isa-basics.band: B1
+topic.hardware.isa-basics.tier: T2
+topic.hardware.isa-basics.bloom: apply
+topic.hardware.isa-basics.prereqs: [hardware/memory-hierarchy]
+topic.hardware.isa-basics.related: []
+
+topic.hardware.interrupts-and-dma.title: Interrupts & DMA
+topic.hardware.interrupts-and-dma.band: B1
+topic.hardware.interrupts-and-dma.tier: T2
+topic.hardware.interrupts-and-dma.bloom: apply
+topic.hardware.interrupts-and-dma.prereqs: [hardware/isa-basics]
+topic.hardware.interrupts-and-dma.related: []
+
+topic.hardware.cpu-pipelining.title: CPU Pipelining
+topic.hardware.cpu-pipelining.band: B1
+topic.hardware.cpu-pipelining.tier: T2
+topic.hardware.cpu-pipelining.bloom: apply
+topic.hardware.cpu-pipelining.prereqs: [hardware/isa-basics]
+topic.hardware.cpu-pipelining.related: []
+
+topic.hardware.cache-coherence.title: Cache Coherence
+topic.hardware.cache-coherence.band: B1
+topic.hardware.cache-coherence.tier: T1
+topic.hardware.cache-coherence.bloom: analyze
+topic.hardware.cache-coherence.prereqs: [hardware/memory-hierarchy, hardware/cpu-pipelining]
+topic.hardware.cache-coherence.related: [systems-software/virtual-memory]
+
+topic.hardware.storage-devices.title: Storage Devices
+topic.hardware.storage-devices.band: B1
+topic.hardware.storage-devices.tier: T2
+topic.hardware.storage-devices.bloom: understand
+topic.hardware.storage-devices.prereqs: [hardware/memory-hierarchy]
+topic.hardware.storage-devices.related: []
+
+topic.engineering-process.requirements-engineering.title: Requirements Engineering
+topic.engineering-process.requirements-engineering.band: B5
+topic.engineering-process.requirements-engineering.tier: T2
+topic.engineering-process.requirements-engineering.bloom: apply
+topic.engineering-process.requirements-engineering.prereqs: []
+topic.engineering-process.requirements-engineering.related: []
+
+topic.engineering-process.software-lifecycle.title: Software Lifecycle
+topic.engineering-process.software-lifecycle.band: B5
+topic.engineering-process.software-lifecycle.tier: T2
+topic.engineering-process.software-lifecycle.bloom: apply
+topic.engineering-process.software-lifecycle.prereqs: [engineering-process/requirements-engineering]
+topic.engineering-process.software-lifecycle.related: []
+
+topic.engineering-process.agile-methods.title: Agile Methods
+topic.engineering-process.agile-methods.band: B5
+topic.engineering-process.agile-methods.tier: T3
+topic.engineering-process.agile-methods.bloom: apply
+topic.engineering-process.agile-methods.prereqs: [engineering-process/software-lifecycle]
+topic.engineering-process.agile-methods.related: []
+
+topic.engineering-process.estimation-and-cost.title: Estimation & Cost
+topic.engineering-process.estimation-and-cost.band: B5
+topic.engineering-process.estimation-and-cost.tier: T1
+topic.engineering-process.estimation-and-cost.bloom: apply
+topic.engineering-process.estimation-and-cost.prereqs: [engineering-process/software-lifecycle]
+topic.engineering-process.estimation-and-cost.related: []
+
+topic.engineering-process.configuration-management.title: Configuration Management
+topic.engineering-process.configuration-management.band: B4
+topic.engineering-process.configuration-management.tier: T2
+topic.engineering-process.configuration-management.bloom: apply
+topic.engineering-process.configuration-management.prereqs: [engineering-process/software-lifecycle]
+topic.engineering-process.configuration-management.related: []
+
+topic.engineering-process.professional-ethics.title: Professional Ethics
+topic.engineering-process.professional-ethics.band: B5
+topic.engineering-process.professional-ethics.tier: T2
+topic.engineering-process.professional-ethics.bloom: understand
+topic.engineering-process.professional-ethics.prereqs: []
+topic.engineering-process.professional-ethics.related: []
+
+topic.operations.devops-pipeline.title: DevOps Pipeline
+topic.operations.devops-pipeline.band: B5
+topic.operations.devops-pipeline.tier: T3
+topic.operations.devops-pipeline.bloom: apply
+topic.operations.devops-pipeline.prereqs: [engineering-process/configuration-management, engineering-process/software-lifecycle]
+topic.operations.devops-pipeline.related: []
+
+topic.operations.observability.title: Observability
+topic.operations.observability.band: B5
+topic.operations.observability.tier: T3
+topic.operations.observability.bloom: apply
+topic.operations.observability.prereqs: [operations/devops-pipeline]
+topic.operations.observability.related: []
+
+topic.operations.incident-response.title: Incident Response
+topic.operations.incident-response.band: B5
+topic.operations.incident-response.tier: T3
+topic.operations.incident-response.bloom: apply
+topic.operations.incident-response.prereqs: [operations/observability]
+topic.operations.incident-response.related: []
+
+topic.operations.software-maintenance.title: Software Maintenance
+topic.operations.software-maintenance.band: B4
+topic.operations.software-maintenance.tier: T1
+topic.operations.software-maintenance.bloom: apply
+topic.operations.software-maintenance.prereqs: [engineering-process/software-lifecycle]
+topic.operations.software-maintenance.related: []
+
+topic.ai-ml.ml-fundamentals.title: ML Fundamentals
+topic.ai-ml.ml-fundamentals.band: B4
+topic.ai-ml.ml-fundamentals.tier: T1
+topic.ai-ml.ml-fundamentals.bloom: apply
+topic.ai-ml.ml-fundamentals.prereqs: [cs-foundations/probability-statistics]
+topic.ai-ml.ml-fundamentals.related: []
+
+topic.ai-ml.supervised-learning.title: Supervised Learning
+topic.ai-ml.supervised-learning.band: B4
+topic.ai-ml.supervised-learning.tier: T1
+topic.ai-ml.supervised-learning.bloom: apply
+topic.ai-ml.supervised-learning.prereqs: [ai-ml/ml-fundamentals]
+topic.ai-ml.supervised-learning.related: []
+
+topic.ai-ml.neural-networks.title: Neural Networks
+topic.ai-ml.neural-networks.band: B4
+topic.ai-ml.neural-networks.tier: T1
+topic.ai-ml.neural-networks.bloom: apply
+topic.ai-ml.neural-networks.prereqs: [ai-ml/supervised-learning]
+topic.ai-ml.neural-networks.related: []
+
+topic.ai-ml.llm-architectures.title: LLM Architectures
+topic.ai-ml.llm-architectures.band: B5
+topic.ai-ml.llm-architectures.tier: T4
+topic.ai-ml.llm-architectures.bloom: understand
+topic.ai-ml.llm-architectures.prereqs: [ai-ml/neural-networks]
+topic.ai-ml.llm-architectures.related: []
+
+topic.frontiers.agentic-systems.title: Agentic Systems
+topic.frontiers.agentic-systems.band: B5
+topic.frontiers.agentic-systems.tier: T4
+topic.frontiers.agentic-systems.bloom: apply
+topic.frontiers.agentic-systems.prereqs: [ai-ml/llm-architectures]
+topic.frontiers.agentic-systems.related: []
+
+topic.frontiers.formal-verification-scale.title: Formal Verification at Scale
+topic.frontiers.formal-verification-scale.band: B5
+topic.frontiers.formal-verification-scale.tier: T4
+topic.frontiers.formal-verification-scale.bloom: understand
+topic.frontiers.formal-verification-scale.prereqs: [cs-foundations/computability, cs-foundations/complexity-theory]
+topic.frontiers.formal-verification-scale.related: []
+
+topic.frontiers.post-quantum-cryptography.title: Post-Quantum Cryptography
+topic.frontiers.post-quantum-cryptography.band: B2
+topic.frontiers.post-quantum-cryptography.tier: T4
+topic.frontiers.post-quantum-cryptography.bloom: understand
+topic.frontiers.post-quantum-cryptography.prereqs: [security/cryptography-basics]
+topic.frontiers.post-quantum-cryptography.related: []
+
+topic.frontiers.zero-knowledge-proofs.title: Zero-Knowledge Proofs
+topic.frontiers.zero-knowledge-proofs.band: B5
+topic.frontiers.zero-knowledge-proofs.tier: T4
+topic.frontiers.zero-knowledge-proofs.bloom: understand
+topic.frontiers.zero-knowledge-proofs.prereqs: [security/cryptography-basics]
+topic.frontiers.zero-knowledge-proofs.related: []

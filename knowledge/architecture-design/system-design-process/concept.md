@@ -1,0 +1,28 @@
+---
+id: architecture-design/system-design-process
+title: System Design Process
+band: B5
+track: architecture-design
+tier: T2
+bloom_target: analyze
+prerequisites: [architecture-design/architectural-styles, engineering-process/requirements-engineering]
+related: []
+status: draft
+schema-version: 1
+owner: l0-inventory
+reviewed-by: []
+updated: 2026-08-18
+sources: []
+---
+
+# System Design Process
+
+## Claims
+
+> To be authored in Phase 2/3 by L1 research + L2 validation.
+
+## Details
+
+## Boundaries / common misunderstandings
+
+## References (evidence records)

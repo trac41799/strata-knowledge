@@ -1,0 +1,32 @@
+---
+id: quality-testing/quality-models
+title: Quality Models
+band: B5
+track: quality-testing
+tier: T2
+bloom_target: understand
+prerequisites: [engineering-process/requirements-engineering]
+related: []
+status: draft
+schema-version: 1
+owner: l0-inventory
+reviewed-by: []
+updated: 2026-08-18
+sources: []
+---
+
+# Quality Models — teaching
+
+## Learning objectives (Bloom)
+
+> To be authored by L3 pedagogy.
+
+## Worked example
+
+## Elaboration prompts
+
+## Common misconceptions
+
+## Feynman targets
+
+## Interleaving hooks
