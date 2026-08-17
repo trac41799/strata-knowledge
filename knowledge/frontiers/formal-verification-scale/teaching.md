@@ -7,6 +7,7 @@ tier: T4
 bloom_target: understand
 prerequisites: [cs-foundations/computability, cs-foundations/complexity-theory]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

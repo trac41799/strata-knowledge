@@ -7,6 +7,7 @@ tier: T2
 bloom_target: analyze
 prerequisites: [architecture-design/architectural-styles, engineering-process/requirements-engineering]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

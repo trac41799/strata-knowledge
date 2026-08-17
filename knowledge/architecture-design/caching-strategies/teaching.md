@@ -7,6 +7,7 @@ tier: T3
 bloom_target: apply
 prerequisites: [systems-software/http-caching]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

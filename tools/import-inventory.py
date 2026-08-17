@@ -20,7 +20,7 @@ TIERS = ['T0', 'T1', 'T2', 'T3', 'T4']
 BLOOMS = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
 PREFIX = 'topic.'
-FIELDS = ('title', 'band', 'tier', 'bloom', 'prereqs', 'related')
+FIELDS = ('title', 'band', 'tier', 'bloom', 'prereqs', 'recommended', 'related')
 
 
 def load_manifest():
@@ -51,7 +51,7 @@ def load_manifest():
             errors.append('%s: invalid tier %r' % (tid, t.get('tier')))
         if t.get('bloom') not in BLOOMS:
             errors.append('%s: invalid bloom %r' % (tid, t.get('bloom')))
-        for lst_field in ('prereqs', 'related'):
+        for lst_field in ('prereqs', 'recommended', 'related'):
             if not isinstance(t.get(lst_field), list):
                 errors.append('%s: %s must be a list' % (tid, lst_field))
     for e in errors:
@@ -75,6 +75,7 @@ def build_files(t, today):
         'tier: %s' % t['tier'],
         'bloom_target: %s' % t['bloom'],
         'prerequisites: [%s]' % ', '.join(t.get('prereqs', [])),
+        'recommended: [%s]' % ', '.join(t.get('recommended', [])),
         'related: [%s]' % ', '.join(t.get('related', [])),
         'status: draft',
         'schema-version: 1',

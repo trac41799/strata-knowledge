@@ -12,6 +12,7 @@ topics:
     status: draft
     depth: 1
     prerequisites: []
+    recommended: []
     related: [cs-foundations/discrete-mathematics]
   - id: engineering-process/professional-ethics
     title: Professional Ethics
@@ -22,6 +23,7 @@ topics:
     status: draft
     depth: 1
     prerequisites: []
+    recommended: []
     related: []
   - id: engineering-process/requirements-engineering
     title: Requirements Engineering
@@ -32,6 +34,7 @@ topics:
     status: draft
     depth: 1
     prerequisites: []
+    recommended: []
     related: []
   - id: hardware/memory-hierarchy
     title: Memory Hierarchy
@@ -42,6 +45,7 @@ topics:
     status: draft
     depth: 1
     prerequisites: []
+    recommended: []
     related: []
   - id: systems-software/networking-basics
     title: Networking Basics
@@ -52,6 +56,7 @@ topics:
     status: draft
     depth: 1
     prerequisites: []
+    recommended: []
     related: []
   - id: cs-foundations/computability
     title: Computability
@@ -62,6 +67,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [cs-foundations/logic-and-proof]
+    recommended: []
     related: []
   - id: cs-foundations/data-structures
     title: Data Structures
@@ -72,6 +78,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [cs-foundations/logic-and-proof]
+    recommended: []
     related: [cs-foundations/algorithms]
   - id: cs-foundations/discrete-mathematics
     title: Discrete Mathematics
@@ -82,6 +89,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [cs-foundations/logic-and-proof]
+    recommended: []
     related: []
   - id: engineering-process/software-lifecycle
     title: Software Lifecycle
@@ -92,6 +100,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [engineering-process/requirements-engineering]
+    recommended: []
     related: []
   - id: hardware/isa-basics
     title: ISA Basics
@@ -102,6 +111,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [hardware/memory-hierarchy]
+    recommended: []
     related: []
   - id: hardware/storage-devices
     title: Storage Devices
@@ -112,6 +122,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [hardware/memory-hierarchy]
+    recommended: []
     related: []
   - id: programming/memory-model-and-pointers
     title: Memory Model & Pointers
@@ -122,6 +133,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [hardware/memory-hierarchy]
+    recommended: []
     related: [systems-software/virtual-memory]
   - id: programming/programming-paradigms
     title: Programming Paradigms
@@ -132,6 +144,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [cs-foundations/logic-and-proof]
+    recommended: []
     related: []
   - id: quality-testing/quality-models
     title: Quality Models
@@ -142,6 +155,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [engineering-process/requirements-engineering]
+    recommended: []
     related: []
   - id: systems-software/http-basics
     title: HTTP Basics
@@ -152,6 +166,7 @@ topics:
     status: draft
     depth: 2
     prerequisites: [systems-software/networking-basics]
+    recommended: []
     related: []
   - id: architecture-design/modularity
     title: Modularity
@@ -162,6 +177,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [programming/programming-paradigms]
+    recommended: []
     related: []
   - id: cs-foundations/complexity-theory
     title: Complexity Theory
@@ -172,6 +188,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [cs-foundations/computability, cs-foundations/data-structures]
+    recommended: []
     related: []
   - id: cs-foundations/probability-statistics
     title: Probability & Statistics
@@ -182,6 +199,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [cs-foundations/discrete-mathematics]
+    recommended: []
     related: []
   - id: data/relational-model
     title: Relational Model
@@ -192,6 +210,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [cs-foundations/discrete-mathematics, cs-foundations/logic-and-proof]
+    recommended: []
     related: []
   - id: engineering-process/agile-methods
     title: Agile Methods
@@ -202,6 +221,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [engineering-process/software-lifecycle]
+    recommended: []
     related: []
   - id: engineering-process/configuration-management
     title: Configuration Management
@@ -212,6 +232,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [engineering-process/software-lifecycle]
+    recommended: []
     related: []
   - id: engineering-process/estimation-and-cost
     title: Estimation & Cost
@@ -222,6 +243,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [engineering-process/software-lifecycle]
+    recommended: []
     related: []
   - id: hardware/cpu-pipelining
     title: CPU Pipelining
@@ -232,6 +254,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [hardware/isa-basics]
+    recommended: []
     related: []
   - id: hardware/interrupts-and-dma
     title: Interrupts & DMA
@@ -242,6 +265,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [hardware/isa-basics]
+    recommended: []
     related: []
   - id: operations/software-maintenance
     title: Software Maintenance
@@ -252,6 +276,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [engineering-process/software-lifecycle]
+    recommended: []
     related: []
   - id: programming/functions-and-types
     title: Functions & Types
@@ -262,6 +287,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [programming/programming-paradigms]
+    recommended: []
     related: []
   - id: programming/garbage-collection
     title: Garbage Collection
@@ -272,6 +298,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [programming/memory-model-and-pointers]
+    recommended: []
     related: []
   - id: quality-testing/software-testing-basics
     title: Software Testing Basics
@@ -282,6 +309,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [programming/programming-paradigms]
+    recommended: []
     related: []
   - id: systems-software/http-caching
     title: HTTP Caching
@@ -292,6 +320,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [systems-software/http-basics]
+    recommended: []
     related: [architecture-design/caching-strategies]
   - id: systems-software/os-processes
     title: OS Processes
@@ -302,6 +331,7 @@ topics:
     status: draft
     depth: 3
     prerequisites: [programming/memory-model-and-pointers]
+    recommended: []
     related: []
   - id: ai-ml/ml-fundamentals
     title: ML Fundamentals
@@ -312,6 +342,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [cs-foundations/probability-statistics]
+    recommended: []
     related: []
   - id: architecture-design/architectural-styles
     title: Architectural Styles
@@ -322,6 +353,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [architecture-design/modularity]
+    recommended: []
     related: []
   - id: architecture-design/caching-strategies
     title: Caching Strategies
@@ -332,6 +364,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [systems-software/http-caching]
+    recommended: []
     related: []
   - id: architecture-design/design-patterns
     title: Design Patterns
@@ -342,6 +375,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [architecture-design/modularity]
+    recommended: []
     related: []
   - id: cs-foundations/algorithms
     title: Algorithms
@@ -352,6 +386,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [cs-foundations/data-structures, cs-foundations/complexity-theory]
+    recommended: []
     related: []
   - id: data/indexing-and-storage
     title: Indexing & Storage
@@ -362,6 +397,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [data/relational-model, hardware/memory-hierarchy]
+    recommended: []
     related: []
   - id: data/sql-and-query-optimization
     title: SQL & Query Optimization
@@ -372,6 +408,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [data/relational-model]
+    recommended: []
     related: []
   - id: data/transactions-and-isolation
     title: Transactions & Isolation
@@ -382,6 +419,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [data/relational-model]
+    recommended: []
     related: []
   - id: frontiers/formal-verification-scale
     title: Formal Verification at Scale
@@ -392,6 +430,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [cs-foundations/computability, cs-foundations/complexity-theory]
+    recommended: []
     related: []
   - id: hardware/cache-coherence
     title: Cache Coherence
@@ -402,6 +441,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [hardware/memory-hierarchy, hardware/cpu-pipelining]
+    recommended: []
     related: [systems-software/virtual-memory]
   - id: operations/devops-pipeline
     title: DevOps Pipeline
@@ -412,6 +452,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [engineering-process/configuration-management, engineering-process/software-lifecycle]
+    recommended: []
     related: []
   - id: programming/compiler-pipeline
     title: Compiler Pipeline
@@ -422,6 +463,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [programming/functions-and-types, hardware/isa-basics]
+    recommended: []
     related: []
   - id: programming/concurrency-primitives
     title: Concurrency Primitives
@@ -432,6 +474,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [programming/memory-model-and-pointers, systems-software/os-processes]
+    recommended: []
     related: []
   - id: quality-testing/code-review
     title: Code Review
@@ -442,6 +485,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [quality-testing/software-testing-basics]
+    recommended: []
     related: []
   - id: quality-testing/test-design-techniques
     title: Test Design Techniques
@@ -452,6 +496,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [quality-testing/software-testing-basics]
+    recommended: []
     related: []
   - id: security/cryptography-basics
     title: Cryptography Basics
@@ -462,6 +507,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [cs-foundations/probability-statistics, cs-foundations/logic-and-proof]
+    recommended: []
     related: []
   - id: systems-software/os-scheduling
     title: OS Scheduling
@@ -472,6 +518,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [systems-software/os-processes]
+    recommended: []
     related: []
   - id: systems-software/virtual-memory
     title: Virtual Memory & Paging
@@ -482,6 +529,7 @@ topics:
     status: draft
     depth: 4
     prerequisites: [hardware/memory-hierarchy, systems-software/os-processes]
+    recommended: []
     related: [hardware/cache-coherence, systems-software/containers-isolation]
   - id: ai-ml/supervised-learning
     title: Supervised Learning
@@ -492,6 +540,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [ai-ml/ml-fundamentals]
+    recommended: []
     related: []
   - id: architecture-design/system-design-process
     title: System Design Process
@@ -502,6 +551,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [architecture-design/architectural-styles, engineering-process/requirements-engineering]
+    recommended: []
     related: []
   - id: frontiers/post-quantum-cryptography
     title: Post-Quantum Cryptography
@@ -512,6 +562,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [security/cryptography-basics]
+    recommended: []
     related: []
   - id: frontiers/zero-knowledge-proofs
     title: Zero-Knowledge Proofs
@@ -522,6 +573,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [security/cryptography-basics]
+    recommended: []
     related: []
   - id: operations/observability
     title: Observability
@@ -532,6 +584,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [operations/devops-pipeline]
+    recommended: []
     related: []
   - id: quality-testing/performance-engineering
     title: Performance Engineering
@@ -542,6 +595,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [quality-testing/quality-models, systems-software/os-scheduling]
+    recommended: []
     related: []
   - id: quality-testing/test-automation
     title: Test Automation
@@ -552,6 +606,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [quality-testing/test-design-techniques]
+    recommended: []
     related: []
   - id: security/threat-modeling
     title: Threat Modeling
@@ -562,6 +617,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [architecture-design/architectural-styles, systems-software/networking-basics]
+    recommended: []
     related: []
   - id: systems-software/containers-isolation
     title: Containers & Isolation
@@ -572,6 +628,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [systems-software/virtual-memory, systems-software/os-processes]
+    recommended: []
     related: []
   - id: systems-software/distributed-systems-basics
     title: Distributed Systems Basics
@@ -582,6 +639,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [systems-software/networking-basics, programming/concurrency-primitives]
+    recommended: []
     related: []
   - id: systems-software/parallel-programming
     title: Parallel Programming
@@ -592,6 +650,7 @@ topics:
     status: draft
     depth: 5
     prerequisites: [programming/concurrency-primitives, hardware/cache-coherence]
+    recommended: []
     related: []
   - id: ai-ml/neural-networks
     title: Neural Networks
@@ -602,6 +661,7 @@ topics:
     status: draft
     depth: 6
     prerequisites: [ai-ml/supervised-learning]
+    recommended: []
     related: []
   - id: data/distributed-databases
     title: Distributed Databases
@@ -612,6 +672,7 @@ topics:
     status: draft
     depth: 6
     prerequisites: [data/transactions-and-isolation, systems-software/distributed-systems-basics]
+    recommended: []
     related: []
   - id: operations/incident-response
     title: Incident Response
@@ -622,6 +683,7 @@ topics:
     status: draft
     depth: 6
     prerequisites: [operations/observability]
+    recommended: []
     related: []
   - id: security/authentication-authorization
     title: Authentication & Authorization
@@ -632,6 +694,7 @@ topics:
     status: draft
     depth: 6
     prerequisites: [security/threat-modeling, security/cryptography-basics]
+    recommended: []
     related: []
   - id: security/secure-sdlc
     title: Secure SDLC
@@ -642,6 +705,7 @@ topics:
     status: draft
     depth: 6
     prerequisites: [security/threat-modeling, engineering-process/requirements-engineering]
+    recommended: []
     related: []
   - id: systems-software/distributed-consensus
     title: Distributed Consensus
@@ -652,6 +716,7 @@ topics:
     status: draft
     depth: 6
     prerequisites: [systems-software/distributed-systems-basics]
+    recommended: []
     related: []
   - id: ai-ml/llm-architectures
     title: LLM Architectures
@@ -662,6 +727,7 @@ topics:
     status: draft
     depth: 7
     prerequisites: [ai-ml/neural-networks]
+    recommended: []
     related: []
   - id: security/web-security
     title: Web Security
@@ -672,6 +738,7 @@ topics:
     status: draft
     depth: 7
     prerequisites: [security/authentication-authorization, systems-software/http-basics]
+    recommended: []
     related: []
   - id: frontiers/agentic-systems
     title: Agentic Systems
@@ -682,6 +749,7 @@ topics:
     status: draft
     depth: 8
     prerequisites: [ai-ml/llm-architectures]
+    recommended: []
     related: []
 waves:
   1: [cs-foundations/logic-and-proof, engineering-process/professional-ethics, engineering-process/requirements-engineering, hardware/memory-hierarchy, systems-software/networking-basics]

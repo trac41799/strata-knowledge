@@ -7,6 +7,7 @@ tier: T0
 bloom_target: apply
 prerequisites: []
 related: [cs-foundations/discrete-mathematics]
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

@@ -7,6 +7,7 @@ tier: T2
 bloom_target: apply
 prerequisites: [data/relational-model, hardware/memory-hierarchy]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

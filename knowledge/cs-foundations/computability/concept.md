@@ -7,6 +7,7 @@ tier: T0
 bloom_target: understand
 prerequisites: [cs-foundations/logic-and-proof]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

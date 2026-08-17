@@ -54,6 +54,7 @@ def main():
         'tier: %s' % args.tier,
         'bloom_target: %s' % args.bloom_target,
         'prerequisites: [%s]' % ', '.join(prereqs),
+        'recommended: []',
         'related: [%s]' % ', '.join(related),
         'status: draft',
         'schema-version: 1',

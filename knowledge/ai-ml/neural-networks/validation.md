@@ -7,6 +7,7 @@ tier: T1
 bloom_target: apply
 prerequisites: [ai-ml/supervised-learning]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

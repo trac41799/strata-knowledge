@@ -7,6 +7,7 @@ tier: T2
 bloom_target: apply
 prerequisites: [systems-software/http-basics]
 related: [architecture-design/caching-strategies]
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

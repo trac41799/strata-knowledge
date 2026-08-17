@@ -7,6 +7,7 @@ tier: T1
 bloom_target: analyze
 prerequisites: [hardware/memory-hierarchy, hardware/cpu-pipelining]
 related: [systems-software/virtual-memory]
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

@@ -7,6 +7,7 @@ tier: T1
 bloom_target: apply
 prerequisites: [hardware/memory-hierarchy, systems-software/os-processes]
 related: [hardware/cache-coherence, systems-software/containers-isolation]
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

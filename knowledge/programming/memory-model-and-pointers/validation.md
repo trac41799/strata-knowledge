@@ -7,6 +7,7 @@ tier: T1
 bloom_target: apply
 prerequisites: [hardware/memory-hierarchy]
 related: [systems-software/virtual-memory]
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

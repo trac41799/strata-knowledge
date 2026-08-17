@@ -7,6 +7,7 @@ tier: T4
 bloom_target: understand
 prerequisites: [ai-ml/neural-networks]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

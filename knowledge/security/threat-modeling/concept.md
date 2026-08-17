@@ -7,6 +7,7 @@ tier: T2
 bloom_target: apply
 prerequisites: [architecture-design/architectural-styles, systems-software/networking-basics]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

@@ -192,15 +192,56 @@ Every topic node is positioned on:
 - **Axis C — Evidence tier** (T0–T4, §6.3).
 - **Axis D — Learner depth** (Bloom target level, §7.1).
 
-### 6.2 The knowledge graph (DAG)
+### 6.2 The knowledge graph (typed, multi-relational)
 
-- **Nodes** = topics. **Edges** = `prerequisite` (must be mastered first), `related`
-  (cross-links), `part-of` (subsumption).
-- The graph MUST be acyclic (CI-enforced). Cycles are build errors, not warnings.
-- Machine-readable form: `knowledge-graph.yml` (auto-generated from topic frontmatter by
-  `tools/index.py`; deterministic output, CI diff-checks it).
-- **Graph planning**: build and learning both follow topological order; the build team works
-  in **waves** = bands of topics whose prerequisites are all in earlier waves (§10.4).
+The graph is a **typed, multi-relational knowledge graph**, not a bare DAG. Only the
+`prerequisite` edge type is order-constrained (theorem T1); every other edge type may form
+loops because it asserts nothing about learning order.
+
+**Node types**
+
+| Node | Location | Key attributes |
+|---|---|---|
+| Topic | `knowledge/<track>/<id>/concept.md` | band, tier, bloom_target, status, updated, sources |
+| Evidence record | `evidence/records/S-####.md` | type, hierarchy-level, year, venue/standard |
+| Standard map | `standards/*-map.md` | KA / PA / characteristic sections |
+| Track | `tracks.yml` | title, SWEBOK/CS2023 mappings |
+| Rubric | `rubrics/<track>/*.md` | criteria, standards-refs |
+
+**Edge types**
+
+| Edge | Type | Cycle allowed | Meaning | Enforced by |
+|---|---|---|---|---|
+| `prerequisite` | directed | **NO** | must be mastered first | `check-graph.py` (T1) |
+| `recommended` | directed, soft | no (ordering advice) | advised, non-blocking | `check-graph.py` (warning) |
+| `related` | undirected | yes | cross-link, no ordering claim | `check-graph.py` (warning) |
+| `sources` / `claims-supported` | topic ↔ record | yes | provenance bijection | `lint.py` |
+| `replaced-by` | directed, temporal | n/a (retired nodes excluded from active graph) | obsolescence | `lint.py` |
+
+**The DAG theorem (T1).** `prerequisite` is a strict partial order: "to learn Y you must
+have mastered X" is transitive, antisymmetric, irreflexive. A cycle would mean no entry
+point exists — nothing can be learned first — a contradiction. Acyclicity is therefore a
+semantic invariant of that edge type, verified by CI at every commit. Other edge types are
+deliberately unconstrained: richness of association without ordering claims.
+
+**Versioned, not frozen.**
+
+- Any commit may add nodes, re-point edges, or retire topics; CI re-verifies every
+  invariant on each commit. History is preserved: nothing is deleted, retirement is a
+  status (`retired`), not removal.
+- During a session the graph is read-only: hot mutations would bypass verification (K2)
+  and break determinism (K6). Contributions go through PRs (AGENTS.md §6).
+- The learner's dynamic state is NOT in the graph: it lives in the per-learner overlay
+  (`.journey/state/` — skill matrix, review queue, calibration). Shared canonical
+  structure vs personal state is the K5 separation.
+
+**Update protocol.** New/retired topic or edge change → PR → CI (schema, links,
+acyclicity, determinism) → L2/L4 review → human gate → merge.
+
+**Extension roadmap** (designed for, not built in v1): weighted edges (cost-optimal
+paths), bloom-threshold edges (X at `apply` before Y at `analyze`), co-requisite
+hyperedges, temporal validity windows, centrality/clustering curation analytics,
+semantic/vector search over packs (MCP server).
 
 ### 6.3 Evidence tiers (Axis C)
 
@@ -268,8 +309,9 @@ track: systems-software
 tier: T1            # evidence axis
 bloom_target: apply # learner axis
 prerequisites: [hardware/memory-hierarchy, hardware/isa-basics, systems-software/processes]
+recommended: [systems-software/containers-isolation]
 related: [hardware/cache-coherence, systems-software/containers-isolation]
-status: published   # draft | validated | published
+status: published   # draft | validated | published | retired
 schema-version: 1
 owner: <agent-id>   # build-time
 reviewed-by: [<agent-id>]

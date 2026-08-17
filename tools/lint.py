@@ -75,6 +75,13 @@ def check_tracks_file():
 
 
 TRACKS = check_tracks_file()
+TOPIC_IDS = set()
+
+if KNOWLEDGE.exists():
+    for concept in KNOWLEDGE.rglob('concept.md'):
+        fm, _ = parse_frontmatter(concept.read_text(encoding='utf-8'))
+        if fm and fm.get('id'):
+            TOPIC_IDS.add(fm['id'])
 
 
 def check_frontmatter(path, schema, kind):
@@ -107,6 +114,13 @@ def check_topic_file(path, expected_id, is_concept):
         error('%s: status %s requires non-empty reviewed-by' % (path, status))
     if status == 'published' and not fm.get('sources'):
         error('%s: status published requires non-empty sources' % (path))
+    replaced_by = fm.get('replaced-by')
+    if status == 'retired' and not replaced_by:
+        error('%s: status retired requires replaced-by topic id' % path)
+    if replaced_by and replaced_by not in TOPIC_IDS:
+        error('%s: replaced-by %r does not exist as a topic' % (path, replaced_by))
+    if replaced_by and status != 'retired':
+        warning('%s: replaced-by is only meaningful for status retired' % path)
     tier = fm.get('tier')
     if tier == 'T4':
         if not fm.get('review_after'):
@@ -114,7 +128,7 @@ def check_topic_file(path, expected_id, is_concept):
         elif fm['review_after'] < TODAY.isoformat():
             error('%s: review_after %s is expired (tier T4 content must be re-reviewed)' % (path, fm['review_after']))
     updated = fm.get('updated')
-    if updated:
+    if updated and status != 'retired':
         try:
             if date.fromisoformat(updated) < months_before_today(18):
                 error('%s: content stale (updated %s > 18 months ago)' % (path, updated))

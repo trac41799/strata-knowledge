@@ -7,6 +7,7 @@ tier: T1
 bloom_target: apply
 prerequisites: [programming/memory-model-and-pointers, systems-software/os-processes]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

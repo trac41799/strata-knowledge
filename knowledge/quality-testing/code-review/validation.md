@@ -7,6 +7,7 @@ tier: T1
 bloom_target: apply
 prerequisites: [quality-testing/software-testing-basics]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

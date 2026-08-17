@@ -49,10 +49,12 @@ be derived, it is derived. *Enforced by:* `tools/*.py`, CI `git diff --exit-code
 
 ## The structural theorem
 
-**T1 — The knowledge graph is a DAG.**
+**T1 — The knowledge graph is a DAG over prerequisites.**
 Topics and prerequisites form a directed acyclic graph; build waves and learning paths are
 its topological order. Violating this (cycle, dangling prerequisite) fails CI. Corollary:
 every learner at every level can be placed in the graph and given a corrective path.
+Other edge types (`related`, `sources`, `recommended`, `replaced-by`) are not
+order-constrained and may form loops.
 *Enforced by:* `tools/check-graph.py`.
 
 ## Empirical laws the pedagogy is bound to

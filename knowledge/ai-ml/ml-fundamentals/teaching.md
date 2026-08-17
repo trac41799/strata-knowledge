@@ -7,6 +7,7 @@ tier: T1
 bloom_target: apply
 prerequisites: [cs-foundations/probability-statistics]
 related: []
+recommended: []
 status: draft
 schema-version: 1
 owner: l0-inventory

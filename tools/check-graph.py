@@ -51,6 +51,7 @@ def collect_topics():
             'bloom_target': fm.get('bloom_target', ''),
             'status': fm.get('status', 'draft'),
             'prerequisites': [p for p in fm.get('prerequisites', []) if p],
+            'recommended': [r for r in fm.get('recommended', []) if r],
             'related': [r for r in fm.get('related', []) if r],
         }
         if not (concept.parent / 'validation.md').exists():
@@ -77,14 +78,30 @@ def check_edges(topics):
                 error('%s: self-related' % tid)
             elif r not in topics:
                 warning('%s: related topic %r does not exist' % (tid, r))
+            elif topics[r]['status'] == 'retired':
+                warning('%s: related topic %r is retired' % (tid, r))
+        for r in t['recommended']:
+            if r == tid:
+                error('%s: self-recommended' % tid)
+            elif r not in topics:
+                warning('%s: recommended topic %r does not exist' % (tid, r))
+            elif topics[r]['status'] == 'retired':
+                warning('%s: recommended topic %r is retired' % (tid, r))
+            elif r in t['prerequisites']:
+                warning('%s: %r is both prerequisite and recommended' % (tid, r))
+        for p in t['prerequisites']:
+            if p in topics and topics[p]['status'] == 'retired':
+                warning('%s: prerequisite %r is retired' % (tid, p))
 
 
 def detect_cycles(topics):
-    indeg = {tid: len(t['prerequisites']) for tid, t in topics.items()}
+    active = {tid for tid, t in topics.items() if t['status'] != 'retired'}
+    indeg = {tid: len([p for p in topics[tid]['prerequisites'] if p in active]) for tid in active}
     out = defaultdict(list)
-    for tid, t in topics.items():
-        for p in t['prerequisites']:
-            out[p].append(tid)
+    for tid in active:
+        for p in topics[tid]['prerequisites']:
+            if p in active:
+                out[p].append(tid)
     queue = deque(sorted(tid for tid, d in indeg.items() if d == 0))
     order = []
     while queue:
@@ -94,8 +111,8 @@ def detect_cycles(topics):
             indeg[child] -= 1
             if indeg[child] == 0:
                 queue.append(child)
-    if len(order) != len(topics):
-        remaining = sorted(set(topics) - set(order))
+    if len(order) != len(active):
+        remaining = sorted(active - set(order))
         error('cycle detected among (or orphaned by missing prerequisites): %s' % ', '.join(remaining))
         return None, []
     return order, indeg
@@ -104,8 +121,11 @@ def detect_cycles(topics):
 def compute_depths(topics, order):
     depths = {}
     for tid in order:
-        prereq_depths = [depths[p] for p in topics[tid]['prerequisites']]
+        prereq_depths = [depths[p] for p in topics[tid]['prerequisites'] if p in depths]
         depths[tid] = 1 + max(prereq_depths) if prereq_depths else 1
+    for tid, t in topics.items():
+        if t['status'] == 'retired':
+            depths[tid] = 0
     return depths
 
 
@@ -129,9 +149,12 @@ def emit_graph(topics, depths):
         lines.append('    status: %s' % t['status'])
         lines.append('    depth: %d' % depth)
         lines.append('    prerequisites: [%s]' % ', '.join(t['prerequisites']))
+        lines.append('    recommended: [%s]' % ', '.join(t['recommended']))
         lines.append('    related: [%s]' % ', '.join(t['related']))
     lines.append('waves:')
     for wave, ids in sorted(waves.items()):
+        if wave == 0:
+            continue
         lines.append('  %d: [%s]' % (wave, ', '.join(ids)))
     OUTPUT.write_text('\n'.join(lines) + '\n', encoding='utf-8')
 
@@ -155,7 +178,8 @@ def main():
     if ERRORS:
         print('check-graph failed: %d error(s)' % len(ERRORS))
         sys.exit(1)
-    print('check-graph OK: %d topics, %d waves' % (len(topics), len(set(depths.values()))))
+    wave_count = len([d for d in set(depths.values()) if d > 0])
+    print('check-graph OK: %d topics, %d waves' % (len(topics), wave_count))
 
 
 if __name__ == '__main__':
