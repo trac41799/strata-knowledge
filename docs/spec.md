@@ -117,7 +117,7 @@ to a section of this spec and to an evidence record in `evidence/records/`.
 | SWEBOK (IEEE CS) | **v4.0, 2024** (v4.0a, Sep 2025) — 18 Knowledge Areas incl. new Architecture, Operations, Security | Primary SE topic spine; coverage audit target |
 | CS2023 (ACM/IEEE-CS/AAAI) | Endorsed Jan–Feb 2024 — 17 KAs, competency model | CS-foundations topic spine; coverage audit target |
 | ISO/IEC 25010 | **2023** — 9 product quality characteristics (usability→interaction capability; safety added) | Quality/testing track; project-review rubrics |
-| ISO/IEC/IEEE 12207 | 2017 — lifecycle processes | Engineering-process track |
+| ISO/IEC/IEEE 12207 | 2017 — lifecycle processes (superseded by the 2026 revision; claims citing S-0020 are dated to 2017) | Engineering-process track |
 | ISO/IEC/IEEE 24765 | 2017 — SE vocabulary | Terminology canonicalization (claim-norming) |
 | ISO/IEC/IEEE 42010 | 2022 — architecture description | Architecture track |
 | CMMI | **V3.0, Apr 2023** (ISACA) — 31 practice areas (17 core + 14 domain), 8 domains | Engineering-process/maturity track; org-level topics |
@@ -370,6 +370,11 @@ Item anatomy: `Q: <question>` · `bloom: <level>` · `bank: formative|summative|
 `A: <model answer>` · `evidence: [S-####]` · `topic: <topic id>` (**required** on every
 item — machines use it to assemble interleaved sets) · `distractors:` (optional; only for
 multiple-choice style items).
+`topic:` values must be clean topic ids (no parentheticals). A pack's frontmatter `sources`
+lists the records backing the pack's own claims; review items may cite records from other
+packs for interleaved prerequisites without listing them in `sources`.
+Claim lines carry exactly ONE tier tag (the strongest applicable tier); additional record
+refs follow the tier tag: `[T1][S-0037][S-0036]`.
 
 Bloom targets (Anderson & Krathwohl 2001): `remember → understand → apply → analyze →
 evaluate → create`. Per-topic default progression: concept quiz = understand; exercises =

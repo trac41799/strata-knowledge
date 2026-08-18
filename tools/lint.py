@@ -145,6 +145,10 @@ def check_topic_file(path, expected_id, is_concept):
 def check_claim_evidence(path, fm):
     lines = path.read_text(encoding='utf-8').splitlines()
     for i, line in enumerate(lines, 1):
+        tags = TIER_TAG.findall(line)
+        if len(set(tags)) > 1:
+            error('%s:%d: multiple distinct tier tags on one claim (%s); one tier per claim, strongest wins' % (
+                path, i, ', '.join(sorted(set(tags)))))
         if TIER_TAG.search(line):
             if not RECORD_REF.search(line):
                 error('%s:%d: claim tag %r without an S-#### record reference' % (path, i, TIER_TAG.search(line).group(0)))
