@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier — a scholarly notebook for Strata's journey</title>
+<meta name="description" content="Design exploration: the Strata journey interface as a beautifully kept annotated notebook. Static demo; reads real data from journey/examples and INDEX.">
+<style>
+/* ============================================================
+   ATELIER — design tokens
+   Warm paper, ink text, fountain-pen blue marginalia.
+   All tokens defined once in :root; a dark variant is provided
+   under [data-theme="dark"] and via prefers-color-scheme.
+   ============================================================ */
+:root {
+  /* paper */
+  --paper: #F5F0E6;
+  --paper-2: #EDE6D6;
+  --paper-3: #E2D9C4;
+  /* ink */
+  --ink: #2A2722;
+  --ink-soft: #57534A;
+  --ink-faint: #8A8578;          /* decorative / large text only (3.2:1) */
+  /* rules & lines */
+  --rule: #D8CFBC;
+  --rule-strong: #B8AE96;
+  /* pen (accent) */
+  --pen: #23486B;
+  --pen-soft: #4A6C92;
+  /* verdict inks */
+  --ok: #3A6B47;   --ok-bg: #E4EDE2;
+  --warn: #8A5300; --warn-bg: #F3E8D5;
+  --bad: #9B3B2F;  --bad-bg: #F2E3DE;
+  /* frontier */
+  --t4: #6B3E80;
+  /* heat levels (heatmap / field notes) */
+  --heat-1: rgba(42,39,34,.06);
+  --heat-2: rgba(42,39,34,.12);
+  --heat-3: rgba(42,39,34,.24);
+  --heat-4: rgba(42,39,34,.40);
+  --heat-5: rgba(42,39,34,.58);
+  /* typography */
+  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", serif;
+  --font-body: Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  /* scale */
+  --fs-display: clamp(2.1rem, 3.5vw + 1rem, 3rem);
+  --fs-h1: clamp(1.6rem, 2vw + .9rem, 2.15rem);
+  --fs-h2: clamp(1.2rem, 1.2vw + .8rem, 1.5rem);
+  --fs-h3: 1.05rem;
+  --fs-body: 1rem;
+  --fs-small: .875rem;
+  --fs-caption: .78rem;
+  --fs-mono: .85rem;
+  --lh-body: 1.62;
+  --lh-tight: 1.3;
+  /* geometry */
+  --maxw: 70rem;
+  --gutter: clamp(1rem, 3vw, 2.25rem);
+  --radius: 3px;
+  --shadow: 0 1px 2px rgba(42,39,34,.10), 0 6px 18px rgba(42,39,34,.05);
+  --focus: 2px solid var(--pen);
+  /* motion */
+  --t-fast: 140ms ease;
+}
+
+[data-theme="dark"] {
+  --paper: #1B1812;
+  --paper-2: #211D15;
+  --paper-3: #2B2619;
+  --ink: #E9E2D2;
+  --ink-soft: #A8A194;
+  --ink-faint: #7A746A;
+  --rule: #3A362C;
+  --rule-strong: #58523F;
+  --pen: #8FB0D8;
+  --pen-soft: #A9C4E4;
+  --ok: #7FB493;   --ok-bg: #26352B;
+  --warn: #D9A441; --warn-bg: #362D1B;
+  --bad: #D98A7E;  --bad-bg: #3A2723;
+  --t4: #C39BD8;
+  --heat-1: rgba(233,226,210,.07);
+  --heat-2: rgba(233,226,210,.14);
+  --heat-3: rgba(233,226,210,.26);
+  --heat-4: rgba(233,226,210,.42);
+  --heat-5: rgba(233,226,210,.60);
+  --shadow: 0 1px 2px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1B1812;
+    --paper-2: #211D15;
+    --paper-3: #2B2619;
+    --ink: #E9E2D2;
+    --ink-soft: #A8A194;
+    --ink-faint: #7A746A;
+    --rule: #3A362C;
+    --rule-strong: #58523F;
+    --pen: #8FB0D8;
+    --pen-soft: #A9C4E4;
+    --ok: #7FB493;   --ok-bg: #26352B;
+    --warn: #D9A441; --warn-bg: #362D1B;
+    --bad: #D98A7E;  --bad-bg: #3A2723;
+    --t4: #C39BD8;
+    --heat-1: rgba(233,226,210,.07);
+    --heat-2: rgba(233,226,210,.14);
+    --heat-3: rgba(233,226,210,.26);
+    --heat-4: rgba(233,226,210,.42);
+    --heat-5: rgba(233,226,210,.60);
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+
+/* ---------- reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(35,72,107,.05), transparent 42rem),
+    var(--paper);
+  transition: background var(--t-fast), color var(--t-fast);
+}
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: var(--lh-tight); margin: 0; }
+h2 { font-size: var(--fs-h1); }
+h3 { font-size: var(--fs-h2); }
+p { margin: 0 0 .9em; }
+a { color: var(--pen); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+code, .mono, .src { font-family: var(--font-mono); font-size: var(--fs-mono); }
+:focus-visible { outline: var(--focus); outline-offset: 2px; }
+::selection { background: var(--pen-soft); color: var(--paper); }
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 50;
+  background: var(--ink); color: var(--paper); padding: .5rem 1rem;
+  font-family: var(--font-mono); font-size: var(--fs-small);
+}
+.skip-link:focus { left: 0; }
+
+/* ---------- masthead ---------- */
+.masthead {
+  max-width: var(--maxw); margin: 0 auto; padding: clamp(1.5rem, 4vw, 3rem) var(--gutter) 1rem;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap;
+}
+.brand-kicker {
+  font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ink-soft); margin-bottom: .4rem;
+}
+.brand-title { font-size: var(--fs-display); font-weight: 600; letter-spacing: .01em; }
+.brand-title em { font-style: italic; font-weight: 400; color: var(--ink-soft); font-size: .62em; }
+.folio-tools { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.folio-date { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft); margin: 0; }
+.icon-btn {
+  font-family: var(--font-mono); font-size: var(--fs-small); color: var(--ink-soft);
+  background: transparent; border: 1px solid var(--rule-strong); border-radius: var(--radius);
+  padding: .35rem .7rem; cursor: pointer;
+}
+.icon-btn:hover { color: var(--pen); border-color: var(--pen); }
+
+/* ---------- bookmark tabs ---------- */
+.tabbar {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter);
+  border-bottom: 2px solid var(--rule-strong);
+  display: flex; gap: .15rem; flex-wrap: wrap;
+}
+[role="tab"] {
+  appearance: none; border: 0; cursor: pointer; font: inherit;
+  font-family: var(--font-display); font-size: .95rem;
+  color: var(--ink-soft); background: transparent;
+  padding: .65rem 1.1rem .55rem; border-top-left-radius: var(--radius); border-top-right-radius: var(--radius);
+  border-top: 3px solid transparent; border-bottom: 3px solid transparent;
+  margin-bottom: -2px; transition: color var(--t-fast), border-color var(--t-fast);
+}
+[role="tab"] .tabnum { font-family: var(--font-mono); font-size: .72rem; margin-right: .35rem; color: var(--ink-faint); }
+[role="tab"]:hover { color: var(--ink); }
+[role="tab"][aria-selected="true"] {
+  color: var(--pen); font-weight: 700;
+  border-top-color: var(--pen); border-bottom-color: var(--paper);
+  background: var(--paper);
+}
+
+/* ---------- screen layout ---------- */
+main { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter) 4rem; }
+[role="tabpanel"] { padding-top: 2.2rem; }
+
+.folio { display: flex; gap: 1.1rem; align-items: baseline; border-bottom: 1px solid var(--rule); padding-bottom: .9rem; margin-bottom: 1.8rem; }
+.folio-index {
+  font-family: var(--font-mono); font-size: var(--fs-h2); color: var(--pen);
+  font-weight: 700; line-height: 1;
+}
+.folio-rule {
+  font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft);
+  letter-spacing: .06em; text-transform: uppercase; margin: .35rem 0 0;
+}
+.folio .folio-head { flex: 1; }
+
+.screen-grid { display: grid; grid-template-columns: minmax(0, 48rem) minmax(11rem, 15rem); gap: clamp(1.5rem, 4vw, 3.5rem); justify-content: center; }
+.screen-body { min-width: 0; }
+.margin { min-width: 0; }
+.marginal {
+  font-size: var(--fs-small); color: var(--ink-soft);
+  border-left: 3px solid var(--pen); padding-left: .8rem; margin-bottom: 1.4rem;
+}
+.marginal .m-head {
+  font-family: var(--font-mono); font-size: var(--fs-caption); text-transform: uppercase;
+  letter-spacing: .12em; color: var(--pen); margin-bottom: .35rem;
+}
+.marginal p { margin-bottom: .55em; }
+.marginal .src { font-size: var(--fs-caption); color: var(--ink-faint); }
+@media (max-width: 980px) {
+  .screen-grid { grid-template-columns: minmax(0, 1fr); }
+  .margin { border-top: 1px solid var(--rule); padding-top: 1rem; margin-top: .5rem; }
+  .marginal { border-left: 0; border-top: 3px double var(--rule-strong); padding: .8rem 0 0; }
+}
+
+/* ---------- leaf cards ---------- */
+.leaf {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-top: 3px double var(--rule-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 1.4rem;
+}
+.leaf-title { font-size: var(--fs-h3); font-weight: 700; margin-bottom: .4rem; display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+.leaf-sub { font-size: var(--fs-small); color: var(--ink-soft); margin-bottom: 1rem; }
+
+/* ---------- stat tiles ---------- */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .9rem; margin-bottom: 1.4rem; }
+.stat {
+  background: var(--paper-2); border: 1px solid var(--rule); border-top: 3px double var(--rule-strong);
+  border-radius: var(--radius); padding: .9rem 1rem .85rem; box-shadow: var(--shadow);
+}
+.stat-value { font-family: var(--font-mono); font-size: 1.9rem; font-weight: 700; line-height: 1.05; }
+.stat-label { font-size: var(--fs-small); color: var(--ink-soft); margin-top: .3rem; }
+.stat-note { font-size: var(--fs-caption); font-family: var(--font-mono); color: var(--ink-faint); margin-top: .25rem; }
+.stat.warn .stat-value { color: var(--warn); }
+.stat.ok .stat-value { color: var(--ok); }
+
+/* ---------- badges ---------- */
+.badge {
+  display: inline-block; font-family: var(--font-mono); font-size: var(--fs-caption);
+  padding: .12rem .5rem; border-radius: 2px; letter-spacing: .04em; white-space: nowrap;
+}
+.badge.ink   { background: var(--ink); color: var(--paper); }
+.badge.pen   { background: var(--pen); color: var(--paper); }
+.badge.ok    { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok); }
+.badge.warn  { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); }
+.badge.bad   { background: var(--bad-bg); color: var(--bad); border: 1px solid var(--bad); }
+.badge.ghost { background: transparent; color: var(--ink-soft); border: 1px dashed var(--rule-strong); }
+.badge.t4    { background: transparent; color: var(--t4); border: 1px solid var(--t4); }
+.badge.mono  { background: var(--paper-3); color: var(--ink); border: 1px solid var(--rule-strong); }
+.mock-badge {
+  display: inline-block; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .14em;
+  color: var(--ink-soft); border: 1px dashed var(--rule-strong); border-radius: 2px;
+  padding: .05rem .42rem; text-transform: uppercase; vertical-align: middle;
+}
+
+/* tier chips */
+.tier { font-family: var(--font-mono); font-size: var(--fs-caption); font-weight: 700; white-space: nowrap; }
+.tier::before { content: ""; display: inline-block; width: .55em; height: .55em; border-radius: 1px; margin-right: .35em; vertical-align: .05em; }
+.tier.t0 { color: var(--ink); }        .tier.t0::before { background: var(--ink); }
+.tier.t1 { color: var(--pen); }        .tier.t1::before { background: var(--pen); }
+.tier.t2 { color: var(--ok); }         .tier.t2::before { background: var(--ok); }
+.tier.t3 { color: var(--ink-soft); }   .tier.t3::before { background: var(--ink-soft); }
+.tier.t4 { color: var(--t4); }         .tier.t4::before { background: var(--t4); }
+
+/* status glyphs */
+.status-glyph { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft); white-space: nowrap; }
+.status-glyph .sq { display: inline-block; width: .62em; height: .62em; margin-right: .35em; vertical-align: -.02em; }
+.sq.full { background: var(--ink); }
+.sq.half { background: var(--ink-soft); opacity: .55; }
+.sq.open { border: 1px solid var(--ink-soft); background: transparent; }
+
+/* ---------- heat grid (field notes) ---------- */
+.heat { display: grid; grid-template-rows: repeat(7, 13px); grid-auto-flow: column; gap: 3px; margin: .8rem 0 .6rem; }
+.heat-cell { width: 13px; height: 13px; border-radius: 2px; }
+.heat-cell.h1 { background: var(--heat-1); } .heat-cell.h2 { background: var(--heat-2); }
+.heat-cell.h3 { background: var(--heat-3); } .heat-cell.h4 { background: var(--heat-4); }
+.heat-cell.h5 { background: var(--heat-5); }
+.heat-legend { display: flex; gap: .5rem; align-items: center; font-size: var(--fs-caption); font-family: var(--font-mono); color: var(--ink-soft); margin-top: .4rem; }
+.heat-legend .hcell { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  appearance: none; cursor: pointer; font: inherit; font-family: var(--font-display);
+  border-radius: var(--radius); padding: .55rem 1.1rem; font-size: var(--fs-small);
+  transition: filter var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.btn.ink { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); }
+.btn.ink:hover { filter: brightness(1.12); }
+.btn.outline { background: var(--paper-2); color: var(--ink); border: 1px solid var(--rule-strong); }
+.btn.outline:hover { border-color: var(--pen); color: var(--pen); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-row { display: flex; gap: .6rem; flex-wrap: wrap; margin: .9rem 0; }
+
+/* ---------- verdict stamp ---------- */
+.verdict-zone { min-height: 6rem; }
+.verdict-stamp {
+  display: inline-block; font-family: var(--font-display); font-weight: 700;
+  font-size: 1.15rem; letter-spacing: .14em; text-transform: uppercase;
+  border: 3px double var(--stamp); outline: 1px solid var(--stamp); outline-offset: 3px;
+  border-radius: 5px; padding: .5rem 1.15rem; transform: rotate(-1.4deg);
+  background: var(--stamp-bg); color: var(--stamp);
+}
+.verdict-stamp[data-v="correct"] { --stamp: var(--ok); --stamp-bg: var(--ok-bg); }
+.verdict-stamp[data-v="partial"] { --stamp: var(--warn); --stamp-bg: var(--warn-bg); }
+.verdict-stamp[data-v="incorrect"] { --stamp: var(--bad); --stamp-bg: var(--bad-bg); }
+.verdict-meta { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--ink-soft); margin-top: .9rem; }
+.evidence-chips { display: flex; gap: .45rem; flex-wrap: wrap; margin: .6rem 0; }
+.rec {
+  font-family: var(--font-mono); font-size: var(--fs-caption); text-decoration: none;
+  color: var(--pen); border: 1px solid var(--pen); border-radius: 2px; padding: .15rem .5rem;
+}
+.rec:hover { background: var(--pen); color: var(--paper); }
+.steps { margin: .4rem 0 0; padding-left: 1.4rem; }
+.steps li { margin-bottom: .5em; }
+.steps .step-tag { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft); }
+
+/* ---------- claim composer ---------- */
+.field-label { display: block; font-family: var(--font-mono); font-size: var(--fs-caption); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: .4rem; }
+.claim-input {
+  width: 100%; min-height: 5.2rem; resize: vertical; font: inherit;
+  font-family: var(--font-body); color: var(--ink);
+  background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: var(--radius);
+  padding: .7rem .9rem;
+}
+.claim-input:focus-visible { outline: var(--focus); }
+.sample-chips { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .7rem; }
+.sample-chip {
+  font-family: var(--font-mono); font-size: var(--fs-caption); cursor: pointer;
+  background: transparent; border: 1px solid var(--rule-strong); border-radius: 2px;
+  color: var(--ink-soft); padding: .3rem .6rem;
+}
+.sample-chip:hover { border-color: var(--pen); color: var(--pen); }
+.sample-chip[aria-pressed="true"] { border-color: var(--pen); color: var(--pen); background: var(--paper-3); }
+
+/* ---------- quiz ---------- */
+.session-ledger {
+  font-family: var(--font-mono); font-size: var(--fs-small); color: var(--ink-soft);
+  border: 1px solid var(--rule); border-left: 3px solid var(--pen); border-radius: 2px;
+  background: var(--paper-2); padding: .7rem .9rem; margin-bottom: 1.4rem;
+}
+.session-ledger .lg-line { margin-bottom: .25rem; }
+.session-ledger .lg-key { color: var(--ink-faint); }
+.quiz-q { font-size: 1.05rem; line-height: var(--lh-body); margin-bottom: .8rem; }
+.quiz-options { list-style: none; padding: 0; margin: 0 0 .9rem; display: grid; gap: .45rem; }
+.quiz-options li { margin: 0; }
+.quiz-opt {
+  display: block; width: 100%; text-align: left; cursor: pointer; font: inherit; font-size: var(--fs-small);
+  background: var(--paper-2); color: var(--ink); border: 1px solid var(--rule-strong);
+  border-radius: var(--radius); padding: .55rem .8rem;
+}
+.quiz-opt:hover { border-color: var(--pen); }
+.quiz-opt[aria-checked="true"] { border-color: var(--pen); background: var(--paper-3); }
+.model-answer {
+  background: var(--paper-2); border: 1px dashed var(--rule-strong); border-radius: var(--radius);
+  padding: .9rem 1rem; font-size: var(--fs-small);
+}
+.model-answer.hidden { display: none; }
+.model-answer .ma-head { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: .12em; color: var(--pen); margin-bottom: .4rem; }
+
+/* ---------- dialog ---------- */
+dialog {
+  border: 1px solid var(--rule-strong); border-top: 4px double var(--rule-strong);
+  border-radius: var(--radius); background: var(--paper); color: var(--ink);
+  box-shadow: var(--shadow); padding: 0; max-width: 34rem; width: calc(100% - 2rem);
+}
+dialog::backdrop { background: rgba(42,39,34,.45); }
+.dlg-inner { padding: 1.4rem 1.5rem 1.2rem; }
+.dlg-inner h3 { font-size: 1.15rem; margin-bottom: .7rem; }
+.dlg-grade { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .6rem; }
+.dlg-grade[data-v="correct"] { color: var(--ok); }
+.dlg-grade[data-v="partial"] { color: var(--warn); }
+.dlg-grade[data-v="incorrect"] { color: var(--bad); }
+
+/* ---------- review shelf ---------- */
+.shelf-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .9rem; align-items: start;
+  border-bottom: 1px solid var(--rule); padding: .9rem 0 .95rem;
+}
+.shelf-row:first-of-type { border-top: 1px solid var(--rule); }
+.shelf-title { font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; }
+.shelf-id { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft); margin-top: .2rem; }
+.shelf-meta { font-size: var(--fs-small); color: var(--ink-soft); margin-top: .4rem; display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+.ladder { display: flex; gap: .3rem; align-items: center; font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-faint); margin-top: .5rem; flex-wrap: wrap; }
+.ladder .rung { border: 1px solid var(--rule-strong); border-radius: 2px; padding: .1rem .42rem; }
+.ladder .rung.past { color: var(--ink-soft); }
+.ladder .rung.now { color: var(--pen); border-color: var(--pen); font-weight: 700; background: var(--paper-3); }
+.due-flag { font-family: var(--font-mono); font-size: var(--fs-caption); font-weight: 700; white-space: nowrap; }
+.due-flag.overdue { color: var(--bad); }
+.due-flag.soon { color: var(--ok); }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; margin-bottom: 1.2rem; }
+table { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
+caption {
+  caption-side: top; text-align: left; font-family: var(--font-mono);
+  font-size: var(--fs-caption); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); padding-bottom: .5rem;
+}
+th, td { padding: .5rem .65rem; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+th { font-family: var(--font-mono); font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 700; }
+tbody tr:hover { background: var(--paper-2); }
+.num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+
+/* ---------- explorer chapters ---------- */
+.chapter { border-bottom: 1px solid var(--rule); }
+.chapter summary {
+  cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: .9rem;
+  padding: .8rem .2rem; font-family: var(--font-display); font-weight: 700; font-size: 1.02rem;
+}
+.chapter summary::-webkit-details-marker { display: none; }
+.chapter summary::before {
+  content: "\25B8"; font-family: var(--font-mono); font-size: .8rem; color: var(--pen);
+  transition: transform var(--t-fast); width: .8em; display: inline-block;
+}
+.chapter[open] summary::before { transform: rotate(90deg); }
+.chapter summary .ch-count { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft); font-weight: 400; }
+.chapter summary .ch-meta { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-faint); font-weight: 400; white-space: nowrap; }
+.topic-list { padding: 0 0 .6rem 1.7rem; }
+.topic-row { display: flex; align-items: baseline; gap: .6rem; padding: .34rem 0; font-size: var(--fs-small); }
+.topic-row .t-title { font-weight: 700; }
+.topic-row .t-id { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topic-row .t-band { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft); }
+.topic-row .t-bloom { font-family: var(--font-display); font-style: italic; font-size: var(--fs-caption); color: var(--ink-soft); }
+.topic-row .t-spacer { flex: 1; min-width: .5rem; }
+.topic-row .mastered { color: var(--ok); font-weight: 700; }
+.legend-row { display: flex; gap: 1.1rem; flex-wrap: wrap; font-size: var(--fs-caption); color: var(--ink-soft); margin-top: 1rem; }
+
+/* ---------- chart ---------- */
+.chart-wrap { margin: .6rem 0 1rem; }
+.chart-wrap svg { width: 100%; height: auto; display: block; }
+.chart-label { font-family: var(--font-mono); font-size: .72rem; fill: var(--ink-soft); }
+.chart-axis { stroke: var(--rule-strong); stroke-width: 1; }
+.chart-grid { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 4; }
+.chart-line { fill: none; stroke-width: 2.2; stroke-linecap: round; }
+.chart-line.pred { stroke: var(--ink-faint); stroke-dasharray: 5 5; }
+.chart-line.act { stroke: var(--pen); }
+.chart-dot { fill: var(--paper); stroke-width: 2.2; }
+.chart-dot.pred { stroke: var(--ink-faint); }
+.chart-dot.act { stroke: var(--pen); }
+.chart-legend { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--ink-soft); display: flex; gap: 1.2rem; }
+.chart-legend .sw { display: inline-block; width: 1.4rem; height: 0; border-top: 2.5px solid; vertical-align: middle; margin-right: .4rem; }
+.chart-legend .sw.pred { border-color: var(--ink-faint); border-top-style: dashed; }
+.chart-legend .sw.act { border-color: var(--pen); }
+
+/* ---------- footer ---------- */
+.site-foot {
+  max-width: var(--maxw); margin: 0 auto; padding: 2.5rem var(--gutter) 4rem;
+  border-top: 1px solid var(--rule); font-size: var(--fs-caption); color: var(--ink-soft);
+}
+.site-foot h3 { font-size: .95rem; margin-bottom: .5rem; }
+.site-foot ul { margin: 0; padding-left: 1.1rem; }
+.site-foot li { margin-bottom: .3em; }
+.site-foot .src { color: var(--ink-soft); }
+
+/* ---------- print ---------- */
+@media print {
+  .tabbar, .icon-btn, .skip-link, .btn-row { display: none !important; }
+  body { background: #fff; color: #000; }
+  [role="tabpanel"] { display: block !important; page-break-before: always; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .verdict-stamp { transform: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="brand">
+    <p class="brand-kicker">Strata &middot; journey interface &middot; design exploration</p>
+    <h1 class="brand-title">Atelier <em>&mdash; a scholarly notebook for learning systems</em></h1>
+  </div>
+  <div class="folio-tools">
+    <button type="button" class="icon-btn" id="theme-toggle" aria-pressed="false">Theme &middot; dark</button>
+    <p class="folio-date" id="folio-date">Tuesday, August 18, 2026</p>
+  </div>
+</header>
+
+<nav class="tabbar" role="tablist" aria-label="Screens">
+  <button role="tab" id="tab-dashboard" aria-controls="screen-dashboard" aria-selected="true" data-screen="dashboard"><span class="tabnum">I.</span>The Desk</button>
+  <button role="tab" id="tab-explorer" aria-controls="screen-explorer" aria-selected="false" data-screen="explorer" tabindex="-1"><span class="tabnum">II.</span>The Index</button>
+  <button role="tab" id="tab-validate" aria-controls="screen-validate" aria-selected="false" data-screen="validate" tabindex="-1"><span class="tabnum">III.</span>Claim Under Review</button>
+  <button role="tab" id="tab-quiz" aria-controls="screen-quiz" aria-selected="false" data-screen="quiz" tabindex="-1"><span class="tabnum">IV.</span>Study Session</button>
+  <button role="tab" id="tab-review" aria-controls="screen-review" aria-selected="false" data-screen="review" tabindex="-1"><span class="tabnum">V.</span>Review Shelf</button>
+  <button role="tab" id="tab-progress" aria-controls="screen-progress" aria-selected="false" data-screen="progress" tabindex="-1"><span class="tabnum">VI.</span>Progress Ledger</button>
+</nav>
+
+<main id="main">
+
+  <!-- ========================================================
+       SCREEN 1 — THE DESK (dashboard)
+       ======================================================== -->
+  <section role="tabpanel" id="screen-dashboard" aria-labelledby="tab-dashboard">
+    <header class="folio">
+      <p class="folio-index" aria-hidden="true">I.</p>
+      <div class="folio-head">
+        <h2>The Desk</h2>
+        <p class="folio-rule">Mastery at a glance &middot; folio 01 of 06 &middot; L0 overview</p>
+      </div>
+    </header>
+
+    <div class="screen-grid">
+      <div class="screen-body">
+
+        <div class="stat-row">
+          <div class="stat warn">
+            <div class="stat-value" id="stat-due">2</div>
+            <div class="stat-label">Reviews due</div>
+            <div class="stat-note">1 overdue &middot; real</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">12 <span style="font-size:.6em">days</span></div>
+            <div class="stat-label">Current streak</div>
+            <div class="stat-note"><span class="mock-badge">MOCK</span></div>
+          </div>
+          <div class="stat ok">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Validated topics</div>
+            <div class="stat-note">of 2 in matrix &middot; real</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">68</div>
+            <div class="stat-label">Topics in the index</div>
+            <div class="stat-note">12 tracks &middot; 5 published &middot; real</div>
+          </div>
+        </div>
+
+        <div class="leaf">
+          <h3 class="leaf-title">Next on the shelf</h3>
+          <p class="leaf-sub">From <span class="src">journey/examples/review-queue.example.json</span> &middot; evaluated against today.</p>
+          <div class="shelf-row">
+            <div>
+              <div class="shelf-title">Garbage Collection</div>
+              <div class="shelf-id">programming/garbage-collection</div>
+              <div class="shelf-meta"><span class="badge bad">Overdue</span> due 2026-08-17 &middot; interval 1d &middot; review 1</div>
+            </div>
+          </div>
+          <div class="shelf-row">
+            <div>
+              <div class="shelf-title">HTTP Caching</div>
+              <div class="shelf-id">systems-software/http-caching</div>
+              <div class="shelf-meta"><span class="badge ok">Due tomorrow</span> due 2026-08-19 &middot; interval 3d &middot; review 2</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn ink" type="button" data-goto="review">Open the review shelf</button>
+          </div>
+        </div>
+
+        <div class="leaf">
+          <h3 class="leaf-title">Field notes &mdash; practice days <span class="mock-badge">MOCK</span></h3>
+          <p class="leaf-sub">Fourteen weeks of practice activity. Tiles are quiet ink washes, not traffic lights: a dense page is simply a well-kept notebook.</p>
+          <div class="heat" id="heatmap" role="img" aria-label="Mock practice heatmap: fourteen weeks by weekdays, denser ink means more practice minutes"></div>
+          <div class="heat-legend" aria-hidden="true">
+            <span>less</span><span class="hcell" style="background:var(--heat-1)"></span><span class="hcell" style="background:var(--heat-2)"></span><span class="hcell" style="background:var(--heat-3)"></span><span class="hcell" style="background:var(--heat-4)"></span><span class="hcell" style="background:var(--heat-5)"></span><span>more</span>
+          </div>
+        </div>
+
+        <div class="leaf">
+          <h3 class="leaf-title">Quick sessions</h3>
+          <p class="leaf-sub">Three ways in, mirroring the harness protocol: prove, practice, revisit.</p>
+          <div class="btn-row">
+            <button class="btn ink" type="button" data-goto="validate">Submit a claim</button>
+            <button class="btn outline" type="button" data-goto="quiz">Run a study session</button>
+            <button class="btn outline" type="button" data-goto="explorer">Browse the index</button>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="margin" aria-label="Marginalia for the desk">
+        <div class="marginal">
+          <p class="m-head">&para; Provenance</p>
+          <p>Due counts, matrix totals, and queue rows are rendered from the committed example files, not invented.</p>
+          <p class="src">journey/examples/review-queue.example.json<br>journey/examples/skill-matrix.example.json</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Depth note &middot; K3</p>
+          <p>This folio stays at L0. Deep artifacts &mdash; claims, evidence records, rubrics &mdash; open only on demand, so the page never outgrows the reader.</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Honesty</p>
+          <p>Anything not backed by a committed file carries a dashed <span class="mono">MOCK</span> tag, here and everywhere.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 2 — THE INDEX (topic explorer)
+       ======================================================== -->
+  <section role="tabpanel" id="screen-explorer" aria-labelledby="tab-explorer" hidden>
+    <header class="folio">
+      <p class="folio-index" aria-hidden="true">II.</p>
+      <div class="folio-head">
+        <h2>The Index</h2>
+        <p class="folio-rule">The knowledge graph as a table of contents &middot; folio 02 of 06 &middot; L1 maps</p>
+      </div>
+    </header>
+
+    <div class="screen-grid">
+      <div class="screen-body">
+        <p>Chapters are tracks; entries are topics. Bands run high (B6, systems of systems) to low (B1, hardware). Marks: <span class="status-glyph"><span class="sq full"></span>published</span> &nbsp; <span class="status-glyph"><span class="sq half"></span>validated</span> &nbsp; <span class="status-glyph"><span class="sq open"></span>draft</span>. A green title means the example skill matrix records mastery there.</p>
+
+        <div id="track-chapters"><!-- chapters rendered by JS from INDEX.md data --></div>
+
+        <div class="legend-row" id="tier-legend" aria-hidden="true"></div>
+      </div>
+
+      <aside class="margin" aria-label="Marginalia for the index">
+        <div class="marginal">
+          <p class="m-head">&para; Provenance</p>
+          <p>All 68 topics, their bands, tiers, Bloom targets, and statuses are rendered verbatim from the committed index and graph.</p>
+          <p class="src">INDEX.md &middot; knowledge-graph.yml (68 topics, 8 waves)</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Axis reading</p>
+          <p>Three axes at once: abstraction band (vertical), evidence tier (confidence), Bloom depth (practice target). The graph&rsquo;s <span class="mono">prerequisite</span> edges stay in the margins here &mdash; the wave order in <span class="mono">knowledge-graph.yml</span> preserves them.</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Tier legend</p>
+          <p><span class="tier t0">T0</span> formal proof &middot; <span class="tier t1">T1</span> strong empirical &middot; <span class="tier t2">T2</span> codified consensus &middot; <span class="tier t3">T3</span> established practice &middot; <span class="tier t4">T4</span> frontier, volatile</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; T4 care</p>
+          <p>Frontier topics are dated and volatile-flagged; CI alerts when their <span class="mono">review_after</span> passes. The violet mark is a warning, not a badge of honour.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 3 — CLAIM UNDER REVIEW (validate flow)
+       ======================================================== -->
+  <section role="tabpanel" id="screen-validate" aria-labelledby="tab-validate" hidden>
+    <header class="folio">
+      <p class="folio-index" aria-hidden="true">III.</p>
+      <div class="folio-head">
+        <h2>Claim Under Review</h2>
+        <p class="folio-rule">Verdict &middot; tier &middot; evidence &middot; corrective path &middot; folio 03 of 06</p>
+      </div>
+    </header>
+
+    <div class="screen-grid">
+      <div class="screen-body">
+
+        <div class="leaf">
+          <h3 class="leaf-title">State your claim</h3>
+          <p class="leaf-sub">Write what you believe and why. The harness resolves the topic, compares against the published claims, and returns a verdict with its evidence.</p>
+          <label class="field-label" for="claim-input">Your claim</label>
+          <textarea class="claim-input" id="claim-input" spellcheck="false">Cache-Control max-age makes a response reusable for that many seconds from origin.</textarea>
+          <p class="leaf-sub" id="claim-source-note">Rendered from <span class="src">journey/examples/session.example.jsonl</span> (claim.submitted).</p>
+          <div class="sample-chips" role="group" aria-label="Sample claims">
+            <button class="sample-chip" type="button" data-sample="a" aria-pressed="true">Sample A &middot; real</button>
+            <button class="sample-chip" type="button" data-sample="b" aria-pressed="false">Sample B &middot; MOCK</button>
+            <button class="sample-chip" type="button" data-sample="c" aria-pressed="false">Sample C &middot; MOCK</button>
+          </div>
+          <div class="btn-row">
+            <button class="btn ink" type="button" id="submit-claim">Submit for review</button>
+            <button class="btn outline" type="button" id="clear-claim">Clear to free text</button>
+          </div>
+          <p class="leaf-sub" id="free-text-note" hidden>Free text is evaluated by the agent harness during a real session. This static folio renders verdicts for the three sample claims only &mdash; submit one of those to see the full apparatus. <span class="mock-badge">MOCK</span></p>
+        </div>
+
+        <div class="leaf" id="verdict-leaf">
+          <h3 class="leaf-title">Verdict</h3>
+          <div class="verdict-zone" id="verdict-zone" aria-live="polite">
+            <p class="leaf-sub">No claim submitted yet.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="margin" aria-label="Marginalia for claim review">
+        <div class="marginal">
+          <p class="m-head">&para; Protocol</p>
+          <p>Verdicts come from comparing the claim against <span class="mono">concept.md</span> claims; every verdict cites a record id. Unknown claims are answered <span class="mono">UNVERIFIED</span>, never guessed.</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Sample A &middot; real</p>
+          <p>The first sample is the actual claim submitted in the committed example session &mdash; verdict, tier, record, and note are all taken from <span class="mono">claim.verdict</span>.</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Corrective path</p>
+          <p>The steps under each verdict follow the shortest topological path from your current mastery to the target topic, per the knowledge graph.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 4 — STUDY SESSION (quiz)
+       ======================================================== -->
+  <section role="tabpanel" id="screen-quiz" aria-labelledby="tab-quiz" hidden>
+    <header class="folio">
+      <p class="folio-index" aria-hidden="true">IV.</p>
+      <div class="folio-head">
+        <h2>Study Session</h2>
+        <p class="folio-rule">Formative practice with immediate feedback &middot; folio 04 of 06</p>
+      </div>
+    </header>
+
+    <div class="screen-grid">
+      <div class="screen-body">
+
+        <div class="session-ledger" aria-label="Session ledger">
+          <div class="lg-line"><span class="lg-key">session</span> s-example-001 &middot; <span class="lg-key">started</span> 2026-08-16T10:00:00Z &middot; <span class="lg-key">objective</span> validate understanding of HTTP caching</div>
+          <div class="lg-line"><span class="lg-key">bank</span> formative &middot; <span class="lg-key">topic</span> systems-software/http-caching &middot; <span class="lg-key">tier</span> <span class="tier t2">T2</span> &middot; <span class="lg-key">bloom target</span> apply</div>
+          <div class="lg-line">Rendered from <span class="src">journey/examples/session.example.jsonl</span> &middot; questions from <span class="src">knowledge/systems-software/http-caching/validation.md</span></div>
+        </div>
+
+        <div class="leaf" id="item-1">
+          <h3 class="leaf-title">Item 1 <span class="badge mono">apply</span> <span class="badge ghost">formative</span> <span class="badge ghost">Q3</span></h3>
+          <p class="leaf-sub">Write your answer first &mdash; retrieval before reading (Roediger &amp; Karpicke, 2006).</p>
+          <p class="quiz-q">At 12:00:00 a proxy stores a response with <span class="mono">Date: 12:00:00</span>, <span class="mono">Age: 0</span>, <span class="mono">Cache-Control: public, max-age=300</span>. The proxy forwards it at 12:03:00. What <span class="mono">Age</span> value must the proxy send, and is the response still fresh?</p>
+          <textarea class="claim-input" id="q1-answer" spellcheck="false" aria-label="Your answer to item 1" placeholder="Your answer, in your own words"></textarea>
+          <div class="btn-row">
+            <button class="btn outline" type="button" data-reveal="a1">Reveal model answer</button>
+            <button class="btn ink" type="button" id="grade-1" disabled>Self-grade this item</button>
+          </div>
+          <div class="model-answer hidden" id="a1">
+            <p class="ma-head">Model answer &middot; evidence S-0009</p>
+            <p>Age = 180 (3 minutes of resident time added to prior Age 0). Freshness lifetime is 300 s, current age 180 s &lt; 300 s, so it is still fresh and may be served without contacting the origin.</p>
+          </div>
+        </div>
+
+        <div class="leaf" id="item-2">
+          <h3 class="leaf-title">Item 2 <span class="badge mono">remember</span> <span class="badge ghost">formative</span> <span class="badge ghost">Q1</span></h3>
+          <p class="leaf-sub">Multiple choice &middot; distractors constructed from claims in <span class="src">concept.md</span>.</p>
+          <p class="quiz-q">Which single Cache-Control directive truly prevents a response from being stored and reused by any cache?</p>
+          <ul class="quiz-options" id="q2-options" role="radiogroup" aria-label="Answers for item 2">
+            <li><button class="quiz-opt" type="button" role="radio" aria-checked="false" data-opt="0">no-store</button></li>
+            <li><button class="quiz-opt" type="button" role="radio" aria-checked="false" data-opt="1">no-cache</button></li>
+            <li><button class="quiz-opt" type="button" role="radio" aria-checked="false" data-opt="2">private</button></li>
+            <li><button class="quiz-opt" type="button" role="radio" aria-checked="false" data-opt="3">must-revalidate</button></li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn ink" type="button" id="grade-2" disabled>Check my answer</button>
+            <button class="btn outline" type="button" data-reveal="a2">Reveal model answer</button>
+          </div>
+          <div class="model-answer hidden" id="a2">
+            <p class="ma-head">Model answer &middot; evidence S-0009</p>
+            <p><span class="mono">no-store</span>. <span class="mono">no-cache</span> still allows storage (it only forces revalidation before reuse), and <span class="mono">private</span> still allows the browser&rsquo;s own cache to store the response.</p>
+          </div>
+        </div>
+
+        <div class="leaf">
+          <h3 class="leaf-title">Session close</h3>
+          <p class="leaf-sub">When both items are graded, the session would log <span class="mono">quiz.attempted</span> with per-Bloom scores and schedule the next review &mdash; that bookkeeping is the harness&rsquo;s job, not this folio&rsquo;s.</p>
+        </div>
+
+      </div>
+
+      <aside class="margin" aria-label="Marginalia for the study session">
+        <div class="marginal">
+          <p class="m-head">&para; Method</p>
+          <p>Questions come first, answers second: retrieval practice before reading. Feedback is immediate on every item.</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Provenance</p>
+          <p>Both items are real formative questions from the published HTTP Caching pack &mdash; bank, Bloom level, evidence records included.</p>
+          <p class="src">validation.md Q1, Q3 &middot; concept.md</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Spacing</p>
+          <p>Review items interleave prerequisites. This session is formative; the next stop is the shelf.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 5 — REVIEW SHELF (review queue)
+       ======================================================== -->
+  <section role="tabpanel" id="screen-review" aria-labelledby="tab-review" hidden>
+    <header class="folio">
+      <p class="folio-index" aria-hidden="true">V.</p>
+      <div class="folio-head">
+        <h2>The Review Shelf</h2>
+        <p class="folio-rule">Spaced-repetition due list &middot; folio 05 of 06</p>
+      </div>
+    </header>
+
+    <div class="screen-grid">
+      <div class="screen-body">
+
+        <div class="leaf">
+          <h3 class="leaf-title">Due now <span class="badge warn">2 items</span></h3>
+          <p class="leaf-sub">From <span class="src">journey/examples/review-queue.example.json</span> &middot; due dates evaluated against today (2026-08-18).</p>
+
+          <div class="shelf-row">
+            <div>
+              <div class="shelf-title">Garbage Collection</div>
+              <div class="shelf-id">programming/garbage-collection</div>
+              <div class="shelf-meta"><span class="due-flag overdue">OVERDUE &middot; 1 day</span> &middot; reviews 1 &middot; last 2026-08-16</div>
+              <div class="ladder" aria-label="Spacing ladder: interval 1 of 1, 3, 7, 14, 30, 60, 120 days">
+                <span class="rung now">1</span><span class="rung">3</span><span class="rung">7</span><span class="rung">14</span><span class="rung">30</span><span class="rung">60</span><span class="rung">120</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="shelf-row">
+            <div>
+              <div class="shelf-title">HTTP Caching</div>
+              <div class="shelf-id">systems-software/http-caching</div>
+              <div class="shelf-meta"><span class="due-flag soon">Due 2026-08-19</span> &middot; reviews 2 &middot; last 2026-08-16</div>
+              <div class="ladder" aria-label="Spacing ladder: interval 3 of 1, 3, 7, 14, 30, 60, 120 days">
+                <span class="rung past">1</span><span class="rung now">3</span><span class="rung">7</span><span class="rung">14</span><span class="rung">30</span><span class="rung">60</span><span class="rung">120</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn ink" type="button" id="start-review">Start review session</button>
+          </div>
+          <p class="leaf-sub" id="review-note" hidden>A review session draws mixed, interleaved items from each topic and its prerequisites. This demo drops you on the study-session folio. <span class="mock-badge">MOCK</span></p>
+        </div>
+
+        <div class="leaf">
+          <h3 class="leaf-title">The ladder</h3>
+          <p class="leaf-sub">Distributed practice, per Cepeda et al. (2006): 1 &rarr; 3 &rarr; 7 &rarr; 14 &rarr; 30 &rarr; 60 &rarr; 120 days, optimal gap roughly 10&ndash;20% of the retention interval.</p>
+          <p class="leaf-sub">Each completed review advances the rung; the shelf re-evaluates on every visit, so an overdue item sits at the top, quietly.</p>
+        </div>
+
+      </div>
+
+      <aside class="margin" aria-label="Marginalia for the review shelf">
+        <div class="marginal">
+          <p class="m-head">&para; Provenance</p>
+          <p>Both due items, intervals, and review counts come verbatim from the committed example queue.</p>
+          <p class="src">journey/examples/review-queue.example.json</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Overdue, not failing</p>
+          <p>The brick ink marks a missed date, nothing more. Reviews are never a punishment &mdash; the ladder simply resumes where it left off.</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Interleaving</p>
+          <p>Sessions mix this topic with its prerequisites, so the shelf double-checks the foundation each time it climbs.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 6 — PROGRESS LEDGER (progress & calibration)
+       ======================================================== -->
+  <section role="tabpanel" id="screen-progress" aria-labelledby="tab-progress" hidden>
+    <header class="folio">
+      <p class="folio-index" aria-hidden="true">VI.</p>
+      <div class="folio-head">
+        <h2>The Progress Ledger</h2>
+        <p class="folio-rule">Skill matrix &middot; predicted vs actual &middot; event log &middot; folio 06 of 06</p>
+      </div>
+    </header>
+
+    <div class="screen-grid">
+      <div class="screen-body">
+
+        <div class="leaf">
+          <h3 class="leaf-title">Skill matrix</h3>
+          <p class="leaf-sub">From <span class="src">journey/examples/skill-matrix.example.json</span> &middot; schema v1.</p>
+          <div class="table-wrap">
+            <table id="matrix-table">
+              <caption>Recorded topics (real example data)</caption>
+              <thead>
+                <tr><th scope="col">Topic</th><th scope="col">Level</th><th scope="col" class="num">Score</th><th scope="col">Validated</th><th scope="col">Last attempt</th><th scope="col">Evidence</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>HTTP Caching</strong><br><span class="mono" style="color:var(--ink-faint)">systems-software/http-caching</span></td>
+                  <td>competent</td><td class="num">80</td><td>&#10003;</td><td>2026-08-16</td><td><a class="rec" href="#screen-progress">S-0009</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Garbage Collection</strong><br><span class="mono" style="color:var(--ink-faint)">programming/garbage-collection</span></td>
+                  <td>advanced-beginner</td><td class="num">55</td><td>&mdash;</td><td>2026-08-10</td><td><span class="mono" style="color:var(--ink-faint)">none</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="leaf-sub"><span class="mock-badge">MOCK</span> The full matrix would hold one row per studied topic. Four plausible rows, clearly marked, show the shape:</p>
+          <div class="table-wrap">
+            <table>
+              <caption>Extended matrix (mock rows only)</caption>
+              <thead>
+                <tr><th scope="col">Topic</th><th scope="col">Level</th><th scope="col" class="num">Score</th><th scope="col">Validated</th><th scope="col">Last attempt</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Virtual Memory &amp; Paging</td><td>advanced-beginner</td><td class="num">62</td><td>&mdash;</td><td>2026-08-14</td></tr>
+                <tr><td>OS Scheduling</td><td>novice</td><td class="num">41</td><td>&mdash;</td><td>2026-08-12</td></tr>
+                <tr><td>Threat Modeling</td><td>competent</td><td class="num">78</td><td>&#10003;</td><td>2026-08-08</td></tr>
+                <tr><td>Test Design Techniques</td><td>novice</td><td class="num">33</td><td>&mdash;</td><td>2026-08-05</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="leaf">
+          <h3 class="leaf-title">Calibration &mdash; predicted vs actual <span class="mock-badge">MOCK</span></h3>
+          <p class="leaf-sub">After each checkpoint you predict your score; the ledger plots prediction against outcome. Drift is not shame &mdash; it is the calibration signal that tunes your self-knowledge. Drawn in SVG; no chart library.</p>
+
+          <div class="chart-wrap" role="img" aria-label="Line chart, mock: predicted scores as dashed line, actual scores as solid line, six checkpoints from July to August 2026. Mean absolute error 6.2 points.">
+            <svg viewBox="0 0 640 300" aria-hidden="true" focusable="false">
+              <line class="chart-grid" x1="60" y1="30" x2="600" y2="30"/>
+              <line class="chart-grid" x1="60" y1="85" x2="600" y2="85"/>
+              <line class="chart-grid" x1="60" y1="140" x2="600" y2="140"/>
+              <line class="chart-grid" x1="60" y1="195" x2="600" y2="195"/>
+              <line class="chart-grid" x1="60" y1="250" x2="600" y2="250"/>
+              <line class="chart-axis" x1="60" y1="30" x2="60" y2="250"/>
+              <line class="chart-axis" x1="60" y1="250" x2="600" y2="250"/>
+              <text class="chart-label" x="52" y="253" text-anchor="end">0</text>
+              <text class="chart-label" x="52" y="143" text-anchor="end">50</text>
+              <text class="chart-label" x="48" y="33" text-anchor="end">100</text>
+              <text class="chart-label" x="90" y="272" text-anchor="middle">Jul 1</text>
+              <text class="chart-label" x="198" y="272" text-anchor="middle">Jul 15</text>
+              <text class="chart-label" x="306" y="272" text-anchor="middle">Jul 29</text>
+              <text class="chart-label" x="414" y="272" text-anchor="middle">Aug 5</text>
+              <text class="chart-label" x="522" y="272" text-anchor="middle">Aug 12</text>
+              <text class="chart-label" x="590" y="272" text-anchor="end">Aug 18</text>
+              <polyline class="chart-line pred" points="90,96 198,85 306,107 414,74 522,78.4 590,63"/>
+              <polyline class="chart-line act" points="90,129 198,91.6 306,118 414,85 522,69.6 590,52"/>
+              <circle class="chart-dot pred" cx="90" cy="96" r="3.5"/>
+              <circle class="chart-dot pred" cx="198" cy="85" r="3.5"/>
+              <circle class="chart-dot pred" cx="306" cy="107" r="3.5"/>
+              <circle class="chart-dot pred" cx="414" cy="74" r="3.5"/>
+              <circle class="chart-dot pred" cx="522" cy="78.4" r="3.5"/>
+              <circle class="chart-dot pred" cx="590" cy="63" r="3.5"/>
+              <circle class="chart-dot act" cx="90" cy="129" r="3.5"/>
+              <circle class="chart-dot act" cx="198" cy="91.6" r="3.5"/>
+              <circle class="chart-dot act" cx="306" cy="118" r="3.5"/>
+              <circle class="chart-dot act" cx="414" cy="85" r="3.5"/>
+              <circle class="chart-dot act" cx="522" cy="69.6" r="3.5"/>
+              <circle class="chart-dot act" cx="590" cy="52" r="3.5"/>
+            </svg>
+          </div>
+          <div class="chart-legend" aria-hidden="true">
+            <span><span class="sw pred"></span>predicted</span>
+            <span><span class="sw act"></span>actual</span>
+            <span>mean absolute error 6.2 pts</span>
+          </div>
+          <p class="leaf-sub" style="margin-top:.8rem">Predicted &mdash; your pre-checkpoint estimate; actual &mdash; the score the harness recorded. The gap shrinks with practice: the ledger is a mirror with a ruler on it. (Data simulated; the <span class="mono">calibration.updated</span> event in the committed schema is the contract that carries it.)</p>
+        </div>
+
+        <div class="leaf">
+          <h3 class="leaf-title">Recent events</h3>
+          <p class="leaf-sub">From <span class="src">journey/examples/session.example.jsonl</span> &mdash; the event log, rendered as an index card.</p>
+          <div class="table-wrap">
+            <table>
+              <caption>Session s-example-001 &middot; 2026-08-16</caption>
+              <thead>
+                <tr><th scope="col">Time</th><th scope="col">Event</th><th scope="col">Payload</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="num">10:00</td><td><span class="mono">session.started</span></td><td>objective: validate understanding of HTTP caching</td></tr>
+                <tr><td class="num">10:02</td><td><span class="mono">claim.submitted</span></td><td>Cache-Control max-age &hellip; from origin</td></tr>
+                <tr><td class="num">10:03</td><td><span class="mono">claim.verdict</span></td><td><span class="badge warn">partial</span> <span class="tier t2">T2</span> <a class="rec" href="#screen-progress">S-0009</a> &mdash; age counters and stale-while-revalidate nuances missing</td></tr>
+                <tr><td class="num">10:20</td><td><span class="mono">quiz.attempted</span></td><td>bank: formative &middot; score 80 &middot; understand 100 &middot; apply 75</td></tr>
+                <tr><td class="num">10:25</td><td><span class="mono">matrix.updated</span></td><td>level: competent &middot; score: 80 &middot; validated: false</td></tr>
+                <tr><td class="num">10:30</td><td><span class="mono">session.completed</span></td><td>next_review: 2026-08-19</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="margin" aria-label="Marginalia for the progress ledger">
+        <div class="marginal">
+          <p class="m-head">&para; Provenance</p>
+          <p>Matrix rows are the committed example&rsquo;s two topics; the six event rows are the committed session log, line for line.</p>
+          <p class="src">journey/examples/skill-matrix.example.json<br>journey/examples/session.example.jsonl</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Calibration</p>
+          <p>Metacognition is trained, not assumed (Flavell, 1979). Predicted-vs-actual is logged per <span class="mono">calibration.updated</span> and shown as a plain pencil-and-ink plot &mdash; no gamified metres.</p>
+        </div>
+        <div class="marginal">
+          <p class="m-head">&para; Privacy &middot; K5</p>
+          <p>All of this is read from your local <span class="mono">.journey/</span>. No accounts, no telemetry; the page works entirely offline.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========================================================
+     FEEDBACK DIALOG (quiz immediate feedback)
+     ======================================================== -->
+<dialog id="feedback-dialog" aria-labelledby="dlg-title" aria-describedby="dlg-body">
+  <div class="dlg-inner">
+    <h3 id="dlg-title">Item feedback</h3>
+    <div id="dlg-body">
+      <p class="dlg-grade" data-v="" id="dlg-grade">Graded</p>
+      <p id="dlg-copy"></p>
+      <p id="dlg-self" hidden>How did you do? Grade yourself against the model answer.</p>
+      <div class="btn-row" id="dlg-self-options" hidden>
+        <button class="btn outline" type="button" data-self="correct">Correct</button>
+        <button class="btn outline" type="button" data-self="partial">Partial</button>
+        <button class="btn outline" type="button" data-self="incorrect">Incorrect</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn ink" type="button" id="dlg-close">Close</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<footer class="site-foot">
+  <h3>Provenance &amp; honesty</h3>
+  <p>This folio is a design exploration &mdash; a static, offline mock. Everything tagged <span class="mono">real</span> is rendered from committed data; everything else carries a dashed <span class="mock-badge">MOCK</span> tag and is clearly simulated.</p>
+  <ul>
+    <li>Real: <span class="src">journey/examples/profile.example.json</span>, <span class="src">skill-matrix.example.json</span>, <span class="src">review-queue.example.json</span>, <span class="src">session.example.jsonl</span> &middot; schemas in <span class="src">journey/schema/</span></li>
+    <li>Real: <span class="src">INDEX.md</span> (68 topics), <span class="src">knowledge-graph.yml</span> (8 waves), <span class="src">knowledge/systems-software/http-caching/concept.md</span> &amp; <span class="src">validation.md</span> (Q1, Q3)</li>
+    <li>Contract: <span class="src">docs/spec.md</span> &sect;5.1, &sect;7&ndash;&sect;8 &middot; <span class="src">docs/adr/0001-journey-interface-consumer-layer.md</span></li>
+    <li>MOCK: streak, practice heatmap, calibration chart, sample claims B/C, extended matrix rows, review-session behaviour</li>
+  </ul>
+  <p style="margin-top:1rem">Atelier &middot; design exploration 01 &middot; L1 UI/UX agent &middot; 2026-08-18</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- tabs ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('[role="tabpanel"]'));
+  var current = 0;
+
+  function show(id, focusHead) {
+    var i;
+    for (i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute("data-screen") === id;
+      tabs[i].setAttribute("aria-selected", on ? "true" : "false");
+      tabs[i].tabIndex = on ? 0 : -1;
+      panels[i].hidden = !on;
+      if (on) current = i;
+    }
+    if (focusHead) {
+      var head = document.querySelector("#screen-" + id + " h2");
+      if (head) head.setAttribute("tabindex", "-1");
+      if (head) head.focus();
+    }
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener("click", function () { show(tab.getAttribute("data-screen")); });
+    tab.addEventListener("keydown", function (e) {
+      var next = null;
+      if (e.key === "ArrowRight") next = (i + 1) % tabs.length;
+      else if (e.key === "ArrowLeft") next = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === "Home") next = 0;
+      else if (e.key === "End") next = tabs.length - 1;
+      if (next !== null) {
+        e.preventDefault();
+        show(tabs[next].getAttribute("data-screen"), true);
+        tabs[next].focus();
+      }
+    });
+  });
+
+  /* cross-screen navigation */
+  document.querySelectorAll("[data-goto]").forEach(function (b) {
+    b.addEventListener("click", function () { show(b.getAttribute("data-goto"), true); });
+  });
+
+  /* ---------- theme ---------- */
+  var saved = null;
+  try { saved = localStorage.getItem("atelier-theme"); } catch (e) { saved = null; }
+  var root = document.documentElement;
+  var toggle = document.getElementById("theme-toggle");
+  var dark = saved === "dark" || (saved === null && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  function apply() {
+    root.setAttribute("data-theme", dark ? "dark" : "light");
+    toggle.setAttribute("aria-pressed", dark ? "true" : "false");
+    toggle.textContent = "Theme \u00B7 " + (dark ? "light" : "dark");
+  }
+  toggle.addEventListener("click", function () {
+    dark = !dark;
+    try { localStorage.setItem("atelier-theme", dark ? "dark" : "light"); } catch (e) {}
+    apply();
+  });
+  apply();
+
+  /* ---------- heatmap (MOCK, seeded so it is stable) ---------- */
+  function lcg(seed) {
+    var s = seed >>> 0;
+    return function () {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      return s / 4294967296;
+    };
+  }
+  var rand = lcg(20260818);
+  var heat = document.getElementById("heatmap");
+  var frag = document.createDocumentFragment();
+  for (var w = 0; w < 14; w++) {
+    for (var d = 0; d < 7; d++) {
+      var r = rand();
+      var lvl = r < 0.60 ? 0 : r < 0.74 ? 1 : r < 0.84 ? 2 : r < 0.93 ? 3 : 4;
+      var cell = document.createElement("span");
+      cell.className = "heat-cell" + (lvl > 0 ? " h" + lvl : "");
+      if (lvl > 0) cell.title = "Practice day \u00B7 " + (lvl * 7) + " min (MOCK)";
+      frag.appendChild(cell);
+    }
+  }
+  heat.appendChild(frag);
+
+  /* ---------- explorer: tracks from INDEX.md (real) ---------- */
+  var TRACKS = [
+    ["cs-foundations", "Foundations of Computing", [
+      ["Algorithms", "cs-foundations/algorithms", "B3", "T1", "apply", "d"],
+      ["Data Structures", "cs-foundations/data-structures", "B3", "T0", "apply", "d"],
+      ["Discrete Mathematics", "cs-foundations/discrete-mathematics", "B3", "T0", "apply", "d"],
+      ["Logic & Proof", "cs-foundations/logic-and-proof", "B3", "T0", "apply", "d"],
+      ["Complexity Theory", "cs-foundations/complexity-theory", "B2", "T0", "apply", "d"],
+      ["Computability", "cs-foundations/computability", "B2", "T0", "understand", "d"],
+      ["Probability & Statistics", "cs-foundations/probability-statistics", "B2", "T1", "apply", "d"]
+    ]],
+    ["programming", "Programming & Languages", [
+      ["Compiler Pipeline", "programming/compiler-pipeline", "B3", "T3", "apply", "d"],
+      ["Concurrency Primitives", "programming/concurrency-primitives", "B3", "T1", "apply", "d"],
+      ["Functions & Types", "programming/functions-and-types", "B3", "T0", "apply", "d"],
+      ["Garbage Collection", "programming/garbage-collection", "B3", "T1", "apply", "p"],
+      ["Memory Model & Pointers", "programming/memory-model-and-pointers", "B3", "T1", "apply", "d"],
+      ["Programming Paradigms", "programming/programming-paradigms", "B3", "T3", "apply", "d"]
+    ]],
+    ["data", "Data Management", [
+      ["Distributed Databases", "data/distributed-databases", "B5", "T2", "apply", "d"],
+      ["Relational Model", "data/relational-model", "B4", "T2", "apply", "d"],
+      ["SQL & Query Optimization", "data/sql-and-query-optimization", "B4", "T1", "apply", "d"],
+      ["Transactions & Isolation", "data/transactions-and-isolation", "B4", "T0", "apply", "d"],
+      ["Indexing & Storage", "data/indexing-and-storage", "B3", "T2", "apply", "d"]
+    ]],
+    ["architecture-design", "Architecture & Design", [
+      ["Architectural Styles", "architecture-design/architectural-styles", "B5", "T2", "apply", "d"],
+      ["System Design Process", "architecture-design/system-design-process", "B5", "T2", "analyze", "d"],
+      ["Caching Strategies", "architecture-design/caching-strategies", "B4", "T3", "apply", "d"],
+      ["Design Patterns", "architecture-design/design-patterns", "B4", "T3", "apply", "d"],
+      ["Modularity", "architecture-design/modularity", "B4", "T3", "apply", "d"]
+    ]],
+    ["quality-testing", "Quality & Testing", [
+      ["Quality Models", "quality-testing/quality-models", "B5", "T2", "understand", "d"],
+      ["Code Review", "quality-testing/code-review", "B4", "T1", "apply", "d"],
+      ["Performance Engineering", "quality-testing/performance-engineering", "B4", "T1", "apply", "d"],
+      ["Software Testing Basics", "quality-testing/software-testing-basics", "B4", "T2", "apply", "d"],
+      ["Test Automation", "quality-testing/test-automation", "B4", "T3", "apply", "d"],
+      ["Test Design Techniques", "quality-testing/test-design-techniques", "B4", "T1", "apply", "d"]
+    ]],
+    ["security", "Security", [
+      ["Secure SDLC", "security/secure-sdlc", "B5", "T2", "apply", "d"],
+      ["Threat Modeling", "security/threat-modeling", "B5", "T2", "apply", "d"],
+      ["Authentication & Authorization", "security/authentication-authorization", "B4", "T2", "apply", "d"],
+      ["Web Security", "security/web-security", "B4", "T2", "apply", "d"],
+      ["Cryptography Basics", "security/cryptography-basics", "B2", "T0", "apply", "d"]
+    ]],
+    ["systems-software", "Systems Software", [
+      ["Distributed Consensus", "systems-software/distributed-consensus", "B5", "T0", "analyze", "p"],
+      ["Distributed Systems Basics", "systems-software/distributed-systems-basics", "B5", "T2", "apply", "d"],
+      ["HTTP Basics", "systems-software/http-basics", "B4", "T2", "apply", "d"],
+      ["HTTP Caching", "systems-software/http-caching", "B4", "T2", "apply", "p"],
+      ["Containers & Isolation", "systems-software/containers-isolation", "B3", "T3", "apply", "d"],
+      ["Parallel Programming", "systems-software/parallel-programming", "B3", "T1", "apply", "d"],
+      ["Networking Basics", "systems-software/networking-basics", "B2", "T2", "apply", "d"],
+      ["OS Processes", "systems-software/os-processes", "B2", "T2", "apply", "d"],
+      ["OS Scheduling", "systems-software/os-scheduling", "B2", "T1", "apply", "d"],
+      ["Virtual Memory & Paging", "systems-software/virtual-memory", "B2", "T0", "apply", "p"]
+    ]],
+    ["hardware", "Hardware & Architecture", [
+      ["Cache Coherence", "hardware/cache-coherence", "B1", "T0", "analyze", "p"],
+      ["CPU Pipelining", "hardware/cpu-pipelining", "B1", "T2", "apply", "d"],
+      ["Interrupts & DMA", "hardware/interrupts-and-dma", "B1", "T2", "apply", "d"],
+      ["ISA Basics", "hardware/isa-basics", "B1", "T2", "apply", "d"],
+      ["Memory Hierarchy", "hardware/memory-hierarchy", "B1", "T2", "apply", "d"],
+      ["Storage Devices", "hardware/storage-devices", "B1", "T2", "understand", "d"]
+    ]],
+    ["engineering-process", "Engineering Process", [
+      ["Agile Methods", "engineering-process/agile-methods", "B5", "T3", "apply", "d"],
+      ["Estimation & Cost", "engineering-process/estimation-and-cost", "B5", "T1", "apply", "d"],
+      ["Professional Ethics", "engineering-process/professional-ethics", "B5", "T2", "understand", "d"],
+      ["Requirements Engineering", "engineering-process/requirements-engineering", "B5", "T2", "apply", "d"],
+      ["Software Lifecycle", "engineering-process/software-lifecycle", "B5", "T2", "apply", "d"],
+      ["Configuration Management", "engineering-process/configuration-management", "B4", "T2", "apply", "d"]
+    ]],
+    ["operations", "Operations", [
+      ["DevOps Pipeline", "operations/devops-pipeline", "B5", "T3", "apply", "d"],
+      ["Incident Response", "operations/incident-response", "B5", "T3", "apply", "d"],
+      ["Observability", "operations/observability", "B5", "T3", "apply", "d"],
+      ["Software Maintenance", "operations/software-maintenance", "B4", "T1", "apply", "d"]
+    ]],
+    ["ai-ml", "AI & Machine Learning", [
+      ["LLM Architectures", "ai-ml/llm-architectures", "B5", "T4", "understand", "d"],
+      ["ML Fundamentals", "ai-ml/ml-fundamentals", "B4", "T1", "apply", "d"],
+      ["Neural Networks", "ai-ml/neural-networks", "B4", "T1", "apply", "d"],
+      ["Supervised Learning", "ai-ml/supervised-learning", "B4", "T1", "apply", "d"]
+    ]],
+    ["frontiers", "Frontiers (T4, volatile)", [
+      ["Agentic Systems", "frontiers/agentic-systems", "B5", "T4", "apply", "d"],
+      ["Formal Verification at Scale", "frontiers/formal-verification-scale", "B5", "T4", "understand", "d"],
+      ["Zero-Knowledge Proofs", "frontiers/zero-knowledge-proofs", "B5", "T4", "understand", "d"],
+      ["Post-Quantum Cryptography", "frontiers/post-quantum-cryptography", "B2", "T4", "understand", "d"]
+    ]]
+  ];
+
+  var MASTERED = { "systems-software/http-caching": "competent", "programming/garbage-collection": "advanced-beginner" };
+  var STATUS_SQ = { p: ["sq full", "published"], v: ["sq half", "validated"], d: ["sq open", "draft"] };
+
+  var chapters = document.getElementById("track-chapters");
+  TRACKS.forEach(function (tr) {
+    var d = document.createElement("details");
+    d.className = "chapter";
+    var sum = document.createElement("summary");
+    var total = tr[2].length;
+    var published = tr[2].filter(function (t) { return t[5] === "p"; }).length;
+    sum.innerHTML = "<span>" + tr[1] + "</span><span class=\"ch-count\">" + total + " topics</span><span class=\"ch-meta\">" + published + " published</span>";
+    d.appendChild(sum);
+    var list = document.createElement("div");
+    list.className = "topic-list";
+    tr[2].forEach(function (t) {
+      var row = document.createElement("div");
+      row.className = "topic-row";
+      var mastered = MASTERED[t[1]];
+      var status = STATUS_SQ[t[5]];
+      var sq = "<span class=\"" + status[0] + "\" aria-hidden=\"true\"></span>";
+      var title = mastered
+        ? "<span class=\"t-title mastered\" title=\"Matrix: " + mastered + "\">" + t[0] + " \u2020</span>"
+        : "<span class=\"t-title\">" + t[0] + "</span>";
+      row.innerHTML = title +
+        "<span class=\"t-id\">" + t[1] + "</span>" +
+        "<span class=\"t-spacer\"></span>" +
+        "<span class=\"t-band\">" + t[2] + "</span>" +
+        "<span class=\"tier " + t[3].toLowerCase() + "\">" + t[3] + "</span>" +
+        "<span class=\"t-bloom\">" + t[4] + "</span>" +
+        "<span class=\"status-glyph\">" + sq + status[1] + "</span>";
+      list.appendChild(row);
+    });
+    d.appendChild(list);
+    chapters.appendChild(d);
+  });
+
+  var legend = document.getElementById("tier-legend");
+  [["t0", "T0 formal proof"], ["t1", "T1 strong empirical"], ["t2", "T2 codified consensus"], ["t3", "T3 established practice"], ["t4", "T4 frontier \u00B7 volatile"]].forEach(function (e) {
+    var s = document.createElement("span");
+    s.innerHTML = "<span class=\"tier " + e[0] + "\">" + e[1] + "</span>";
+    legend.appendChild(s);
+  });
+
+  /* ---------- validate: sample claims ---------- */
+  var SAMPLES = {
+    a: {
+      text: "Cache-Control max-age makes a response reusable for that many seconds from origin.",
+      source: "journey/examples/session.example.jsonl (claim.submitted) \u2014 real",
+      verdict: { v: "partial", label: "Partially correct", tier: "T2", record: "S-0009",
+        note: "Correct for shared caches when freshness from origin is unconstrained; age counters and stale-while-revalidate nuances missing.",
+        recTitle: "RFC 9111: HTTP Caching (IETF, 2022)",
+        steps: [
+          ["Reread", "concept.md \u00A7 Validation (revalidation) and \u00A7 Cache-Control directives"],
+          ["Practice", "validation.md Q2 (freshness order) and Q8 (Age semantics)"],
+          ["Revisit", "shelf due 2026-08-19 \u00B7 interval 3d"]
+        ] }
+    },
+    b: {
+      text: "no-cache means the response is never stored anywhere, so it cannot be cached at all.",
+      source: "Sample B \u2014 MOCK (distractor built from concept.md \u201CBoundaries\u201D)",
+      verdict: { v: "incorrect", label: "Incorrect", tier: "T2", record: "S-0009",
+        note: "no-cache does NOT forbid storage: the response is stored but must be revalidated with the origin before every reuse. Only no-store truly prevents storage.",
+        recTitle: "RFC 9111: HTTP Caching (IETF, 2022)",
+        steps: [
+          ["Reread", "concept.md \u00A7 Cache-Control directives \u2014 the no-store / no-cache pair"],
+          ["Practice", "validation.md Q1 (the only directive that truly prevents caching)"],
+          ["Revisit", "schedule a review after 1 day (rung 1)"]
+        ] }
+    },
+    c: {
+      text: "Vary: Accept-Encoding makes the Accept-Encoding header part of the cache key.",
+      source: "Sample C \u2014 MOCK (a claim the pack supports verbatim)",
+      verdict: { v: "correct", label: "Correct", tier: "T2", record: "S-0023",
+        note: "Exactly right: Vary names request header fields whose values participate in the cache key; a stored response may be reused only when those values match.",
+        recTitle: "RFC 9110: HTTP Semantics (IETF, 2022)",
+        steps: [
+          ["Deepen", "concept.md \u00A7 Vary \u2014 then Q7 (the gzip corruption scenario)"],
+          ["Extend", "related topic: architecture-design/caching-strategies (recommended)"],
+          ["Revisit", "shelf after 7 days (rung 3) to hold it"]
+        ] }
+    }
+  };
+
+  var input = document.getElementById("claim-input");
+  var srcNote = document.getElementById("claim-source-note");
+  var freeNote = document.getElementById("free-text-note");
+  var chips = Array.prototype.slice.call(document.querySelectorAll(".sample-chip"));
+  var activeSample = "a";
+  var verdictZone = document.getElementById("verdict-zone");
+
+  function setClaim(sampleKey, focusText) {
+    activeSample = sampleKey;
+    var s = SAMPLES[sampleKey];
+    input.value = s.text;
+    srcNote.innerHTML = "Source: " + s.source;
+    freeNote.hidden = true;
+    chips.forEach(function (c) { c.setAttribute("aria-pressed", c.getAttribute("data-sample") === sampleKey ? "true" : "false"); });
+    if (focusText) { input.focus(); }
+  }
+
+  function renderVerdict(v) {
+    var html = "";
+    html += "<span class=\"verdict-stamp\" data-v=\"" + v.v + "\">" + v.label + "</span>";
+    html += "<p class=\"verdict-meta\">verdict tier <span class=\"tier " + v.tier.toLowerCase() + "\">" + v.tier + "</span> \u00B7 evidence record <a class=\"rec\" href=\"#screen-progress\" title=\"" + v.recTitle + "\">" + v.record + "</a> \u00B7 " + v.recTitle + "</p>";
+    html += "<p class=\"leaf-sub\" style=\"margin-top:.6rem\">" + v.note + "</p>";
+    html += "<p class=\"field-label\" style=\"margin-top:1rem\">Corrective path \u2014 shortest topological route</p>";
+    html += "<ol class=\"steps\">";
+    v.steps.forEach(function (s) {
+      html += "<li><span class=\"step-tag\">" + s[0] + " \u2014</span> " + s[1] + "</li>";
+    });
+    html += "</ol>";
+    verdictZone.innerHTML = html;
+  }
+
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () { setClaim(c.getAttribute("data-sample"), false); });
+  });
+  document.getElementById("submit-claim").addEventListener("click", function () {
+    if (SAMPLES[activeSample] && input.value.trim() === SAMPLES[activeSample].text.trim()) {
+      renderVerdict(SAMPLES[activeSample].verdict);
+    } else {
+      freeNote.hidden = false;
+      verdictZone.innerHTML = "<p class=\"leaf-sub\">This folio renders verdicts for the three sample claims only; free text is evaluated by the agent harness during a real session. <span class=\"mock-badge\">MOCK</span></p>";
+    }
+  });
+  document.getElementById("clear-claim").addEventListener("click", function () {
+    activeSample = null;
+    input.value = "";
+    srcNote.textContent = "Free text \u2014 demo only.";
+    freeNote.hidden = false;
+    chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    input.focus();
+  });
+
+  /* ---------- quiz ---------- */
+  var dlg = document.getElementById("feedback-dialog");
+  var dlgTitle = document.getElementById("dlg-title");
+  var dlgGrade = document.getElementById("dlg-grade");
+  var dlgCopy = document.getElementById("dlg-copy");
+  var dlgSelf = document.getElementById("dlg-self");
+  var dlgSelfOpts = document.getElementById("dlg-self-options");
+
+  function openDlg() {
+    dlg.showModal();
+  }
+  document.getElementById("dlg-close").addEventListener("click", function () { dlg.close(); });
+
+  document.querySelectorAll("[data-reveal]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var a = document.getElementById(b.getAttribute("data-reveal"));
+      a.classList.remove("hidden");
+      if (b.getAttribute("data-reveal") === "a1") document.getElementById("grade-1").disabled = false;
+    });
+  });
+
+  var q1 = document.getElementById("q1-answer");
+  q1.addEventListener("input", function () {
+    document.getElementById("grade-1").disabled = q1.value.trim().length < 3;
+  });
+  document.getElementById("grade-1").addEventListener("click", function () {
+    dlgTitle.textContent = "Item 1 \u00B7 self-grade";
+    dlgGrade.textContent = "Grade yourself";
+    dlgGrade.setAttribute("data-v", "");
+    dlgCopy.innerHTML = "<span class=\"mono\">Age = 180</span> (3 min resident time on Age 0); lifetime 300 s, current age 180 s &lt; 300 s \u2014 still fresh. Compare your answer to the model answer, then grade yourself; the result would log <span class=\"mono\">quiz.attempted</span> (apply) <span class=\"mock-badge\">MOCK</span>";
+    dlgSelf.hidden = false;
+    dlgSelfOpts.hidden = false;
+    openDlg();
+  });
+
+  var q2Opts = Array.prototype.slice.call(document.querySelectorAll("#q2-options .quiz-opt"));
+  var q2Pick = null;
+  q2Opts.forEach(function (o) {
+    o.addEventListener("click", function () {
+      q2Pick = o.getAttribute("data-opt");
+      q2Opts.forEach(function (x) { x.setAttribute("aria-checked", x === o ? "true" : "false"); });
+      document.getElementById("grade-2").disabled = false;
+    });
+  });
+  document.getElementById("grade-2").addEventListener("click", function () {
+    var ok = q2Pick === "0";
+    dlgTitle.textContent = "Item 2 \u00B7 " + (ok ? "correct" : "recheck");
+    dlgGrade.textContent = ok ? "Correct" : "Not quite";
+    dlgGrade.setAttribute("data-v", ok ? "correct" : "incorrect");
+    dlgCopy.innerHTML = "The answer is <span class=\"mono\">no-store</span> \u2014 the only directive that truly prevents storage. <span class=\"mono\">no-cache</span> stores but revalidates; <span class=\"mono\">private</span> still allows the browser cache; <span class=\"mono\">must-revalidate</span> governs stale serving, not storage. Evidence: <a class=\"rec\" href=\"#screen-progress\">S-0009</a> (RFC 9111)." + (ok ? "" : " The model answer is open above \u2014 reread it, then try the next review item.");
+    dlgSelf.hidden = true;
+    dlgSelfOpts.hidden = true;
+    openDlg();
+  });
+
+  document.querySelectorAll("[data-self]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var v = b.getAttribute("data-self");
+      dlgGrade.textContent = v.charAt(0).toUpperCase() + v.slice(1) + " \u2014 noted";
+      dlgGrade.setAttribute("data-v", v);
+      dlgSelf.hidden = true;
+      dlgSelfOpts.hidden = true;
+      dlgCopy.innerHTML = "Self-grade recorded as <span class=\"mono\">quiz.attempted</span> for item 1 (bank: formative, bloom: apply). The harness would fold this into the topic score and move the shelf rung. <span class=\"mock-badge\">MOCK</span>";
+    });
+  });
+
+  /* ---------- review shelf ---------- */
+  document.getElementById("start-review").addEventListener("click", function () {
+    document.getElementById("review-note").hidden = false;
+    show("quiz", true);
+  });
+
+  /* ---------- defaults ---------- */
+  renderVerdict(SAMPLES.a.verdict);
+})();
+</script>
+</body>
+</html>

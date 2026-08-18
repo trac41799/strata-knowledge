@@ -172,6 +172,15 @@ Four layers + one construction machinery:
 Layers 1–4 are all committed to GitHub except `.journey/` (private). The construction
 machinery (agent team, CI) is itself documented in this spec (§10) and the plan.
 
+### 5.1 Layer 5 — Journey Interface (optional consumer, ADR-0001)
+
+A local-first UI in `ui/` rendering journey + knowledge data. Reads `.journey/` and the
+committed maps; writes only `.journey/` via the event schema; never mutates canonical
+knowledge. Design system is code (tokens as CSS custom properties), documented in
+`docs/design-system/`. Progressive disclosure mirrors the harness protocol (K3). No
+accounts, no telemetry (K5). Data contract = committed schemas, never hardcoded formats
+(K6).
+
 ---
 
 ## 6. Layer 1 — Knowledge Base
@@ -397,6 +406,10 @@ matrix.updated                 (skill deltas)
 calibration.updated            (predicted vs actual → calibration curve)
 reflection.logged              (free text, metacognitive prompts)
 ```
+
+Verdict vocabulary is intentionally split across artifacts: claims use
+`correct|partial|incorrect`; checkpoints and project reviews use `pass|partial|fail`.
+Event `payload` shapes are documented in `journey/README.md` (known contracts).
 
 ### 8.3 Privacy defaults
 

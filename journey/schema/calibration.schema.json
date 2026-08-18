@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Metacognitive calibration state (predicted vs actual, per topic)",
+  "type": "object",
+  "required": ["schema-version", "updated", "entries"],
+  "properties": {
+    "schema-version": {"type": "integer", "const": 1},
+    "updated": {"type": "string", "format": "date"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "date", "predicted", "actual"],
+        "properties": {
+          "topic": {"type": "string"},
+          "date": {"type": "string", "format": "date"},
+          "predicted": {"type": "number", "minimum": 0, "maximum": 100},
+          "actual": {"type": "number", "minimum": 0, "maximum": 100},
+          "session_id": {"type": "string"},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

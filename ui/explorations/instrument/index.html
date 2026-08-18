@@ -1,0 +1,1508 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>STRATA // JOURNEY COCKPIT â€” Instrument</title>
+<style>
+:root{
+  color-scheme: dark;
+  --bg-0:#0A0E14; --bg-1:#0F151E; --bg-2:#131B26; --bg-3:#182130;
+  --line:#1D2A3A; --line-faint:rgba(148,163,184,.14);
+  --text-1:#D3DCE8; --text-2:#8494A9; --text-3:#5B6B7F;
+  --acc-teal:#2DD4BF; --acc-amber:#F5A623;
+  --ok:#34D399; --warn:#F5A623; --err:#F87171; --info:#60A5FA;
+  --t0:#C084FC; --t1:#60A5FA; --t2:#2DD4BF; --t3:#F5A623; --t4:#F472B6;
+  --tint-teal:rgba(45,212,191,.14); --tint-amber:rgba(245,166,35,.14);
+  --tint-ok:rgba(52,211,153,.13); --tint-err:rgba(248,113,113,.13); --tint-info:rgba(96,165,250,.13);
+  --tint-t0:rgba(192,132,252,.13); --tint-t4:rgba(244,114,182,.13);
+  --chip-teal:#2DD4BF; --chip-amber:#F5A623; --chip-ok:#34D399; --chip-err:#F87171;
+  --chip-info:#60A5FA; --chip-t0:#C084FC; --chip-t4:#F472B6;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --fs-0:.625rem; --fs-1:.6875rem; --fs-2:.8125rem; --fs-3:.9375rem; --fs-4:1.25rem; --fs-5:1.5rem;
+  --radius:2px;
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --bg-0:#F4F6F8; --bg-1:#FAFBFC; --bg-2:#FFFFFF; --bg-3:#E9EEF3;
+  --line:#C8D2DE; --line-faint:rgba(27,39,51,.10);
+  --text-1:#1B2733; --text-2:#4A5A6B; --text-3:#7B8998;
+  --acc-teal:#0F766E; --acc-amber:#8A5B00;
+  --ok:#15803D; --warn:#8A5B00; --err:#B91C1C; --info:#1D4ED8;
+  --t0:#7C3AED; --t1:#1D4ED8; --t2:#0F766E; --t3:#8A5B00; --t4:#BE185D;
+  --tint-teal:#E4F0EF; --tint-amber:#F4E8D0; --tint-ok:#E2F1E8; --tint-err:#F7E4E2;
+  --tint-info:#E3EBF7; --tint-t0:#F0EAFB; --tint-t4:#F8E7F0;
+  --chip-teal:#0F766E; --chip-amber:#8A5B00; --chip-ok:#166534; --chip-err:#B91C1C;
+  --chip-info:#1D4ED8; --chip-t0:#7C3AED; --chip-t4:#BE185D;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme]){
+    color-scheme: light;
+    --bg-0:#F4F6F8; --bg-1:#FAFBFC; --bg-2:#FFFFFF; --bg-3:#E9EEF3;
+    --line:#C8D2DE; --line-faint:rgba(27,39,51,.10);
+    --text-1:#1B2733; --text-2:#4A5A6B; --text-3:#7B8998;
+    --acc-teal:#0F766E; --acc-amber:#8A5B00;
+    --ok:#15803D; --warn:#8A5B00; --err:#B91C1C; --info:#1D4ED8;
+    --t0:#7C3AED; --t1:#1D4ED8; --t2:#0F766E; --t3:#8A5B00; --t4:#BE185D;
+    --tint-teal:#E4F0EF; --tint-amber:#F4E8D0; --tint-ok:#E2F1E8; --tint-err:#F7E4E2;
+    --tint-info:#E3EBF7; --tint-t0:#F0EAFB; --tint-t4:#F8E7F0;
+    --chip-teal:#0F766E; --chip-amber:#8A5B00; --chip-ok:#166534; --chip-err:#B91C1C;
+    --chip-info:#1D4ED8; --chip-t0:#7C3AED; --chip-t4:#BE185D;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg-0); color:var(--text-1);
+  font-family:var(--sans); font-size:var(--fs-2); line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,p,ul,ol,figure{margin:0}
+.mono{font-family:var(--mono)}
+.micro{font-size:var(--fs-0); text-transform:uppercase; letter-spacing:.09em; font-family:var(--mono); color:var(--text-2)}
+a{color:var(--acc-teal)}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--acc-teal); outline-offset:2px}
+
+.tickbar{
+  height:6px;
+  background:
+    repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 8px),
+    var(--bg-1);
+  border-bottom:1px solid var(--line);
+}
+.header{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:10px 16px 8px; border-bottom:1px solid var(--line); background:var(--bg-1);
+}
+.brand{display:flex; align-items:center; gap:10px; min-width:0}
+.brand h1{font-family:var(--mono); font-size:var(--fs-3); letter-spacing:.14em; font-weight:700; white-space:nowrap}
+.brand h1 .accent{color:var(--acc-teal)}
+.brand .sub{display:none}
+@media(min-width:820px){.brand .sub{display:block}}
+.ledrow{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.leditem{display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:var(--fs-1); color:var(--text-2)}
+.led{width:8px; height:8px; border-radius:50%; background:#334155; flex:0 0 auto}
+.led.on{background:var(--ok); box-shadow:0 0 6px var(--ok)}
+.led.warn{background:var(--warn); box-shadow:0 0 6px var(--warn)}
+.led.err{background:var(--err); box-shadow:0 0 6px var(--err)}
+.led.idle{background:var(--info); box-shadow:0 0 6px var(--info)}
+.clock{font-family:var(--mono); font-size:var(--fs-1); color:var(--text-2); font-variant-numeric:tabular-nums}
+
+.tablist{
+  display:flex; gap:2px; padding:8px 16px 0; background:var(--bg-1);
+  border-bottom:1px solid var(--line); overflow-x:auto; position:sticky; top:0; z-index:20;
+}
+.tab{
+  font-family:var(--mono); font-size:var(--fs-1); letter-spacing:.06em; text-transform:uppercase;
+  color:var(--text-2); background:transparent; border:1px solid transparent; border-bottom:none;
+  padding:8px 12px; cursor:pointer; white-space:nowrap; position:relative;
+}
+.tab:hover{color:var(--text-1)}
+.tab[aria-selected="true"]{color:var(--acc-teal); background:var(--bg-0); border-color:var(--line); border-bottom:1px solid var(--bg-0)}
+.tab[aria-selected="true"]::before{content:""; display:block; height:2px; background:var(--acc-teal); position:absolute; top:-2px; left:12px; right:12px}
+.tab .key{color:var(--text-3)}
+.theme-switch{
+  font-family:var(--mono); font-size:var(--fs-1); text-transform:uppercase; letter-spacing:.08em;
+  color:var(--acc-amber); background:var(--bg-2); border:1px solid var(--line);
+  padding:6px 10px; cursor:pointer;
+}
+.theme-switch:hover{border-color:var(--acc-amber)}
+
+main{max-width:1280px; margin:0 auto; padding:16px; display:flex; flex-direction:column; gap:16px}
+.screen{display:none; flex-direction:column; gap:16px}
+.screen.active{display:flex}
+.screenhead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; border-bottom:1px dashed var(--line); padding-bottom:6px}
+.screenhead h2{font-family:var(--mono); font-size:var(--fs-4); letter-spacing:.06em}
+.screenhead h2 .screen-no{color:var(--acc-teal)}
+.screenhead .desc{color:var(--text-2); font-size:var(--fs-1)}
+
+.grid{display:grid; gap:16px}
+.g12{grid-template-columns:1fr}
+@media(min-width:900px){.g12{grid-template-columns:1fr 1fr}}
+.g13{grid-template-columns:1fr}
+@media(min-width:900px){.g13{grid-template-columns:1.35fr 1fr}}
+.g31{grid-template-columns:1fr}
+@media(min-width:900px){.g31{grid-template-columns:1fr 1.35fr}}
+.g3{grid-template-columns:1fr}
+@media(min-width:900px){.g3{grid-template-columns:1fr 1fr 1fr}}
+
+.panel{
+  background:var(--bg-1); border:1px solid var(--line); border-radius:var(--radius);
+  position:relative; display:flex; flex-direction:column; min-width:0;
+}
+.panel::before,.panel::after{
+  content:""; position:absolute; width:5px; height:5px; pointer-events:none;
+}
+.panel::before{top:-1px; left:-1px; border-top:1px solid var(--text-3); border-left:1px solid var(--text-3)}
+.panel::after{bottom:-1px; right:-1px; border-bottom:1px solid var(--text-3); border-right:1px solid var(--text-3)}
+.panelhead{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:6px 12px; border-bottom:1px solid var(--line); background:var(--bg-2);
+}
+.panelhead .ptitle{font-family:var(--mono); font-size:var(--fs-1); text-transform:uppercase; letter-spacing:.08em; color:var(--text-1)}
+.panelhead .ptitle::before{content:"\258D"; color:var(--acc-teal); padding-right:6px}
+.panelbody{padding:12px; display:flex; flex-direction:column; gap:12px; flex:1}
+.panelbody.no-pad{padding:0}
+
+.statrow{display:grid; grid-template-columns:1fr; gap:16px}
+@media(min-width:900px){.statrow{grid-template-columns:repeat(3,1fr)}}
+.stat{display:flex; flex-direction:column; gap:4px; padding:10px 12px}
+.stat .stat-label{display:flex; align-items:center; gap:6px}
+.stat .stat-value{font-family:var(--mono); font-size:var(--fs-5); font-variant-numeric:tabular-nums; color:var(--text-1)}
+.stat .stat-value small{font-size:var(--fs-2); color:var(--text-2)}
+.stat .stat-unit{font-size:var(--fs-1); color:var(--text-2); font-family:var(--mono)}
+.spark{display:block; width:100%; height:34px; margin-top:4px}
+
+table.data{width:100%; border-collapse:collapse; font-size:var(--fs-2)}
+table.data th{
+  font-family:var(--mono); font-size:var(--fs-0); text-transform:uppercase; letter-spacing:.08em;
+  color:var(--text-2); text-align:left; font-weight:600;
+  padding:6px 10px; border-bottom:1px solid var(--line);
+  background:var(--bg-2); white-space:nowrap;
+}
+table.data td{padding:6px 10px; border-bottom:1px solid var(--line-faint); vertical-align:top; font-variant-numeric:tabular-nums}
+table.data tbody tr:hover{background:var(--bg-3)}
+.num{font-family:var(--mono); text-align:right}
+
+.tag{
+  display:inline-block; font-family:var(--mono); font-size:var(--fs-0); letter-spacing:.05em;
+  padding:1px 6px; border-radius:1px; border:1px solid var(--line); color:var(--text-2); white-space:nowrap;
+}
+.tag.tier-t0{color:var(--chip-t0); border-color:var(--tint-t0); background:var(--tint-t0)}
+.tag.tier-t1{color:var(--chip-info); border-color:var(--tint-info); background:var(--tint-info)}
+.tag.tier-t2{color:var(--chip-teal); border-color:var(--tint-teal); background:var(--tint-teal)}
+.tag.tier-t3{color:var(--chip-amber); border-color:var(--tint-amber); background:var(--tint-amber)}
+.tag.tier-t4{color:var(--chip-t4); border-color:var(--tint-t4); background:var(--tint-t4)}
+.tag.mock{color:var(--chip-amber); border-color:var(--tint-amber); background:var(--tint-amber)}
+.tag.real{color:var(--chip-ok); border-color:var(--tint-ok); background:var(--tint-ok)}
+.tag.st-draft{color:var(--text-2)}
+.tag.st-validated{color:var(--chip-info); border-color:var(--tint-info); background:var(--tint-info)}
+.tag.st-published{color:var(--chip-ok); border-color:var(--tint-ok); background:var(--tint-ok)}
+
+.meter{height:6px; background:var(--bg-3); border:1px solid var(--line); position:relative}
+.meter>span{display:block; height:100%; background:var(--acc-teal); position:relative}
+.meter>span::after{content:""; position:absolute; right:0; top:-1px; bottom:-1px; width:2px; background:var(--acc-teal)}
+.meter.amber>span{background:var(--acc-amber)}
+.meter.amber>span::after{background:var(--acc-amber)}
+
+.heatwrap{overflow-x:auto}
+.heat{width:100%; border-collapse:separate; border-spacing:3px; font-family:var(--mono); font-size:var(--fs-0)}
+.heat th{
+  font-family:var(--mono); font-size:var(--fs-0); text-transform:uppercase; letter-spacing:.06em;
+  color:var(--text-2); font-weight:600; padding:2px 4px; text-align:center;
+}
+.heat td{border:1px solid var(--line); background:var(--bg-2); padding:4px; text-align:center; color:var(--text-2)}
+.heat td:hover{outline:1px solid var(--acc-teal)}
+.heat .h0{color:var(--text-3)}
+.heat .h1{background:var(--bg-3)}
+.heat .h2{background:rgba(45,212,191,.22)}
+.heat .h3{background:rgba(45,212,191,.38)}
+.heat .h4{background:rgba(45,212,191,.58)}
+.heat .h5{background:rgba(45,212,191,.8)}
+.heat .ht{background:rgba(245,166,35,.45)}
+.heat th.rowlab{text-align:left; color:var(--text-1)}
+
+.filterrow{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.chip{
+  font-family:var(--mono); font-size:var(--fs-1); color:var(--text-2);
+  background:var(--bg-2); border:1px solid var(--line); padding:3px 8px; cursor:pointer;
+}
+.chip:hover{border-color:var(--acc-teal); color:var(--text-1)}
+.chip[aria-pressed="true"]{color:var(--bg-1); background:var(--acc-teal); border-color:var(--acc-teal); font-weight:700}
+
+details.track{border:1px solid var(--line); background:var(--bg-1)}
+details.track[open]{border-color:var(--acc-teal)}
+details.track summary{
+  cursor:pointer; padding:8px 12px; display:flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:var(--fs-2); list-style:none;
+}
+details.track summary::-webkit-details-marker{display:none}
+details.track summary::before{content:"\25B8"; color:var(--acc-teal); transition:transform .15s}
+details.track[open] summary::before{transform:rotate(90deg)}
+details.track summary .counts{margin-left:auto; color:var(--text-2); font-size:var(--fs-1); display:flex; gap:12px}
+details.track .trackmeta{padding:0 12px 8px; font-size:var(--fs-1); color:var(--text-2)}
+details.track table.data{width:100%}
+
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:var(--fs-1); color:var(--text-2); align-items:center}
+.legend .item{display:inline-flex; align-items:center; gap:5px; font-family:var(--mono)}
+
+.claimbox{display:flex; flex-direction:column; gap:10px}
+.claimbox textarea{
+  width:100%; min-height:96px; resize:vertical; font-family:var(--mono); font-size:var(--fs-2);
+  background:var(--bg-0); color:var(--text-1); border:1px solid var(--line); padding:10px;
+}
+.claimbox textarea:focus{border-color:var(--acc-teal)}
+.fieldrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+select{
+  font-family:var(--mono); font-size:var(--fs-2); background:var(--bg-0); color:var(--text-1);
+  border:1px solid var(--line); padding:6px 8px;
+}
+.btn{
+  font-family:var(--mono); font-size:var(--fs-1); letter-spacing:.06em; text-transform:uppercase;
+  padding:8px 14px; cursor:pointer; border:1px solid var(--line); background:var(--bg-2); color:var(--text-1);
+}
+.btn:hover{border-color:var(--acc-teal)}
+.btn:disabled{opacity:.5; cursor:progress}
+.btn.primary{background:var(--acc-teal); border-color:var(--acc-teal); color:var(--bg-0); font-weight:700}
+.btn.primary:hover{box-shadow:0 0 10px rgba(45,212,191,.4)}
+.btn.amber{background:var(--acc-amber); border-color:var(--acc-amber); color:var(--bg-0); font-weight:700}
+.btn.amber:hover{box-shadow:0 0 10px rgba(245,166,35,.4)}
+
+.verdict{border:1px solid var(--line); border-left:3px solid var(--text-2); background:var(--bg-1); padding:0; display:none}
+.verdict.show{display:block}
+.verdict.v-partial{border-left-color:var(--warn)}
+.verdict.v-correct{border-left-color:var(--ok)}
+.verdict.v-incorrect{border-left-color:var(--err)}
+.verdict .vhead{display:flex; align-items:center; gap:12px; padding:12px; border-bottom:1px solid var(--line); flex-wrap:wrap}
+.vbadge{
+  font-family:var(--mono); font-weight:700; letter-spacing:.1em; font-size:var(--fs-2);
+  padding:6px 12px; text-transform:uppercase;
+}
+.v-partial .vbadge{background:var(--tint-amber); color:var(--chip-amber); border:1px solid var(--warn)}
+.v-correct .vbadge{background:var(--tint-ok); color:var(--chip-ok); border:1px solid var(--ok)}
+.v-incorrect .vbadge{background:var(--tint-err); color:var(--chip-err); border:1px solid var(--err)}
+.verdict .vbody{padding:12px; display:flex; flex-direction:column; gap:12px}
+.verdict .vtagrow{display:flex; gap:6px; flex-wrap:wrap}
+.verdict ul{margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px}
+.verdict li::marker{color:var(--acc-teal)}
+
+.path{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; font-family:var(--mono); font-size:var(--fs-1)}
+.path .node{
+  border:1px solid var(--line); background:var(--bg-2); padding:8px 10px; color:var(--text-2);
+  display:flex; flex-direction:column; gap:2px; min-width:0;
+}
+.path .node.current{border-color:var(--acc-teal); color:var(--text-1)}
+.path .node .nname{color:var(--acc-teal); overflow-wrap:anywhere}
+.path .node.current .nname{color:var(--text-1)}
+.path .node .nmeta{font-size:var(--fs-0); color:var(--text-2); letter-spacing:.04em; text-transform:uppercase}
+.path .edge{display:flex; align-items:center; color:var(--text-3); padding:0 4px; font-size:var(--fs-2)}
+.path .edge::after{content:"\2192"}
+.path .edge.prereq::after{content:"\25B6"}
+
+.logline{
+  font-family:var(--mono); font-size:var(--fs-1); padding:7px 10px; border-bottom:1px solid var(--line-faint);
+  display:grid; grid-template-columns:auto 1fr; gap:4px 10px; align-items:baseline;
+}
+.logline:last-child{border-bottom:none}
+.logline .ts{color:var(--text-3); white-space:nowrap}
+.logline .etype{font-size:var(--fs-0); letter-spacing:.06em; text-transform:uppercase}
+.logline .etype.e-session{color:var(--chip-info); background:var(--tint-info); padding:1px 5px}
+.logline .etype.e-claim{color:var(--chip-amber); background:var(--tint-amber); padding:1px 5px}
+.logline .etype.e-verdict{color:var(--chip-teal); background:var(--tint-teal); padding:1px 5px}
+.logline .etype.e-quiz{color:var(--chip-t4); background:var(--tint-t4); padding:1px 5px}
+.logline .etype.e-matrix{color:var(--chip-ok); background:var(--tint-ok); padding:1px 5px}
+.logline .epl{color:var(--text-2); font-size:var(--fs-1)}
+
+.quizcard{display:flex; flex-direction:column; gap:12px}
+.qmeta{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.qtext{font-size:var(--fs-3); line-height:1.55}
+.opts{display:flex; flex-direction:column; gap:8px}
+.opt{
+  display:flex; gap:10px; align-items:flex-start; text-align:left; width:100%;
+  font-family:var(--sans); font-size:var(--fs-2); color:var(--text-1);
+  background:var(--bg-2); border:1px solid var(--line); padding:10px 12px; cursor:pointer;
+}
+.opt:hover{border-color:var(--acc-teal)}
+.opt .optkey{font-family:var(--mono); color:var(--text-3); flex:0 0 auto}
+.opt.correct{border-color:var(--ok); background:var(--tint-ok); color:var(--text-1)}
+.opt.correct .optkey{color:var(--chip-ok)}
+.opt.wrong{border-color:var(--err); background:var(--tint-err)}
+.opt.wrong .optkey{color:var(--chip-err)}
+.opt:disabled{cursor:default}
+.feedback{
+  display:none; border:1px solid var(--line); border-left-width:3px; padding:10px 12px;
+  flex-direction:column; gap:8px;
+}
+.feedback.show{display:flex}
+.feedback.f-ok{border-left-color:var(--ok)}
+.feedback.f-warn{border-left-color:var(--warn)}
+.feedback.f-err{border-left-color:var(--err)}
+.feedback .fhead{display:flex; align-items:center; gap:8px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.06em; font-size:var(--fs-1)}
+.feedback.f-ok .fhead{color:var(--chip-ok)}
+.feedback.f-warn .fhead{color:var(--chip-amber)}
+.feedback.f-err .fhead{color:var(--chip-err)}
+.feedback .fbody{font-size:var(--fs-1); color:var(--text-2)}
+.selfgrade{display:flex; gap:8px; margin-top:2px}
+
+.register{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.register .rval{font-size:var(--fs-4); color:var(--text-1)}
+.register .rlab{font-size:var(--fs-0); text-transform:uppercase; letter-spacing:.08em; color:var(--text-2)}
+
+.ladder{display:flex; flex-direction:column; gap:8px}
+.ladderrow{display:flex; align-items:center; gap:8px}
+.ladderrow .lday{font-family:var(--mono); font-size:var(--fs-1); color:var(--text-2); width:3ch; text-align:right; flex:0 0 auto}
+.ladderrow .lbar{flex:1; height:10px; background:var(--bg-3); border:1px solid var(--line); position:relative}
+.ladderrow .lbar .fill{display:block; height:100%; background:var(--acc-teal); opacity:.85}
+.ladderrow .lbar .mark{position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--acc-amber)}
+.ladderrow .ltag{font-family:var(--mono); font-size:var(--fs-0); color:var(--text-2); flex:0 0 auto; width:16ch}
+
+.cal-wrap{width:100%; overflow-x:auto}
+svg.cal{display:block; min-width:520px; width:100%; height:auto; font-family:var(--mono)}
+svg.cal .gridline{stroke:var(--line); stroke-width:1; stroke-dasharray:2 3}
+svg.cal .axis{stroke:var(--text-3); stroke-width:1}
+svg.cal .ticklabel{fill:var(--text-2); font-size:9px}
+svg.cal .ideal{stroke:var(--text-3); stroke-width:1; stroke-dasharray:4 3}
+svg.cal .pred{stroke:var(--acc-teal); stroke-width:2; fill:none}
+svg.cal .actual{stroke:var(--acc-amber); stroke-width:2; fill:none}
+svg.cal .dot-pred{fill:var(--acc-teal)}
+svg.cal .dot-act{fill:var(--acc-amber)}
+svg.cal .title{fill:var(--text-1); font-size:10px; letter-spacing:.08em; text-transform:uppercase}
+
+.notice{
+  border:1px dashed var(--line); padding:8px 12px; font-size:var(--fs-1); color:var(--text-2);
+  display:flex; gap:8px; align-items:baseline;
+}
+.notice .nl{color:var(--acc-amber); font-family:var(--mono); font-weight:700; flex:0 0 auto}
+
+dialog{
+  background:var(--bg-1); color:var(--text-1); border:1px solid var(--acc-teal);
+  border-radius:var(--radius); padding:0; max-width:560px; width:90%;
+}
+dialog::backdrop{background:rgba(10,14,20,.7)}
+.dlghead{display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--line); font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; font-size:var(--fs-1); background:var(--bg-2)}
+.dlgbody{padding:16px; display:flex; flex-direction:column; gap:12px}
+.dlgfoot{display:flex; gap:8px; justify-content:flex-end; padding:0 16px 16px}
+
+footer{border-top:1px solid var(--line); margin-top:8px; padding:12px 16px 20px; display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:space-between; font-size:var(--fs-1); color:var(--text-2)}
+footer .fitem{font-family:var(--mono)}
+.statusline{font-family:var(--mono); font-size:var(--fs-1); color:var(--text-2); min-height:1.4em}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+  details.track summary::before{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="tickbar" aria-hidden="true"></div>
+
+<header class="header">
+  <div class="brand">
+    <h1>STRATA<span class="accent">//</span>INSTRUMENT</h1>
+    <span class="sub micro">journey cockpit &middot; layer 5 consumer &middot; v0.1</span>
+  </div>
+  <div class="ledrow" role="status">
+    <span class="leditem"><span class="led on" aria-hidden="true"></span>JRNY&nbsp;LOCAL</span>
+    <span class="leditem"><span class="led idle" aria-hidden="true"></span>AGENT&nbsp;LINK</span>
+    <span class="leditem"><span class="led warn" aria-hidden="true"></span>2&nbsp;DUE</span>
+    <span class="leditem mono">OP:&nbsp;alex-dev</span>
+    <span class="clock" id="clock" aria-hidden="true">00:00:00</span>
+    <button class="theme-switch" id="themeToggle" type="button" aria-label="Toggle light and dark theme">THEME:&nbsp;<span id="themeLabel">AUTO</span></button>
+  </div>
+</header>
+
+<nav class="tablist" role="tablist" aria-label="Screens" id="tabs">
+  <button class="tab" role="tab" id="tab-1" aria-selected="true" aria-controls="screen-dashboard" data-screen="screen-dashboard" type="button"><span class="key">01</span>&nbsp;Dashboard</button>
+  <button class="tab" role="tab" id="tab-2" aria-selected="false" aria-controls="screen-explorer" data-screen="screen-explorer" type="button"><span class="key">02</span>&nbsp;Topic&nbsp;Explorer</button>
+  <button class="tab" role="tab" id="tab-3" aria-selected="false" aria-controls="screen-validate" data-screen="screen-validate" type="button"><span class="key">03</span>&nbsp;Validate</button>
+  <button class="tab" role="tab" id="tab-4" aria-selected="false" aria-controls="screen-quiz" data-screen="screen-quiz" type="button"><span class="key">04</span>&nbsp;Quiz&nbsp;Session</button>
+  <button class="tab" role="tab" id="tab-5" aria-selected="false" aria-controls="screen-review" data-screen="screen-review" type="button"><span class="key">05</span>&nbsp;Review&nbsp;Queue</button>
+  <button class="tab" role="tab" id="tab-6" aria-selected="false" aria-controls="screen-progress" data-screen="screen-progress" type="button"><span class="key">06</span>&nbsp;Progress&nbsp;&amp;&nbsp;Calibration</button>
+</nav>
+
+<main>
+
+<section class="screen active" id="screen-dashboard" role="tabpanel" aria-labelledby="tab-1">
+  <div class="screenhead">
+    <h2><span class="screen-no">01</span> / MASTERY OVERVIEW</h2>
+    <span class="desc">telemetry of your own competence &mdash; real fields from <code>.journey/</code></span>
+  </div>
+
+  <div class="statrow">
+    <div class="panel stat">
+      <div class="stat-label"><span class="led warn" aria-hidden="true"></span><span class="micro">REVIEWS DUE</span></div>
+      <div class="stat-value">2 <small>/ 4 queued</small></div>
+      <div class="stat-unit">next window closes 2026-08-19 &middot; ladder 1&ndash;3&ndash;7d</div>
+    </div>
+    <div class="panel stat">
+      <div class="stat-label"><span class="led on" aria-hidden="true"></span><span class="micro">STREAK</span></div>
+      <div class="stat-value">12 <small>days</small> <span class="tag mock">MOCK</span></div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="0,30 20,26 40,27 60,22 80,23 100,17 120,19 140,12 160,14 180,8 200,6" fill="none" stroke="var(--acc-teal)" stroke-width="1.5"/>
+        <polyline points="0,30 20,26 40,27 60,22 80,23 100,17 120,19 140,12 160,14 180,8 200,6" fill="var(--acc-teal)" opacity=".08" stroke="none"/>
+      </svg>
+    </div>
+    <div class="panel stat">
+      <div class="stat-label"><span class="led idle" aria-hidden="true"></span><span class="micro">CALIBRATION ERROR</span></div>
+      <div class="stat-value">+0.18 <small>overconf.</small> <span class="tag mock">MOCK</span></div>
+      <div class="stat-unit">predicted &minus; actual &middot; ideal = 0.00 &middot; see screen 06</div>
+    </div>
+  </div>
+
+  <div class="grid g13">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Due review load</span>
+        <span class="tag real">REAL &middot; review-queue.example.json</span>
+      </div>
+      <div class="panelbody no-pad">
+        <table class="data" data-source="journey/examples/review-queue.example.json">
+          <thead>
+            <tr><th>Topic</th><th class="num">Due</th><th class="num">Interval</th><th class="num">Reviews</th><th>Last review</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr data-source="real">
+              <td><span class="mono">systems-software/http-caching</span></td>
+              <td class="num">2026-08-19</td><td class="num">3d</td><td class="num">2</td><td>2026-08-16</td>
+              <td><span class="tag st-published">PUBLISHED</span></td>
+            </tr>
+            <tr data-source="real">
+              <td><span class="mono">programming/garbage-collection</span></td>
+              <td class="num">2026-08-17</td><td class="num">1d</td><td class="num">1</td><td>2026-08-16</td>
+              <td><span class="tag st-published">PUBLISHED</span></td>
+            </tr>
+            <tr data-source="mock">
+              <td><span class="mono">systems-software/http-basics</span> <span class="tag mock">MOCK</span></td>
+              <td class="num">2026-08-24</td><td class="num">7d</td><td class="num">3</td><td>2026-08-17</td>
+              <td><span class="tag st-draft">DRAFT</span></td>
+            </tr>
+            <tr data-source="mock">
+              <td><span class="mono">hardware/cache-coherence</span> <span class="tag mock">MOCK</span></td>
+              <td class="num">2026-09-02</td><td class="num">14d</td><td class="num">4</td><td>2026-08-19</td>
+              <td><span class="tag st-published">PUBLISHED</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Skill heatmap &middot; track &times; band</span>
+        <span class="tag mock">MOCK tints &middot; REAL counts (INDEX.md)</span>
+      </div>
+      <div class="panelbody no-pad heatwrap">
+        <table class="heat" aria-label="Topic count and mastery heatmap by track and abstraction band">
+          <caption class="micro" style="caption-side:bottom; padding:6px; text-align:left">cell = topic count &middot; tint = mastery (mock) &middot; amber = learner-validated cell</caption>
+          <thead>
+            <tr><th scope="col">track \ band</th><th scope="col">B5</th><th scope="col">B4</th><th scope="col">B3</th><th scope="col">B2</th><th scope="col">B1</th></tr>
+          </thead>
+          <tbody>
+            <tr><th class="rowlab" scope="row">cs-foundations</th><td class="h0">0</td><td class="h0">0</td><td class="h3">4</td><td class="h2">3</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">programming</th><td class="h0">0</td><td class="h0">0</td><td class="h4">6</td><td class="h0">0</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">data</th><td class="h1">1</td><td class="h2">3</td><td class="h1">1</td><td class="h0">0</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">architecture-design</th><td class="h2">2</td><td class="h3">3</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">quality-testing</th><td class="h1">1</td><td class="h4">5</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">security</th><td class="h2">2</td><td class="h2">2</td><td class="h0">0</td><td class="h1">1</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">systems-software</th><td class="h2">2</td><td class="ht">2</td><td class="h2">2</td><td class="h3">4</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">hardware</th><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td><td class="h4">6</td></tr>
+            <tr><th class="rowlab" scope="row">engineering-process</th><td class="h4">5</td><td class="h1">1</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">operations</th><td class="h3">3</td><td class="h1">1</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">ai-ml</th><td class="h1">1</td><td class="h3">3</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td></tr>
+            <tr><th class="rowlab" scope="row">frontiers</th><td class="h3">3</td><td class="h0">0</td><td class="h0">0</td><td class="h1">1</td><td class="h0">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g12">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Last session &middot; event stream</span>
+        <span class="tag real">REAL &middot; session.example.jsonl</span>
+      </div>
+      <div class="panelbody no-pad" data-source="journey/examples/session.example.jsonl">
+        <div class="logline"><span class="ts">10:00:00Z</span><span><span class="etype e-session">SESSION.STARTED</span> <span class="epl">s-example-001 &middot; systems-software/http-caching &middot; objective: validate understanding of HTTP caching</span></span></div>
+        <div class="logline"><span class="ts">10:02:00Z</span><span><span class="etype e-claim">CLAIM.SUBMITTED</span> <span class="epl">"Cache-Control max-age makes a response reusable for that many seconds from origin"</span></span></div>
+        <div class="logline"><span class="ts">10:03:00Z</span><span><span class="etype e-verdict">CLAIM.VERDICT</span> <span class="epl">partial &middot; T2 &middot; S-0009 &middot; age counters &amp; stale-while-revalidate nuances missing</span></span></div>
+        <div class="logline"><span class="ts">10:20:00Z</span><span><span class="etype e-quiz">QUIZ.ATTEMPTED</span> <span class="epl">bank formative &middot; score 80 &middot; understand 100 / apply 75</span></span></div>
+        <div class="logline"><span class="ts">10:25:00Z</span><span><span class="etype e-matrix">MATRIX.UPDATED</span> <span class="epl">http-caching &rarr; competent &middot; score 80 &middot; validated false</span></span></div>
+        <div class="logline"><span class="ts">10:30:00Z</span><span><span class="etype e-session">SESSION.COMPLETED</span> <span class="epl">next review scheduled 2026-08-19</span></span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Focus registers</span>
+        <span class="tag real">REAL + MOCK</span>
+      </div>
+      <div class="panelbody">
+        <div class="register">
+          <div class="rlab">Mastery score &middot; http-caching</div>
+          <div class="rval">80<span style="font-size:.6em; color:var(--text-2)">/100</span></div>
+          <div class="meter" role="img" aria-label="Mastery score 80 percent"><span style="width:80%"></span></div>
+        </div>
+        <div class="register">
+          <div class="rlab">Mastery score &middot; garbage-collection</div>
+          <div class="rval">55<span style="font-size:.6em; color:var(--text-2)">/100</span> <span class="tag mock">MOCK-EXTENDED</span></div>
+          <div class="meter amber" role="img" aria-label="Mastery score 55 percent"><span style="width:55%"></span></div>
+        </div>
+        <div class="register">
+          <div class="rlab">Bloom coverage &middot; last session (understand / apply)</div>
+          <div class="rval">100 <span style="color:var(--acc-teal)">/</span> 75</div>
+          <div class="legend" style="margin-top:2px">
+            <span class="item"><span class="led on" aria-hidden="true"></span>understand</span>
+            <span class="item"><span class="led warn" aria-hidden="true"></span>apply</span>
+          </div>
+        </div>
+        <div class="notice"><span class="nl">DATA</span><span>registers 1&ndash;2 map to <span class="mono">skill-matrix.json.topics[].score</span>; register 3 maps to <span class="mono">quiz.attempted.payload.bloom_scores</span>. Values with a <span class="tag mock">MOCK</span> tag are illustrative only.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="screen-explorer" role="tabpanel" aria-labelledby="tab-2">
+  <div class="screenhead">
+    <h2><span class="screen-no">02</span> / TOPIC EXPLORER</h2>
+    <span class="desc">knowledge-graph inventory &middot; real counts from INDEX.md (68 topics)</span>
+  </div>
+
+  <div class="statrow">
+    <div class="panel stat"><div class="stat-label"><span class="micro">TOPICS</span></div><div class="stat-value">68</div><div class="stat-unit">all tracks &middot; INDEX.md</div></div>
+    <div class="panel stat"><div class="stat-label"><span class="micro">STATUS</span></div><div class="stat-value">5 <small>published</small> &middot; 63 draft</div><div class="stat-unit">0 validated &middot; 0 retired</div></div>
+    <div class="panel stat"><div class="stat-label"><span class="micro">TIER DISTRIBUTION</span></div><div class="stat-value">T0:11 &middot; T1:16 &middot; T2:25 &middot; T3:11 &middot; T4:5</div><div class="stat-unit">strongest-claim per topic &middot; spec &sect;6.3</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panelhead">
+      <span class="ptitle">Filters</span>
+      <span class="micro">filter narrows tables below</span>
+    </div>
+    <div class="panelbody">
+      <div class="filterrow" role="group" aria-label="Tier filters">
+        <span class="micro">TIER</span>
+        <button class="chip" data-filter="tier" data-value="all" aria-pressed="true" type="button">ALL</button>
+        <button class="chip" data-filter="tier" data-value="T0" aria-pressed="false" type="button">T0</button>
+        <button class="chip" data-filter="tier" data-value="T1" aria-pressed="false" type="button">T1</button>
+        <button class="chip" data-filter="tier" data-value="T2" aria-pressed="false" type="button">T2</button>
+        <button class="chip" data-filter="tier" data-value="T3" aria-pressed="false" type="button">T3</button>
+        <button class="chip" data-filter="tier" data-value="T4" aria-pressed="false" type="button">T4</button>
+      </div>
+      <div class="filterrow" role="group" aria-label="Status filters">
+        <span class="micro">STATUS</span>
+        <button class="chip" data-filter="status" data-value="all" aria-pressed="true" type="button">ALL</button>
+        <button class="chip" data-filter="status" data-value="draft" aria-pressed="false" type="button">DRAFT</button>
+        <button class="chip" data-filter="status" data-value="published" aria-pressed="false" type="button">PUBLISHED</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend" aria-label="Legend">
+    <span class="item"><span class="tag tier-t0">T0</span> formal</span>
+    <span class="item"><span class="tag tier-t1">T1</span> empirical</span>
+    <span class="item"><span class="tag tier-t2">T2</span> consensus</span>
+    <span class="item"><span class="tag tier-t3">T3</span> practice</span>
+    <span class="item"><span class="tag tier-t4">T4</span> frontier &middot; volatile</span>
+    <span class="item"><span class="tag st-published">PUB</span> published</span>
+    <span class="item"><span class="tag st-draft">DRAFT</span> draft</span>
+    <span class="item"><span class="tag st-validated">VAL</span> validated</span>
+  </div>
+
+  <div id="tracklist" style="display:flex; flex-direction:column; gap:10px">
+
+    <details class="track" open>
+      <summary>cs-foundations <span class="micro">CS2023: algorithms &middot; math &middot; logic</span>
+        <span class="counts"><span>7 topics</span><span>B3&times;4 B2&times;3</span></span></summary>
+      <div class="trackmeta">prerequisite source for most tracks &middot; strongest tier T0</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T1" data-status="draft"><td class="mono">algorithms</td><td class="mono">B3</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">data-structures</td><td class="mono">B3</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">discrete-mathematics</td><td class="mono">B3</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">logic-and-proof</td><td class="mono">B3</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">complexity-theory</td><td class="mono">B2</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">computability</td><td class="mono">B2</td><td><span class="tag tier-t0">T0</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">probability-statistics</td><td class="mono">B2</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track" open>
+      <summary>programming <span class="micro">SWEBOK construction &middot; CS2023 SD/FPL</span>
+        <span class="counts"><span>6 topics</span><span>B3&times;6</span></span></summary>
+      <div class="trackmeta">includes one published topic: garbage-collection</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T3" data-status="draft"><td class="mono">compiler-pipeline</td><td class="mono">B3</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">concurrency-primitives</td><td class="mono">B3</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">functions-and-types</td><td class="mono">B3</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="published"><td class="mono">garbage-collection</td><td class="mono">B3</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-published">PUBLISHED</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">memory-model-and-pointers</td><td class="mono">B3</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">programming-paradigms</td><td class="mono">B3</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>data <span class="micro">CS2023 data management &middot; DB theory</span>
+        <span class="counts"><span>5 topics</span><span>B5&times;1 B4&times;3 B3&times;1</span></span></summary>
+      <div class="trackmeta">transactions-and-isolation carries the strongest claim tier (T0)</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T2" data-status="draft"><td class="mono">distributed-databases</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">relational-model</td><td class="mono">B4</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">sql-and-query-optimization</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">transactions-and-isolation</td><td class="mono">B4</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">indexing-and-storage</td><td class="mono">B3</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>architecture-design <span class="micro">SWEBOK architecture &middot; ISO 42010</span>
+        <span class="counts"><span>5 topics</span><span>B5&times;2 B4&times;3</span></span></summary>
+      <div class="trackmeta">system-design-process targets bloom level analyze</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T2" data-status="draft"><td class="mono">architectural-styles</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">system-design-process</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">analyze</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">caching-strategies</td><td class="mono">B4</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">design-patterns</td><td class="mono">B4</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">modularity</td><td class="mono">B4</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>quality-testing <span class="micro">SWEBOK quality/testing &middot; ISO 25010:2023</span>
+        <span class="counts"><span>6 topics</span><span>B5&times;1 B4&times;5</span></span></summary>
+      <div class="trackmeta">project-review rubrics map to ISO 25010 characteristics</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T2" data-status="draft"><td class="mono">quality-models</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">code-review</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">performance-engineering</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">software-testing-basics</td><td class="mono">B4</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">test-automation</td><td class="mono">B4</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">test-design-techniques</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>security <span class="micro">SWEBOK security &middot; CS2023 &middot; OWASP (T3)</span>
+        <span class="counts"><span>5 topics</span><span>B5&times;2 B4&times;2 B2&times;1</span></span></summary>
+      <div class="trackmeta">cryptography-basics carries T0 (formal)</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T2" data-status="draft"><td class="mono">secure-sdlc</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">threat-modeling</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">authentication-authorization</td><td class="mono">B4</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">web-security</td><td class="mono">B4</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="draft"><td class="mono">cryptography-basics</td><td class="mono">B2</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track" open>
+      <summary>systems-software <span class="micro">CS2023 OS &middot; networking &middot; distributed</span>
+        <span class="counts"><span>10 topics</span><span>B5&times;2 B4&times;2 B3&times;2 B2&times;4</span></span></summary>
+      <div class="trackmeta">most published topics (3 of 5) &middot; your active track</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T0" data-status="published"><td class="mono">distributed-consensus</td><td class="mono">B5</td><td><span class="tag tier-t0">T0</span></td><td class="mono">analyze</td><td><span class="tag st-published">PUBLISHED</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">distributed-systems-basics</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">http-basics</td><td class="mono">B4</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="published"><td class="mono">http-caching</td><td class="mono">B4</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-published">PUBLISHED</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">containers-isolation</td><td class="mono">B3</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">parallel-programming</td><td class="mono">B3</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">networking-basics</td><td class="mono">B2</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">os-processes</td><td class="mono">B2</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">os-scheduling</td><td class="mono">B2</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T0" data-status="published"><td class="mono">virtual-memory</td><td class="mono">B2</td><td><span class="tag tier-t0">T0</span></td><td class="mono">apply</td><td><span class="tag st-published">PUBLISHED</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>hardware <span class="micro">B1/B0 bands &middot; memory hierarchy &middot; ISA</span>
+        <span class="counts"><span>6 topics</span><span>B1&times;6</span></span></summary>
+      <div class="trackmeta">cache-coherence published &middot; deepest band in the graph</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T0" data-status="published"><td class="mono">cache-coherence</td><td class="mono">B1</td><td><span class="tag tier-t0">T0</span></td><td class="mono">analyze</td><td><span class="tag st-published">PUBLISHED</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">cpu-pipelining</td><td class="mono">B1</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">interrupts-and-dma</td><td class="mono">B1</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">isa-basics</td><td class="mono">B1</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">memory-hierarchy</td><td class="mono">B1</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">storage-devices</td><td class="mono">B1</td><td><span class="tag tier-t2">T2</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>engineering-process <span class="micro">SWEBOK process &middot; CMMI V3.0 &middot; ISO 12207</span>
+        <span class="counts"><span>6 topics</span><span>B5&times;5 B4&times;1</span></span></summary>
+      <div class="trackmeta">your profile lists engineering-process at competent</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T3" data-status="draft"><td class="mono">agile-methods</td><td class="mono">B5</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">estimation-and-cost</td><td class="mono">B5</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">professional-ethics</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">requirements-engineering</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">software-lifecycle</td><td class="mono">B5</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T2" data-status="draft"><td class="mono">configuration-management</td><td class="mono">B4</td><td><span class="tag tier-t2">T2</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>operations <span class="micro">SWEBOK operations &middot; DevOps practice</span>
+        <span class="counts"><span>4 topics</span><span>B5&times;3 B4&times;1</span></span></summary>
+      <div class="trackmeta">all practice-tier (T3) &middot; no published topics yet</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T3" data-status="draft"><td class="mono">devops-pipeline</td><td class="mono">B5</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">incident-response</td><td class="mono">B5</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T3" data-status="draft"><td class="mono">observability</td><td class="mono">B5</td><td><span class="tag tier-t3">T3</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">software-maintenance</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>ai-ml <span class="micro">CS2023 AI &middot; ML &middot; agents</span>
+        <span class="counts"><span>4 topics</span><span>B5&times;1 B4&times;3</span></span></summary>
+      <div class="trackmeta">llm-architectures is T4 frontier &middot; volatility review applies</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T4" data-status="draft"><td class="mono">llm-architectures</td><td class="mono">B5</td><td><span class="tag tier-t4">T4</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">ml-fundamentals</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">neural-networks</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T1" data-status="draft"><td class="mono">supervised-learning</td><td class="mono">B4</td><td><span class="tag tier-t1">T1</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+    <details class="track">
+      <summary>frontiers <span class="micro">cross-cutting T4 &middot; volatile &middot; dated</span>
+        <span class="counts"><span>4 topics</span><span>B5&times;3 B2&times;1</span></span></summary>
+      <div class="trackmeta">T4 volatility: CI alerts when <span class="mono">review_after</span> passes</div>
+      <div class="panelbody no-pad"><table class="data">
+        <thead><tr><th>id</th><th>band</th><th>tier</th><th>bloom</th><th>status</th></tr></thead>
+        <tbody>
+          <tr data-tier="T4" data-status="draft"><td class="mono">agentic-systems</td><td class="mono">B5</td><td><span class="tag tier-t4">T4</span></td><td class="mono">apply</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T4" data-status="draft"><td class="mono">formal-verification-scale</td><td class="mono">B5</td><td><span class="tag tier-t4">T4</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T4" data-status="draft"><td class="mono">zero-knowledge-proofs</td><td class="mono">B5</td><td><span class="tag tier-t4">T4</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+          <tr data-tier="T4" data-status="draft"><td class="mono">post-quantum-cryptography</td><td class="mono">B2</td><td><span class="tag tier-t4">T4</span></td><td class="mono">understand</td><td><span class="tag st-draft">DRAFT</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
+
+  </div>
+</section>
+
+<section class="screen" id="screen-validate" role="tabpanel" aria-labelledby="tab-3">
+  <div class="screenhead">
+    <h2><span class="screen-no">03</span> / CLAIM VALIDATION</h2>
+    <span class="desc">protocol: resolve topic &rarr; compare against concept.md claims &rarr; verdict + tier + records + corrective path</span>
+  </div>
+
+  <div class="grid g31">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Claim under test</span>
+        <span class="tag real">REAL &middot; session.example.jsonl</span>
+      </div>
+      <div class="panelbody">
+        <form class="claimbox" id="claimForm">
+          <label class="micro" for="claimInput">CLAIM TEXT</label>
+          <textarea id="claimInput" required>Cache-Control max-age makes a response reusable for that many seconds from origin</textarea>
+          <div class="fieldrow">
+            <label class="micro" for="claimTopic">TOPIC</label>
+            <select id="claimTopic">
+              <option value="systems-software/http-caching" selected>systems-software/http-caching</option>
+              <option value="programming/garbage-collection">programming/garbage-collection</option>
+              <option value="systems-software/http-basics">systems-software/http-basics</option>
+              <option value="hardware/cache-coherence">hardware/cache-coherence</option>
+            </select>
+            <button class="btn primary" id="runValidate" type="submit">RUN VALIDATION</button>
+          </div>
+          <div class="statusline" id="validateStatus" aria-live="polite">idle &mdash; awaiting claim</div>
+        </form>
+        <div class="notice"><span class="nl">PROTOCOL</span><span>the agent resolves the topic via <span class="mono">knowledge-graph.yml</span>, loads the L2 pack, and grades the claim against tagged claims. Verdicts only; tiers never guessed (AGENTS.md &sect;2).</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Verdict output</span>
+        <span class="micro">post-hoc view of the verdict card</span>
+      </div>
+      <div class="panelbody">
+        <article class="verdict v-partial" id="verdictCard" aria-live="polite">
+          <div class="vhead">
+            <span class="vbadge">PARTIAL</span>
+            <span class="vtagrow">
+              <span class="tag tier-t2">TIER T2</span>
+              <span class="tag real">EVIDENCE S-0009</span>
+              <span class="tag real">+S-0023</span>
+              <span class="tag real">+S-0024</span>
+            </span>
+            <span class="micro" style="margin-left:auto">verdict by agent l2 &middot; session s-example-001</span>
+          </div>
+          <div class="vbody">
+            <p><strong>Claim:</strong> <span class="mono" id="vClaim">Cache-Control max-age makes a response reusable for that many seconds from origin</span></p>
+            <p><strong>Resolution:</strong> <span class="mono">systems-software/http-caching</span> &middot; 21 claims checked &middot; 2 matched</p>
+            <div>
+              <span class="micro">MATCHED CLAIMS (concept.md)</span>
+              <ul>
+                <li><span class="mono">max-age=N declares the response stale once its age exceeds N seconds counted from the time the response was generated.</span> <span class="tag tier-t2">T2</span><span class="tag real">S-0009</span></li>
+                <li><span class="mono">A stored response may satisfy a request only while it is fresh: its age must not exceed its freshness lifetime.</span> <span class="tag tier-t2">T2</span><span class="tag real">S-0009</span></li>
+              </ul>
+            </div>
+            <div>
+              <span class="micro">GAPS FOUND</span>
+              <ul>
+                <li>correct for shared caches when freshness from origin is unconstrained</li>
+                <li>age counters (<span class="mono">Age</span> header, resident time) missing &mdash; freshness is measured from generation, not receipt</li>
+                <li><span class="mono">stale-while-revalidate</span> / <span class="mono">stale-if-error</span> reuse windows missing</li>
+              </ul>
+            </div>
+            <div>
+              <span class="micro">CORRECTED MENTAL MODEL</span>
+              <p class="small">max-age declares how long a response may be reused from the moment it was generated; a cache computes current age from <span class="mono">Date</span>/<span class="mono">Age</span> and serves only while age &le; lifetime, otherwise revalidates (<span class="mono">If-None-Match</span> preferred) or applies stale-reuse directives.</p>
+            </div>
+          </div>
+        </article>
+        <div id="verdictEmpty" class="notice"><span class="nl">IDLE</span><span>run a validation to populate the verdict card. The card above mirrors the real <span class="mono">claim.verdict</span> payload from session.example.jsonl.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g12">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Corrective path &middot; shortest topological route</span>
+        <span class="tag real">REAL &middot; concept.md prerequisites</span>
+      </div>
+      <div class="panelbody">
+        <div class="path">
+          <div class="node"><span class="nmeta">current mastery</span><span class="nname">http-caching</span><span class="nmeta">competent &middot; score 80</span></div>
+          <span class="edge prereq"></span>
+          <div class="node"><span class="nmeta">prerequisite &middot; draft</span><span class="nname">systems-software/http-basics</span><span class="nmeta">band B4 &middot; tier T2</span></div>
+          <span class="edge"></span>
+          <div class="node current"><span class="nmeta">target &middot; bloom apply</span><span class="nname">http-caching &rarr; review bank</span><span class="nmeta">items Q8&ndash;Q10 &middot; spaced</span></div>
+          <span class="edge"></span>
+          <div class="node"><span class="nmeta">related &middot; optional</span><span class="nname">architecture-design/caching-strategies</span><span class="nmeta">band B4 &middot; tier T3</span></div>
+        </div>
+        <div class="notice"><span class="nl">EDGES</span><span>prerequisite (order-constrained, theorem T1) &middot; related (undirected, no ordering claim). Path computed from <span class="mono">concept.md</span> frontmatter + <span class="mono">knowledge-graph.yml</span>.</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Verdict history</span>
+        <span class="tag real">REAL &middot; claim.verdict events</span>
+      </div>
+      <div class="panelbody no-pad">
+        <table class="data">
+          <thead><tr><th>When</th><th>Topic</th><th>Verdict</th><th>Tier</th><th>Record</th></tr></thead>
+          <tbody>
+            <tr data-source="real">
+              <td class="num mono">2026-08-16</td>
+              <td class="mono">systems-software/http-caching</td>
+              <td><span class="tag mock">PARTIAL</span></td>
+              <td><span class="tag tier-t2">T2</span></td>
+              <td class="mono">S-0009</td>
+            </tr>
+            <tr data-source="mock">
+              <td class="num mono">2026-08-10</td>
+              <td class="mono">programming/garbage-collection</td>
+              <td><span class="tag mock">INCORRECT</span></td>
+              <td><span class="tag tier-t1">T1</span></td>
+              <td class="mono">S-0015</td>
+            </tr>
+            <tr data-source="mock">
+              <td class="num mono">2026-08-04</td>
+              <td class="mono">systems-software/http-basics</td>
+              <td><span class="tag real">CORRECT</span></td>
+              <td><span class="tag tier-t2">T2</span></td>
+              <td class="mono">S-0023</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding:8px 10px" class="micro">rows without a REAL source tag are MOCK illustrative data</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="screen-quiz" role="tabpanel" aria-labelledby="tab-4">
+  <div class="screenhead">
+    <h2><span class="screen-no">04</span> / QUIZ SESSION</h2>
+    <span class="desc">formative items with immediate feedback &middot; real items from systems-software/http-caching/validation.md</span>
+  </div>
+
+  <div class="grid g31">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Session telemetry</span>
+        <span class="tag real">REAL &middot; validation.md + quiz.attempted</span>
+      </div>
+      <div class="panelbody">
+        <div class="fieldrow" role="group" aria-label="Quiz bank selector">
+          <span class="micro">BANK</span>
+          <button class="chip" data-bank="formative" aria-pressed="true" type="button">FORMATIVE</button>
+          <button class="chip" data-bank="summative" aria-pressed="false" type="button">SUMMATIVE</button>
+          <button class="chip" data-bank="review" aria-pressed="false" type="button">REVIEW</button>
+        </div>
+        <div class="register">
+          <div class="rlab">Item position</div>
+          <div class="rval"><span id="qPos">1</span><span style="font-size:.6em; color:var(--text-2)">/4</span></div>
+        </div>
+        <div class="register">
+          <div class="rlab">Elapsed</div>
+          <div class="rval" id="quizTimer">00:00</div>
+        </div>
+        <div class="register">
+          <div class="rlab">Score register &middot; this session</div>
+          <div class="rval" id="scoreReg">0<span style="font-size:.6em; color:var(--text-2)">/0</span></div>
+          <div class="meter" role="img" aria-label="Session score"><span id="scoreBar" style="width:0%"></span></div>
+        </div>
+        <div class="register">
+          <div class="rlab">Bloom breakdown &middot; last attempt (real)</div>
+          <div class="rval">understand <span class="tag real">100</span> &nbsp;apply <span class="tag mock">75</span></div>
+        </div>
+        <div class="notice"><span class="nl">SCIENCE</span><span>retrieval practice (Roediger &amp; Karpicke 2006) &middot; immediate feedback (Ericsson 1993) &middot; items tagged <span class="mono">bloom</span>/<span class="mono">bank</span>/<span class="mono">evidence</span> per validation.md anatomy.</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Item card</span>
+        <span class="micro" id="qBank">bank: formative</span>
+      </div>
+      <div class="panelbody">
+        <div class="quizcard" id="quizCard">
+          <div class="qmeta">
+            <span class="tag tier-t2">T2</span>
+            <span class="tag real" id="qBloomTag">BLOOM REMEMBER</span>
+            <span class="tag real" id="qEv">S-0009</span>
+          </div>
+          <p class="qtext" id="qText">Q1 &mdash; Which single Cache-Control directive truly prevents a response from being stored and reused by any cache?</p>
+          <div class="opts" id="qOpts" role="group" aria-label="Answer options">
+            <button class="opt" type="button" data-correct="1"><span class="optkey">[A]</span><span>no-store</span></button>
+            <button class="opt" type="button" data-correct="0"><span class="optkey">[B]</span><span>no-cache</span></button>
+            <button class="opt" type="button" data-correct="0"><span class="optkey">[C]</span><span>private</span></button>
+            <button class="opt" type="button" data-correct="0"><span class="optkey">[D]</span><span>public</span></button>
+          </div>
+          <div class="feedback" id="qFeedback">
+            <div class="fhead"><span class="led on" aria-hidden="true" id="fbLed"></span><span id="fbTitle">CORRECT</span></div>
+            <div class="fbody" id="fbBody"></div>
+          </div>
+          <div class="fieldrow" id="qNav">
+            <button class="btn" id="qPrev" type="button" disabled>PREV</button>
+            <button class="btn primary" id="qNext" type="button" disabled>NEXT ITEM</button>
+            <button class="btn ghost" id="qReset" type="button">RESET SESSION</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="screen-review" role="tabpanel" aria-labelledby="tab-5">
+  <div class="screenhead">
+    <h2><span class="screen-no">05</span> / REVIEW QUEUE</h2>
+    <span class="desc">spaced-repetition ladder &middot; real items from review-queue.example.json</span>
+  </div>
+
+  <div class="grid g13">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Due items</span>
+        <span class="tag real">REAL &middot; review-queue.example.json</span>
+      </div>
+      <div class="panelbody no-pad">
+        <table class="data">
+          <thead><tr><th>Topic</th><th class="num">Due</th><th class="num">Interval</th><th class="num">Reviews</th><th>Last review</th></tr></thead>
+          <tbody>
+            <tr data-source="real">
+              <td><span class="mono">programming/garbage-collection</span></td>
+              <td class="num">2026-08-17</td><td class="num">1d</td><td class="num">1</td><td>2026-08-16</td>
+            </tr>
+            <tr data-source="real">
+              <td><span class="mono">systems-software/http-caching</span></td>
+              <td class="num">2026-08-19</td><td class="num">3d</td><td class="num">2</td><td>2026-08-16</td>
+            </tr>
+            <tr data-source="mock">
+              <td><span class="mono">systems-software/http-basics</span> <span class="tag mock">MOCK</span></td>
+              <td class="num">2026-08-24</td><td class="num">7d</td><td class="num">3</td><td>2026-08-17</td>
+            </tr>
+            <tr data-source="mock">
+              <td><span class="mono">hardware/cache-coherence</span> <span class="tag mock">MOCK</span></td>
+              <td class="num">2026-09-02</td><td class="num">14d</td><td class="num">4</td><td>2026-08-19</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Spacing ladder &middot; position of each item</span>
+        <span class="tag real">REAL + MOCK</span>
+      </div>
+      <div class="panelbody">
+        <div class="ladder">
+          <div class="ladderrow"><span class="lday">1d</span><div class="lbar"><span class="fill" style="width:14%"></span><span class="mark" style="left:14%"></span></div><span class="ltag">garbage-collection <span class="tag mock">MOCK</span></span></div>
+          <div class="ladderrow"><span class="lday">3d</span><div class="lbar"><span class="fill" style="width:43%"></span><span class="mark" style="left:43%"></span></div><span class="ltag">http-caching <span class="tag real">REAL</span></span></div>
+          <div class="ladderrow"><span class="lday">7d</span><div class="lbar"><span class="fill" style="width:100%"></span></div><span class="ltag">http-basics <span class="tag mock">MOCK</span></span></div>
+          <div class="ladderrow"><span class="lday">14d</span><div class="lbar"><span class="fill" style="width:100%"></span></div><span class="ltag">cache-coherence <span class="tag mock">MOCK</span></span></div>
+          <div class="ladderrow"><span class="lday">30d</span><div class="lbar"></div><span class="ltag">--</span></div>
+          <div class="ladderrow"><span class="lday">60d</span><div class="lbar"></div><span class="ltag">--</span></div>
+          <div class="ladderrow"><span class="lday">120d</span><div class="lbar"></div><span class="ltag">--</span></div>
+        </div>
+        <div class="notice"><span class="nl">CADENCE</span><span>ladder 1&ndash;3&ndash;7&ndash;14&ndash;30&ndash;60&ndash;120 days (spec &sect;4.1) &middot; optimal gap &asymp; 10&ndash;20% of retention interval &middot; interleave with prerequisites (Rohrer &amp; Taylor 2007).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panelhead">
+      <span class="ptitle">Session control</span>
+      <span class="micro">writes review.completed + matrix.updated via event schema</span>
+    </div>
+    <div class="panelbody">
+      <div class="fieldrow">
+        <button class="btn amber" id="openReviewDialog" type="button">START REVIEW SESSION</button>
+        <span class="statusline" id="reviewStatus" aria-live="polite">idle</span>
+      </div>
+      <div class="notice"><span class="nl">MIX</span><span>review bank items are interleaved across the topic and its prerequisites (http-basics for http-caching) &mdash; retrieval practice, not rereading (Dunlosky et al. 2013).</span></div>
+    </div>
+  </div>
+
+  <dialog id="reviewDialog" aria-labelledby="reviewDlgTitle">
+    <div class="dlghead">
+      <span id="reviewDlgTitle">Review session &middot; interleaved set</span>
+      <button class="btn ghost" id="closeReviewDialog" type="button" style="padding:4px 8px">X</button>
+    </div>
+    <div class="dlgbody">
+      <p class="small">Queue: <span class="mono">2 due</span> + <span class="mono">2 upcoming</span>. This session draws review-bank items (Q8&ndash;Q10 for http-caching) plus prerequisite items from http-basics.</p>
+      <table class="data">
+        <thead><tr><th>Source</th><th>Item</th><th>Bloom</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr data-source="real"><td class="mono">http-caching &middot; review bank</td><td>Q8 &mdash; what does Age measure, why not client clock?</td><td class="mono">understand</td><td class="mono">S-0009</td></tr>
+          <tr data-source="real"><td class="mono">http-caching &middot; review bank</td><td>Q9 &mdash; cacheable methods, If-None-Match conditions</td><td class="mono">remember</td><td class="mono">S-0009/S-0023</td></tr>
+          <tr data-source="real"><td class="mono">http-caching &middot; review bank</td><td>Q10 &mdash; 304 for never-requested URL</td><td class="mono">apply</td><td class="mono">S-0009/S-0023</td></tr>
+          <tr data-source="mock"><td class="mono">http-basics &middot; interleaved</td><td>methods &amp; conditional semantics <span class="tag mock">MOCK</span></td><td class="mono">understand</td><td class="mono">S-0023</td></tr>
+        </tbody>
+      </table>
+      <p class="small">Estimated duration: 10 min &middot; passes at &ge;80% promote to the next ladder rung.</p>
+    </div>
+    <div class="dlgfoot">
+      <button class="btn" id="cancelReviewDialog" type="button">CANCEL</button>
+      <button class="btn amber" id="confirmReviewDialog" type="button">START</button>
+    </div>
+  </dialog>
+</section>
+
+<section class="screen" id="screen-progress" role="tabpanel" aria-labelledby="tab-6">
+  <div class="screenhead">
+    <h2><span class="screen-no">06</span> / PROGRESS &amp; CALIBRATION</h2>
+    <span class="desc">skill matrix + predicted-vs-actual calibration &middot; real matrix rows from skill-matrix.example.json</span>
+  </div>
+
+  <div class="grid g12">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Skill matrix</span>
+        <span class="tag real">REAL &middot; skill-matrix.example.json</span>
+      </div>
+      <div class="panelbody no-pad">
+        <table class="data" data-source="journey/examples/skill-matrix.example.json">
+          <thead><tr><th>Topic</th><th>Level</th><th class="num">Score</th><th>Validated</th><th>Last attempt</th><th>Evidence</th></tr></thead>
+          <tbody>
+            <tr data-source="real">
+              <td class="mono">systems-software/http-caching</td>
+              <td><span class="lvl">competent</span></td>
+              <td class="num">80</td>
+              <td><span class="led on" aria-hidden="true"></span> true</td>
+              <td class="num">2026-08-16</td>
+              <td class="mono">S-0009</td>
+            </tr>
+            <tr data-source="real">
+              <td class="mono">programming/garbage-collection</td>
+              <td><span class="lvl">advanced-beginner</span></td>
+              <td class="num">55</td>
+              <td><span class="led" aria-hidden="true"></span> false</td>
+              <td class="num">2026-08-10</td>
+              <td class="mono">&mdash;</td>
+            </tr>
+            <tr data-source="mock">
+              <td class="mono">systems-software/http-basics</td>
+              <td><span class="lvl">novice</span></td>
+              <td class="num">35</td>
+              <td><span class="led" aria-hidden="true"></span> false</td>
+              <td class="num">2026-08-17</td>
+              <td class="mono">&mdash;</td>
+            </tr>
+            <tr data-source="mock">
+              <td class="mono">engineering-process/software-lifecycle</td>
+              <td><span class="lvl">competent</span></td>
+              <td class="num">78</td>
+              <td><span class="led on" aria-hidden="true"></span> true</td>
+              <td class="num">2026-08-12</td>
+              <td class="mono">S-0031</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding:8px 10px" class="micro">level ladder: novice &rarr; advanced-beginner &rarr; competent &rarr; proficient &rarr; expert (per track, not global)</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Calibration &middot; predicted vs actual</span>
+        <span class="tag mock">MOCK data &middot; derived from calibration.updated events</span>
+      </div>
+      <div class="panelbody">
+        <div class="cal-wrap">
+          <svg class="cal" viewBox="0 0 520 240" role="img" aria-labelledby="calTitle calDesc">
+            <title id="calTitle">Calibration curve</title>
+            <desc id="calDesc">Predicted versus actual review scores across ten sessions. Ideal line is the dashed diagonal. The teal line is predicted, amber is actual.</desc>
+            <text class="title" x="10" y="16">predicted vs actual &middot; n=10 sessions &middot; MOCK</text>
+            <g>
+              <line class="gridline" x1="60" y1="40" x2="60" y2="210"/>
+              <line class="gridline" x1="150" y1="40" x2="150" y2="210"/>
+              <line class="gridline" x1="240" y1="40" x2="240" y2="210"/>
+              <line class="gridline" x1="330" y1="40" x2="330" y2="210"/>
+              <line class="gridline" x1="420" y1="40" x2="420" y2="210"/>
+              <line class="gridline" x1="510" y1="40" x2="510" y2="210"/>
+              <line class="gridline" x1="60" y1="210" x2="510" y2="210"/>
+              <line class="gridline" x1="60" y1="167.5" x2="510" y2="167.5"/>
+              <line class="gridline" x1="60" y1="125" x2="510" y2="125"/>
+              <line class="gridline" x1="60" y1="82.5" x2="510" y2="82.5"/>
+              <line class="gridline" x1="60" y1="40" x2="510" y2="40"/>
+              <text class="ticklabel" x="54" y="213">0.0</text>
+              <text class="ticklabel" x="54" y="170.5">0.25</text>
+              <text class="ticklabel" x="54" y="128">0.50</text>
+              <text class="ticklabel" x="54" y="85.5">0.75</text>
+              <text class="ticklabel" x="54" y="44">1.0</text>
+              <text class="ticklabel" x="62" y="228">1</text>
+              <text class="ticklabel" x="152" y="228">2</text>
+              <text class="ticklabel" x="242" y="228">3</text>
+              <text class="ticklabel" x="332" y="228">4</text>
+              <text class="ticklabel" x="422" y="228">5</text>
+              <text class="ticklabel" x="512" y="228">6</text>
+            </g>
+            <line class="ideal" x1="60" y1="210" x2="510" y2="40"/>
+            <polyline class="pred" points="60,103 105,110 150,97 195,86 240,103 285,93 330,83 375,76 420,72 465,60 510,55"/>
+            <polyline class="actual" points="60,142 105,131 150,138 195,126 240,134 285,124 330,118 375,107 420,106 465,94 510,86"/>
+            <circle class="dot-pred" cx="60" cy="103" r="2.5"/><circle class="dot-act" cx="60" cy="142" r="2.5"/>
+            <circle class="dot-pred" cx="105" cy="110" r="2.5"/><circle class="dot-act" cx="105" cy="131" r="2.5"/>
+            <circle class="dot-pred" cx="150" cy="97" r="2.5"/><circle class="dot-act" cx="150" cy="138" r="2.5"/>
+            <circle class="dot-pred" cx="195" cy="86" r="2.5"/><circle class="dot-act" cx="195" cy="126" r="2.5"/>
+            <circle class="dot-pred" cx="240" cy="103" r="2.5"/><circle class="dot-act" cx="240" cy="134" r="2.5"/>
+            <circle class="dot-pred" cx="285" cy="93" r="2.5"/><circle class="dot-act" cx="285" cy="124" r="2.5"/>
+            <circle class="dot-pred" cx="330" cy="83" r="2.5"/><circle class="dot-act" cx="330" cy="118" r="2.5"/>
+            <circle class="dot-pred" cx="375" cy="76" r="2.5"/><circle class="dot-act" cx="375" cy="107" r="2.5"/>
+            <circle class="dot-pred" cx="420" cy="72" r="2.5"/><circle class="dot-act" cx="420" cy="106" r="2.5"/>
+            <circle class="dot-pred" cx="465" cy="60" r="2.5"/><circle class="dot-act" cx="465" cy="94" r="2.5"/>
+            <circle class="dot-pred" cx="510" cy="55" r="2.5"/><circle class="dot-act" cx="510" cy="86" r="2.5"/>
+            <text class="ticklabel" x="330" y="36" style="fill:var(--acc-teal)">&mdash; predicted</text>
+            <text class="ticklabel" x="330" y="50" style="fill:var(--acc-amber)">&mdash; actual</text>
+            <text class="ticklabel" x="330" y="64" style="fill:var(--text-3)">- - - ideal (y=x)</text>
+          </svg>
+        </div>
+        <div class="statrow" style="grid-template-columns:repeat(3,1fr)">
+          <div class="register"><div class="rlab">Mean error</div><div class="rval">+0.18</div></div>
+          <div class="register"><div class="rlab">Direction</div><div class="rval">overconfident</div></div>
+          <div class="register"><div class="rlab">Trend (last 5)</div><div class="rval">-0.11</div></div>
+        </div>
+        <div class="notice"><span class="nl">INTERP</span><span>points above the diagonal = you predicted higher than you scored. Error shrinking across sessions indicates improving metacognitive calibration (Flavell 1979).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g12">
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Score history &middot; sparklines</span>
+        <span class="tag mock">MOCK</span>
+      </div>
+      <div class="panelbody">
+        <div class="register">
+          <div class="rlab">http-caching &middot; quiz scores</div>
+          <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points="0,26 33,22 67,24 100,14 133,16 167,9 200,6" fill="none" stroke="var(--acc-teal)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="register">
+          <div class="rlab">garbage-collection &middot; quiz scores</div>
+          <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points="0,12 33,18 67,15 100,22 133,26 167,28 200,30" fill="none" stroke="var(--acc-amber)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="notice"><span class="nl">PROV</span><span>score history is an aggregate of <span class="mono">quiz.attempted</span> events &mdash; schema-validated JSONL, one object per line.</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelhead">
+        <span class="ptitle">Calibration by track</span>
+        <span class="tag mock">MOCK</span>
+      </div>
+      <div class="panelbody no-pad">
+        <table class="data">
+          <thead><tr><th>Track</th><th class="num">Sessions</th><th class="num">Mean error</th><th>Read</th></tr></thead>
+          <tbody>
+            <tr data-source="mock"><td class="mono">systems-software</td><td class="num">6</td><td class="num">+0.22</td><td>overconfident</td></tr>
+            <tr data-source="mock"><td class="mono">programming</td><td class="num">3</td><td class="num">+0.09</td><td>mild overconf.</td></tr>
+            <tr data-source="mock"><td class="mono">engineering-process</td><td class="num">4</td><td class="num">-0.04</td><td>well calibrated</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span class="fitem">STRATA//INSTRUMENT &middot; ui/explorations/instrument &middot; direction: data cockpit</span>
+  <span class="fitem">real data: journey/examples/* &middot; INDEX.md &middot; validation.md &middot; concept.md</span>
+  <span class="fitem">MOCK data explicitly tagged &middot; no telemetry &middot; local-first (ADR-0001)</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var tabs = document.querySelectorAll(".tab");
+  var screens = document.querySelectorAll(".screen");
+  function showScreen(id) {
+    screens.forEach(function (s) { s.classList.toggle("active", s.id === id); });
+    tabs.forEach(function (t) {
+      var on = t.getAttribute("data-screen") === id;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      if (on) t.setAttribute("tabindex", "0");
+    });
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener("click", function () { showScreen(tab.getAttribute("data-screen")); });
+    tab.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      var idx = (e.key === "ArrowRight") ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length;
+      tabs[idx].focus();
+      showScreen(tabs[idx].getAttribute("data-screen"));
+      e.preventDefault();
+    });
+  });
+
+  var clock = document.getElementById("clock");
+  var t0 = Date.now();
+  setInterval(function () {
+    var d = new Date(Date.now() - t0);
+    var p = function (n) { return String(n).padStart(2, "0"); };
+    clock.textContent = p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + ":" + p(d.getUTCSeconds());
+  }, 1000);
+
+  var themeToggle = document.getElementById("themeToggle");
+  var themeLabel = document.getElementById("themeLabel");
+  function effectiveTheme() {
+    if (document.documentElement.getAttribute("data-theme")) return document.documentElement.getAttribute("data-theme");
+    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  }
+  themeToggle.addEventListener("click", function () {
+    var next = effectiveTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    themeLabel.textContent = next.toUpperCase();
+  });
+  themeLabel.textContent = effectiveTheme().toUpperCase();
+
+  document.querySelectorAll(".chip[data-filter]").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      var group = chip.getAttribute("data-filter");
+      var val = chip.getAttribute("data-value");
+      document.querySelectorAll(".chip[data-filter=\"" + group + "\"]").forEach(function (c) {
+        c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+      });
+      document.querySelectorAll("#tracklist tr[data-tier]").forEach(function (row) {
+        var t = row.getAttribute("data-tier") === val || val === "all";
+        var s = row.getAttribute("data-status") === document.querySelector(".chip[data-filter=\"status\"][aria-pressed=\"true\"]").getAttribute("data-value") || document.querySelector(".chip[data-filter=\"status\"][aria-pressed=\"true\"]").getAttribute("data-value") === "all";
+        var b = document.querySelector(".chip[data-filter=\"band\"][aria-pressed=\"true\"]");
+        var ok = t && s && (!b || b.getAttribute("data-value") === "all" || row.getAttribute("data-band") === b.getAttribute("data-value"));
+        row.style.display = ok ? "" : "none";
+      });
+    });
+  });
+
+  var runBtn = document.getElementById("runValidate");
+  var vStatus = document.getElementById("validateStatus");
+  var verdict = document.getElementById("verdictCard");
+  var empty = document.getElementById("verdictEmpty");
+  document.getElementById("claimForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    runBtn.disabled = true;
+    vStatus.textContent = "resolving systems-software/http-caching &rarr; concept.md claims&hellip;";
+    setTimeout(function () {
+      runBtn.disabled = false;
+      vStatus.textContent = "verdict recorded &mdash; claim.verdict event appended (simulated)";
+      document.getElementById("vClaim").textContent = document.getElementById("claimInput").value;
+      verdict.classList.add("show");
+      empty.style.display = "none";
+    }, 700);
+  });
+
+  var banks = {
+    formative: [
+      { q: "Q1 &mdash; Which single Cache-Control directive truly prevents a response from being stored and reused by any cache?", bloom: "BLOOM REMEMBER", ev: "S-0009", opts: [
+        { t: "no-store", correct: true }, { t: "no-cache", correct: false }, { t: "private", correct: false }, { t: "public", correct: false }
+      ], fb: "no-store forbids any cache from storing the response. no-cache still allows storage (it only forces revalidation before reuse), and private still allows the browser's own cache to store it." },
+      { q: "Q2 &mdash; A response carries Cache-Control: max-age=600, an Expires header, and Date. In what order does a cache compute the freshness lifetime?", bloom: "BLOOM UNDERSTAND", ev: "S-0009", opts: [
+        { t: "s-maxage &rarr; max-age &rarr; Expires &minus; Date &rarr; heuristic", correct: true }, { t: "max-age &rarr; s-maxage &rarr; Expires", correct: false }, { t: "Expires &rarr; max-age &rarr; heuristic", correct: false }
+      ], fb: "s-maxage (shared caches only) &rarr; max-age &rarr; Expires minus Date &rarr; heuristic freshness. Since max-age is present, Expires MUST be ignored." },
+      { q: "Q3 &mdash; At 12:00:00 a proxy stores a response with Date: 12:00:00, Age: 0, Cache-Control: public, max-age=300, and forwards it at 12:03:00. What Age must the proxy send, and is the response still fresh?", bloom: "BLOOM APPLY", ev: "S-0009", opts: [
+        { t: "Age = 180; still fresh (180 &lt; 300) &mdash; serve without contacting origin", correct: true }, { t: "Age = 300; stale", correct: false }, { t: "Age = 0; fresh", correct: false }
+      ], fb: "Age = 180 (3 minutes of resident time added to prior Age 0). Freshness lifetime 300 s &gt; current age 180 s, so it may be served without revalidation." },
+      { q: "Q4 &mdash; You run a JSON API keyed by URL whose data changes every 5 minutes and may be cached by CDNs and browsers. Write the Cache-Control header and state what each directive contributes.", bloom: "BLOOM APPLY", ev: "S-0009", opts: null, fb: "Cache-Control: public, max-age=300. public admits shared caches (CDN); max-age=300 matches the 5-minute data lifetime. No no-store (storage permitted), no private (shared caches allowed)." }
+    ],
+    summative: [
+      { q: "Q5 &mdash; Trace hop-by-hop: (1) browser miss for GET /report; (2) origin returns 200 with ETag \u0022v7\u0022, Cache-Control: public, max-age=60; (3) same browser re-requests 90 s later, origin still v7. What happens on the wire?", bloom: "BLOOM APPLY", ev: "S-0009/S-0023", opts: null, fb: "Stored copy is stale (90 s &gt; 60 s), so the browser sends If-None-Match: \u0022v7\u0022; the origin matches via the strong comparison function and returns 304 with no body; the browser serves the stored body and refreshes metadata from the 304." },
+      { q: "Q6 &mdash; A CDN receives Cache-Control: private, max-age=60 for every response and operations asks why the CDN \u0022is not caching\u0022. Explain, including the security rationale and the change that would enable CDN caching.", bloom: "BLOOM ANALYZE", ev: "S-0009", opts: null, fb: "private restricts storage to the user-agent cache; shared caches MUST NOT store such responses. Rationale: responses may embed user-specific data. Switching to public (or s-maxage) enables CDN storage but risks serving one user's content to others." }
+    ],
+    review: [
+      { q: "Q8 &mdash; What exactly does the Age header measure, and why can a client not compute freshness from its own clock alone?", bloom: "BLOOM UNDERSTAND", ev: "S-0009", opts: null, fb: "Age measures time since generation or last validation, including resident time inside intermediate caches; it is derived from Date and observed response times, not the client's clock. (Prerequisite link: http-basics.)" },
+      { q: "Q9 &mdash; Which HTTP methods are cacheable by default, and when may a POST response be stored? When does a client attach If-None-Match?", bloom: "BLOOM REMEMBER", ev: "S-0009/S-0023", opts: null, fb: "GET and HEAD are cacheable by default; a POST response may be cached only with explicit freshness information and a matching Content-Location. If-None-Match is attached when a stored response with an entity-tag must be revalidated." },
+      { q: "Q10 &mdash; A browser receives 304 Not Modified for a URL it has never requested before. What should it do, and why?", bloom: "BLOOM APPLY", ev: "S-0009/S-0023", opts: null, fb: "Treat it as an error (or refetch): a 304 carries no body and only updates an existing stored response's metadata; without a stored entry there is nothing to serve, so the client should issue an unconditional GET." }
+    ]
+  };
+  var bankOrder = ["formative", "summative", "review"];
+  var currentBank = "formative";
+  var currentIdx = 0;
+  var answered = {};
+  var score = { correct: 0, total: 0 };
+  var qPos = document.getElementById("qPos");
+  var qText = document.getElementById("qText");
+  var qOpts = document.getElementById("qOpts");
+  var qFeedback = document.getElementById("qFeedback");
+  var fbTitle = document.getElementById("fbTitle");
+  var fbBody = document.getElementById("fbBody");
+  var fbLed = document.getElementById("fbLed");
+  var qBloom = document.getElementById("qBloomTag");
+  var qEv = document.getElementById("qEv");
+  var qBank = document.getElementById("qBank");
+  var qPrev = document.getElementById("qPrev");
+  var qNext = document.getElementById("qNext");
+  var scoreReg = document.getElementById("scoreReg");
+  var scoreBar = document.getElementById("scoreBar");
+  var timerEl = document.getElementById("quizTimer");
+  var quizStart = Date.now();
+  setInterval(function () {
+    var s = Math.floor((Date.now() - quizStart) / 1000);
+    timerEl.textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+  }, 1000);
+
+  function renderItem() {
+    var item = banks[currentBank][currentIdx];
+    qText.innerHTML = item.q;
+    qBloom.textContent = item.bloom;
+    qEv.textContent = item.ev;
+    qBank.textContent = "bank: " + currentBank;
+    qPos.textContent = String(currentIdx + 1);
+    qFeedback.classList.remove("show");
+    qOpts.innerHTML = "";
+    if (item.opts) {
+      item.opts.forEach(function (o, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "opt";
+        b.innerHTML = '<span class="optkey">[' + String.fromCharCode(65 + i) + ']</span><span>' + o.t + '</span>';
+        b.addEventListener("click", function () { answer(b, o, item); });
+        qOpts.appendChild(b);
+      });
+    } else {
+      var note = document.createElement("p");
+      note.className = "micro";
+      note.textContent = "free-response item &mdash; answer aloud, then reveal and self-grade";
+      qOpts.appendChild(note);
+      var reveal = document.createElement("button");
+      reveal.type = "button";
+      reveal.className = "btn";
+      reveal.textContent = "REVEAL MODEL ANSWER";
+      reveal.addEventListener("click", function () {
+        score.total += 1;
+        showFeedback("info", "MODEL ANSWER", item.fb);
+        qFeedback.insertAdjacentHTML("beforeend", '<div class="selfgrade"><button type="button" class="btn" data-g="1">GOT IT</button><button type="button" class="btn" data-g="0">MISSED</button></div>');
+        qFeedback.querySelectorAll("[data-g]").forEach(function (g) {
+          g.addEventListener("click", function () {
+            if (g.getAttribute("data-g") === "1") score.correct += 1;
+            g.disabled = true;
+            updateScore();
+          });
+        });
+        updateScore();
+        reveal.disabled = true;
+      });
+      qOpts.appendChild(reveal);
+    }
+    qPrev.disabled = currentIdx === 0;
+    qNext.disabled = true;
+  }
+  function answer(btn, opt, item) {
+    if (answered[currentBank + currentIdx]) return;
+    answered[currentBank + currentIdx] = true;
+    score.total += 1;
+    btn.disabled = true;
+    btn.classList.add(opt.correct ? "correct" : "wrong");
+    qOpts.querySelectorAll(".opt").forEach(function (o) { o.disabled = true; });
+    showFeedback(opt.correct ? "ok" : "err", opt.correct ? "CORRECT" : "INCORRECT", item.fb + "  (" + (opt.correct ? "ledgered as correct" : "ledgered as missed") + ")");
+    if (opt.correct) score.correct += 1;
+    updateScore();
+    qNext.disabled = false;
+  }
+  function showFeedback(kind, title, body) {
+    qFeedback.classList.remove("f-ok", "f-warn", "f-err");
+    qFeedback.classList.add(kind === "ok" ? "f-ok" : kind === "err" ? "f-err" : "f-warn");
+    fbLed.className = "led " + (kind === "ok" ? "on" : kind === "err" ? "err" : "warn");
+    fbTitle.textContent = title;
+    fbBody.textContent = body.replace(/&mdash;|&rarr;|&minus;|&hellip;|&gt;|&lt;|&amp;|&quot;|&ldquo;|&rdquo;|&rsquo;/g, "");
+    qFeedback.classList.add("show");
+  }
+  function updateScore() {
+    scoreReg.innerHTML = score.correct + '<span style="font-size:.6em; color:var(--text-2)">/' + score.total + '</span>';
+    var pct = score.total ? Math.round(score.correct / score.total * 100) : 0;
+    scoreBar.style.width = pct + "%";
+  }
+  document.querySelectorAll(".chip[data-bank]").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      document.querySelectorAll(".chip[data-bank]").forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
+      currentBank = chip.getAttribute("data-bank");
+      currentIdx = 0;
+      renderItem();
+    });
+  });
+  qNext.addEventListener("click", function () {
+    if (currentIdx < banks[currentBank].length - 1) { currentIdx += 1; renderItem(); }
+    else { currentIdx = 0; renderItem(); qBank.textContent = "bank: " + currentBank + " &middot; set complete"; }
+  });
+  qPrev.addEventListener("click", function () { if (currentIdx > 0) { currentIdx -= 1; renderItem(); } });
+  document.getElementById("qReset").addEventListener("click", function () {
+    answered = {}; score = { correct: 0, total: 0 };
+    quizStart = Date.now();
+    updateScore();
+    currentIdx = 0;
+    renderItem();
+  });
+  renderItem();
+
+  var dialog = document.getElementById("reviewDialog");
+  var rStatus = document.getElementById("reviewStatus");
+  document.getElementById("openReviewDialog").addEventListener("click", function () { dialog.showModal(); });
+  document.getElementById("closeReviewDialog").addEventListener("click", function () { dialog.close(); });
+  document.getElementById("cancelReviewDialog").addEventListener("click", function () { dialog.close(); });
+  document.getElementById("confirmReviewDialog").addEventListener("click", function () {
+    dialog.close();
+    rStatus.textContent = "REVIEW SESSION ACTIVE &mdash; Q8&ndash;Q10 + http-basics interleave &middot; log via review.completed";
+  });
+})();
+</script>
+</body>
+</html>

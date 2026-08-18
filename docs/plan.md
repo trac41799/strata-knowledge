@@ -142,6 +142,23 @@ Wave 3: `engineering-process` core (CMMI/12207), `hardware` core, `ai-ml` core, 
 
 ---
 
+## Phase 7 — Journey Interface (design workstream, ADR-0001)
+
+**Input:** ADR-0001. **Output:** 3 design directions → selected direction → design system + docs → UI spec + TDD plan. **Gate:** human picks direction (Gate 6).
+**Status: COMPLETED 2026-08-18** — Gate 6: hybrid selected (Instrument core + Arcade action-first + Atelier type discipline). Artifacts: `ui/explorations/{atelier,instrument,arcade}/` (3 directions + vision critiques), `ui/design-system/tokens.css` + `docs/design-system/` (121 tokens, 11 components, contrast-verified), `docs/spec-ui.md` (12 ACs), `docs/plan-ui.md` (17 TDD tasks). Schema gaps found by spec authoring were closed (calibration schema, record locations, verdict vocabulary documented in `journey/README.md`).
+
+- [x] **7.1 Thematic exploration** — 3 parallel L1 design agents produce radically different directions (Atelier: academic notebook; Instrument: data cockpit; Arcade: playful/gamified) as self-contained HTML/CSS prototypes of the 6 core screens (dashboard, topic explorer, validate flow, quiz session, review queue, progress/calibration) + a brief (rationale, WCAG-AA palette, patterns, component inventory, data mapping to `journey/schema/`).
+- [x] **7.2 Vision critique + direction selection** — render prototypes, critique via vision model, human picks direction (Gate 6: hybrid — Instrument core).
+- [x] **7.3 Design system** — tokens (color/type/spacing/radius, light+dark), component library, `docs/design-system/` documentation (usage, a11y, states).
+- [x] **7.4 UI spec (spec-driven)** — `docs/spec-ui.md`: screens, flows, a11y (WCAG 2.2 AA), data contracts (schema-driven), acceptance criteria (AC-UI-01..12).
+- [x] **7.5 TDD plan (test-driven)** — `docs/plan-ui.md`: test-first tasks — token/component tests, E2E via Playwright (`webapp-testing` skill), a11y checks.
+
+## Phase 8 — Journey Interface (implementation, later)
+
+Execution of `docs/plan-ui.md` against the accepted direction; CI validates build + tests.
+
+---
+
 ## Team Manifest (cooperation protocol, spec §10.2)
 
 - One owner per file; claim via `workspace/claims/<topic-id>.json`.

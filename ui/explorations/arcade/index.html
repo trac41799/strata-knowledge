@@ -1,0 +1,1594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strata — Arcade (design exploration)</title>
+<meta name="description" content="ARCADE design direction for the Strata journey UI. Local-first, playful, evidence-backed. Read ui/explorations/arcade/brief.md.">
+<script>
+/* theme boot before paint to avoid flash of wrong theme (no-JS fallback: light) */
+(function(){var t=null;try{t=localStorage.getItem("strata-arcade-theme");}catch(e){}
+if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t);}
+else if(window.matchMedia("(prefers-color-scheme: dark)").matches){document.documentElement.setAttribute("data-theme","dark");}})();
+</script>
+<style>
+/* ==========================================================================
+   STRATA ARCADE — design exploration
+   One self-contained file. Tokens as CSS custom properties.
+   System font stacks only. No frameworks, no CDN.
+   ========================================================================== */
+
+/* ---------- 1. TOKENS : LIGHT (default) ---------- */
+:root{
+  /* neutrals */
+  --bg:            #F6F3EC;
+  --surface:       #FFFFFF;
+  --surface-2:     #EFE9DD;
+  --ink:           #191623;   /* primary text */
+  --ink-soft:      #57536B;   /* muted text (>=4.5:1) */
+  --line:          #191623;   /* borders + hard shadows */
+  --line-soft:     rgba(25,22,35,.16);
+  --on-fill:       #17131F;   /* dark text on vivid fills, BOTH themes */
+  --on-fill-soft:  #3B3649;
+  --white:         #FFFFFF;
+
+  /* semantic accents (text on them is --on-fill unless noted) */
+  --coin:          #FFB703;   /* primary CTA, XP, coins        ink 10.46:1 */
+  --coin-deep:     #E19B00;
+  --mint:          #2EC4B6;   /* correct, validated, mastery   ink  8.43:1 */
+  --coral:         #FF5C39;   /* streak flame, energy, hot     ink  5.95:1 */
+  --coral-deep:    #E74B2A;
+  --violet:        #7C6FF0;   /* rings, focus, calm mastery    ink  4.69:1 */
+  --rose:          #EC4899;   /* partial, highlights           ink  5.18:1 */
+  --red:           #EF4444;   /* incorrect, overdue            ink  4.86:1 */
+  --sky:           #3A86FF;   /* info, links (link text #2563EB 5.17:1) */
+  --sky-deep:      #2563EB;
+  --amber:         #F59E0B;   /* tier T3, mid-progress         ink  8.51:1 */
+  --teal:          #14B8A6;   /* tier T2                       ink  7.34:1 */
+  --cyan:          #06B6D4;   /* tier T0-ish / cs-foundations  ink  7.53:1 */
+  --lime:          #84CC16;   /* engineering-process           ink  9.25:1 */
+  --purple:        #A855F7;   /* ai-ml                         ink  4.62:1 */
+  --slate:         #64748B;   /* hardware — WHITE text 4.76:1  */
+
+  /* level badges (novice -> expert) */
+  --lvl-novice:        #64748B;
+  --lvl-adv-beginner:  #3A86FF;
+  --lvl-competent:     #2EC4B6;
+  --lvl-proficient:    #7C6FF0;
+  --lvl-expert:        #FFB703;
+
+  /* tier chips */
+  --tier-T0: #A855F7;
+  --tier-T1: #3A86FF;
+  --tier-T2: #14B8A6;
+  --tier-T3: #F59E0B;
+  --tier-T4: #FF5C39;
+
+  /* track identities (tower gradients) */
+  --track-cs-foundations:      #06B6D4;
+  --track-programming:         #F97316;
+  --track-data:                #10B981;
+  --track-architecture-design: #7C6FF0;
+  --track-quality-testing:     #EC4899;
+  --track-security:            #EF4444;
+  --track-systems-software:    #3B82F6;
+  --track-hardware:            #64748B;
+  --track-engineering-process: #84CC16;
+  --track-operations:          #14B8A6;
+  --track-ai-ml:               #A855F7;
+  --track-frontiers:           #F59E0B;
+
+  /* type */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", Consolas, monospace;
+  --fs-display: clamp(2.4rem, 5.5vw, 3.6rem);
+  --fs-h2:      clamp(1.6rem, 3.2vw, 2.2rem);
+  --fs-h3:      1.15rem;
+  --fs-body:    1rem;
+  --fs-small:   .8125rem;
+  --fs-micro:   .6875rem;
+  --tracking-tight: -0.03em;
+
+  /* shape & elevation */
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --border-w: 2px;
+  --shadow-hard: 0 5px 0 var(--line);
+  --shadow-hard-sm: 0 3px 0 var(--line);
+  --shadow-soft: 0 10px 30px rgba(25,22,35,.12);
+  --ring-focus: 0 0 0 3px var(--bg), 0 0 0 6px var(--sky);
+
+  /* motion */
+  --ease-pop: cubic-bezier(.34,1.56,.64,1);
+  --ease-out: cubic-bezier(.22,.9,.32,1);
+  --t-fast: 160ms;
+  --t-med:  320ms;
+
+  --page-w: 1200px;
+}
+
+/* ---------- 2. TOKENS : DARK ---------- */
+[data-theme="dark"]{
+  --bg:          #12101C;
+  --surface:     #1D1A2B;
+  --surface-2:   #262238;
+  --ink:         #F4F1E9;
+  --ink-soft:    #B3AECC;
+  --line:        rgba(244,241,233,.28);
+  --line-soft:   rgba(244,241,233,.12);
+  --shadow-hard: 0 5px 0 rgba(0,0,0,.55);
+  --shadow-hard-sm: 0 3px 0 rgba(0,0,0,.55);
+  --shadow-soft: 0 12px 36px rgba(0,0,0,.5);
+  --ring-focus: 0 0 0 3px var(--bg), 0 0 0 6px var(--cyan);
+  --sky-deep:    #8FBEFF;   /* link text on dark: 8.89:1 */
+  --coin-deep:   #FFC53D;
+  --coral-deep:  #FF7A5C;
+}
+/* auto dark for system preference (manual toggle wins via attribute; JS boot script sets it pre-paint) */
+
+/* ---------- 3. RESET / BASE ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--fs-body);
+  line-height:1.55;
+  color:var(--ink);
+  background-color:var(--bg);
+  background:
+    radial-gradient(1000px 500px at 85% -10%, color-mix(in srgb, var(--coin) 14%, transparent), transparent 60%),
+    radial-gradient(900px 460px at -10% 8%, color-mix(in srgb, var(--cyan) 12%, transparent), transparent 55%),
+    var(--bg);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+h1,h2,h3{ line-height:1.12; letter-spacing:var(--tracking-tight); margin:0; }
+h1{ font-size:var(--fs-display); font-weight:900; }
+h2{ font-size:var(--fs-h2); font-weight:850; }
+h3{ font-size:var(--fs-h3); font-weight:750; }
+p{ margin:.4em 0; }
+a{ color:var(--sky-deep); }
+button{ font:inherit; color:inherit; cursor:pointer; }
+::selection{ background:var(--coin); color:var(--on-fill); }
+:focus-visible{ outline:none; box-shadow:var(--ring-focus); border-radius:6px; }
+.num{ font-variant-numeric:tabular-nums; }
+code,.mono{ font-family:var(--font-mono); font-size:.9em; }
+.skip-link{
+  position:absolute; left:-999px; top:0; background:var(--coin); color:var(--on-fill);
+  padding:.6rem 1rem; border-radius:0 0 10px 0; font-weight:700; z-index:200;
+}
+.skip-link:focus{ left:0; }
+
+/* ---------- 4. LAYOUT SHELL ---------- */
+.topbar{
+  position:sticky; top:0; z-index:60;
+  display:flex; align-items:center; gap:.75rem;
+  padding:.65rem clamp(1rem,3vw,2rem);
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(8px);
+  border-bottom:var(--border-w) solid var(--line);
+}
+.brand{ display:flex; align-items:center; gap:.55rem; text-decoration:none; color:var(--ink); }
+.brand svg{ width:30px; height:30px; }
+.brand-name{ font-weight:900; font-size:1.2rem; letter-spacing:-.02em; }
+.brand-tag{
+  font-size:var(--fs-micro); font-weight:800; text-transform:uppercase; letter-spacing:.12em;
+  background:var(--coin); color:var(--on-fill); padding:.14em .55em; border-radius:99px;
+  border:1.5px solid var(--line); transform:rotate(-4deg);
+}
+.topbar-spacer{ flex:1; }
+.hud-chip{
+  display:inline-flex; align-items:center; gap:.45rem;
+  border:var(--border-w) solid var(--line); background:var(--surface);
+  border-radius:99px; padding:.32rem .8rem; font-weight:700; font-size:var(--fs-small);
+  box-shadow:var(--shadow-hard-sm); white-space:nowrap;
+}
+.hud-chip .lbl{ font-size:var(--fs-micro); font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); }
+.icon-btn{
+  width:42px; height:42px; display:grid; place-items:center;
+  border:var(--border-w) solid var(--line); background:var(--surface); border-radius:99px;
+  box-shadow:var(--shadow-hard-sm); transition:transform var(--t-fast) var(--ease-pop);
+}
+.icon-btn:active{ transform:translateY(3px); box-shadow:none; }
+.icon-btn svg{ width:20px; height:20px; }
+
+.tabbar{
+  display:flex; gap:.5rem; overflow-x:auto; padding:.8rem clamp(1rem,3vw,2rem) .2rem;
+  max-width:var(--page-w); margin:0 auto; scrollbar-width:thin;
+}
+.tab{
+  display:inline-flex; align-items:center; gap:.45rem; white-space:nowrap;
+  border:var(--border-w) solid var(--line); background:var(--surface); color:var(--ink-soft);
+  font-weight:750; font-size:var(--fs-small); padding:.55rem 1rem; border-radius:99px;
+  box-shadow:var(--shadow-hard-sm); transition:transform var(--t-fast) var(--ease-pop), color var(--t-fast), background var(--t-fast);
+}
+.tab svg{ width:16px; height:16px; }
+.tab:hover{ transform:translateY(-1px); }
+.tab:active{ transform:translateY(3px); box-shadow:none; }
+.tab[aria-selected="true"]{ background:var(--coin); color:var(--on-fill); box-shadow:var(--shadow-hard-sm); }
+
+main{ max-width:var(--page-w); margin:0 auto; padding:1.2rem clamp(1rem,3vw,2rem) 4rem; }
+.screen{ display:none; }
+.screen.is-active{ display:block; animation:slideUp .45s var(--ease-out) both; }
+.screen-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.6rem 1rem; margin:1rem 0 1.4rem; }
+.screen-head .kicker{
+  font-size:var(--fs-micro); font-weight:850; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--ink-soft); display:block; margin-bottom:.2rem;
+}
+.screen-head p{ color:var(--ink-soft); margin:0; }
+.mock{
+  font-size:var(--fs-micro); font-weight:800; text-transform:uppercase; letter-spacing:.1em;
+  background:var(--surface-2); border:1.5px dashed var(--ink-soft); color:var(--ink-soft);
+  padding:.12em .5em; border-radius:99px; vertical-align:middle; white-space:nowrap;
+}
+footer{ border-top:var(--border-w) solid var(--line); color:var(--ink-soft); font-size:var(--fs-small); padding:1.2rem clamp(1rem,3vw,2rem); text-align:center; }
+
+/* ---------- 5. COMPONENTS ---------- */
+/* sticker card */
+.card{
+  background:var(--surface); border:var(--border-w) solid var(--line);
+  border-radius:var(--radius-lg); padding:1.15rem; box-shadow:var(--shadow-hard);
+}
+.card h3{ display:flex; align-items:center; gap:.5rem; }
+.card .sub{ color:var(--ink-soft); font-size:var(--fs-small); }
+.card-head{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.7rem; }
+.card-foot{ border-top:1px dashed var(--line-soft); margin-top:.9rem; padding-top:.7rem; font-size:var(--fs-small); color:var(--ink-soft); }
+
+/* coin button */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  border:var(--border-w) solid var(--line); background:var(--coin); color:var(--on-fill);
+  font-weight:800; font-size:var(--fs-body); padding:.65rem 1.3rem; border-radius:99px;
+  box-shadow:var(--shadow-hard-sm); transition:transform var(--t-fast) var(--ease-pop), box-shadow var(--t-fast);
+  text-decoration:none;
+}
+.btn:hover{ transform:translateY(-2px); }
+.btn:active{ transform:translateY(3px); box-shadow:none; }
+.btn.ghost{ background:var(--surface); color:var(--ink); }
+.btn.mint{ background:var(--mint); }
+.btn.coral{ background:var(--coral); }
+.btn.violet{ background:var(--violet); }
+.btn.small{ font-size:var(--fs-small); padding:.4rem .9rem; }
+.btn[disabled]{ opacity:.5; pointer-events:none; }
+
+/* chip */
+.chip{
+  display:inline-flex; align-items:center; gap:.35rem;
+  border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink);
+  border-radius:99px; padding:.14em .7em; font-size:var(--fs-small); font-weight:700;
+  white-space:nowrap;
+}
+.chip b{ font-weight:850; }
+.chip.solid{ color:var(--on-fill); border-color:var(--line); }
+.chip.solid.ink{ background:var(--ink); color:var(--bg); }
+.chip.coin{ background:var(--coin); }
+.chip.mint{ background:var(--mint); }
+.chip.coral{ background:var(--coral); }
+.chip.violet{ background:var(--violet); }
+.chip.rose{ background:var(--rose); }
+.chip.red{ background:var(--red); }
+.chip.sky{ background:var(--sky); }
+.chip.amber{ background:var(--amber); }
+.chip.teal{ background:var(--teal); }
+.chip.slate{ background:var(--slate); color:var(--white); }
+.chip.tier-T0{ background:var(--tier-T0); }
+.chip.tier-T1{ background:var(--tier-T1); }
+.chip.tier-T2{ background:var(--tier-T2); }
+.chip.tier-T3{ background:var(--tier-T3); }
+.chip.tier-T4{ background:var(--tier-T4); }
+
+/* level badges */
+.lvl{ display:inline-flex; align-items:center; gap:.3rem; font-weight:800; font-size:var(--fs-small); padding:.14em .7em; border-radius:99px; border:1.5px solid var(--line); color:var(--on-fill); }
+.lvl.novice{ background:var(--lvl-novice); color:var(--white); }
+.lvl.adv-beginner{ background:var(--lvl-adv-beginner); }
+.lvl.competent{ background:var(--lvl-competent); }
+.lvl.proficient{ background:var(--lvl-proficient); }
+.lvl.expert{ background:var(--lvl-expert); }
+
+/* progress bar */
+.bar{ height:12px; border:var(--border-w) solid var(--line); border-radius:99px; background:var(--surface-2); overflow:hidden; }
+.bar > span{ display:block; height:100%; border-radius:99px; background:var(--coin); transition:width .8s var(--ease-out); }
+.bar.mint > span{ background:var(--mint); }
+.bar.violet > span{ background:var(--violet); }
+.bar.coral > span{ background:var(--coral); }
+.bar.shimmer > span{ background-image:linear-gradient(110deg, var(--coin) 30%, color-mix(in srgb, var(--coin) 40%, #fff) 40%, var(--coin) 50%); background-size:200% 100%; animation:shimmer 2.4s linear infinite; }
+
+/* progress ring (SVG) */
+.ring{ position:relative; width:120px; height:120px; }
+.ring svg{ width:100%; height:100%; transform:rotate(-90deg); }
+.ring .track{ fill:none; stroke:var(--surface-2); stroke-width:11; }
+.ring .fill{ fill:none; stroke:var(--violet); stroke-width:11; stroke-linecap:round; stroke-dasharray:301.6; stroke-dashoffset:301.6; transition:stroke-dashoffset 1.1s var(--ease-out); }
+.ring .fill.coin{ stroke:var(--coin); }
+.ring .fill.mint{ stroke:var(--mint); }
+.ring .fill.coral{ stroke:var(--coral); }
+.ring-label{ position:absolute; inset:0; display:grid; place-content:center; text-align:center; }
+.ring-label .big{ font-weight:900; font-size:1.55rem; line-height:1; }
+.ring-label .cap{ font-size:var(--fs-micro); font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); }
+
+/* flame (streak) */
+.flame{ width:34px; height:34px; display:inline-block; filter:drop-shadow(0 3px 0 color-mix(in srgb, var(--coral-deep) 55%, transparent)); animation:flameFlicker 1.6s ease-in-out infinite; transform-origin:50% 90%; }
+.flame.small{ width:20px; height:20px; animation:none; }
+
+/* tables */
+.tbl{ width:100%; border-collapse:collapse; font-size:var(--fs-small); }
+.tbl th{ text-align:left; font-size:var(--fs-micro); text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); padding:.45rem .6rem; border-bottom:var(--border-w) solid var(--line); }
+.tbl td{ padding:.55rem .6rem; border-bottom:1px solid var(--line-soft); vertical-align:middle; }
+.tbl tr:last-child td{ border-bottom:none; }
+
+/* heatmap */
+.heat{ display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; }
+.heat-col{ display:flex; flex-direction:column; gap:4px; flex:none; }
+.heat-col .hlabel{ font-size:9px; font-weight:850; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-soft); text-align:center; white-space:nowrap; }
+.heat-cell{ width:26px; aspect-ratio:1; border-radius:6px; border:1.5px solid var(--line); background:var(--surface-2); position:relative; }
+.heat-cell.lit{ background:var(--mint); border-color:var(--line); }
+.heat-cell.mid{ background:var(--amber); }
+.heat-cell.low{ background:color-mix(in srgb, var(--coral) 55%, var(--surface)); }
+.heat-cell.due::after{ content:""; position:absolute; inset:3px; border-radius:4px; background:var(--coin); animation:blink 1.4s steps(2,start) infinite; }
+
+/* stat blob */
+.stat{ display:flex; flex-direction:column; }
+.stat .v{ font-size:2rem; font-weight:900; line-height:1; letter-spacing:-.02em; }
+.stat .k{ font-size:var(--fs-micro); font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-top:.25rem; }
+
+/* ---------- 6. DASHBOARD ---------- */
+.dash-grid{ display:grid; gap:1rem; grid-template-columns:repeat(12,1fr); }
+.dash-grid > *{ grid-column:span 12; }
+@media(min-width:640px){
+  .span6{ grid-column:span 6 !important; }
+  .span4{ grid-column:span 4 !important; }
+  .span8{ grid-column:span 8 !important; }
+}
+@media(min-width:1024px){
+  .dash-quests{ grid-column:span 4 !important; }
+  .dash-mastery{ grid-column:span 4 !important; }
+  .dash-xp{ grid-column:span 4 !important; }
+  .dash-heat{ grid-column:span 8 !important; }
+  .dash-actions{ grid-column:span 4 !important; }
+}
+.hero-row{ display:flex; flex-wrap:wrap; align-items:center; gap:1rem; margin-bottom:1.4rem; }
+.hero-cta{ margin-left:auto; display:flex; gap:.6rem; flex-wrap:wrap; }
+
+.streak-dots{ display:flex; gap:6px; margin-top:.8rem; }
+.streak-dot{ width:26px; height:26px; border-radius:8px; border:1.5px solid var(--line); background:var(--surface-2); display:grid; place-items:center; }
+.streak-dot .flame{ width:14px; height:14px; filter:none; }
+.streak-dot.on{ background:var(--coral); }
+.streak-dot.grace{ background:color-mix(in srgb, var(--coral) 45%, var(--surface)); }
+
+.xp-events{ list-style:none; margin:.6rem 0 0; padding:0; display:grid; gap:.35rem; }
+.xp-events li{ display:flex; justify-content:space-between; gap:1rem; font-size:var(--fs-small); border-bottom:1px dashed var(--line-soft); padding:.3rem 0; }
+.xp-events .pts{ font-weight:850; color:var(--coin-deep); }
+
+.quest-mini{ list-style:none; margin:.6rem 0; padding:0; display:grid; gap:.5rem; }
+.quest-mini li{ display:flex; align-items:center; gap:.6rem; border:1.5px solid var(--line); border-radius:var(--radius-sm); padding:.55rem .7rem; background:var(--surface-2); }
+.quest-mini .t{ flex:1; font-weight:700; font-size:var(--fs-small); }
+.overdue{ background:var(--red); color:var(--on-fill); font-weight:850; font-size:var(--fs-micro); text-transform:uppercase; letter-spacing:.08em; border-radius:99px; padding:.18em .6em; }
+
+.action-grid{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+.action-item{
+  display:flex; flex-direction:column; gap:.3rem; align-items:flex-start;
+  border:var(--border-w) solid var(--line); border-radius:var(--radius-md); padding:.8rem;
+  background:var(--surface-2); text-decoration:none; color:var(--ink); font-weight:750; font-size:var(--fs-small);
+  box-shadow:var(--shadow-hard-sm); transition:transform var(--t-fast) var(--ease-pop);
+}
+.action-item:hover{ transform:translateY(-2px); }
+.action-item svg{ width:22px; height:22px; }
+.action-item small{ color:var(--ink-soft); font-weight:600; }
+
+/* ---------- 7. EXPLORER (STRATA CITY) ---------- */
+.city-legend{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0 1.2rem; }
+.city-legend .swatch{ width:14px; height:14px; border-radius:4px; border:1.5px solid var(--line); display:inline-block; }
+.skyline{ display:grid; gap:1rem; grid-template-columns:1fr; }
+@media(min-width:720px){ .skyline{ grid-template-columns:1fr 1fr; } }
+.tower{ border:var(--border-w) solid var(--line); border-radius:var(--radius-lg); background:var(--surface); box-shadow:var(--shadow-hard); overflow:hidden; display:flex; flex-direction:column; }
+.tower-head{ display:flex; align-items:center; gap:.7rem; padding:.8rem 1rem; border-bottom:var(--border-w) solid var(--line); background:var(--surface-2); }
+.tower-dot{ width:14px; height:14px; border-radius:4px; border:1.5px solid var(--line); flex:none; }
+.tower-name{ font-weight:850; font-size:1rem; flex:1; line-height:1.2; }
+.tower-name small{ display:block; color:var(--ink-soft); font-weight:600; font-size:var(--fs-micro); text-transform:uppercase; letter-spacing:.08em; }
+.tower-pct{ font-weight:900; font-size:1.05rem; }
+.tower-body{ display:flex; padding:.6rem .8rem .8rem; gap:.6rem; }
+.floor-axis{ display:grid; grid-template-rows:repeat(7, 44px); gap:6px; font-size:var(--fs-micro); font-weight:850; color:var(--ink-soft); text-align:right; }
+.floor-axis span{ line-height:44px; }
+.floors{ flex:1; display:grid; grid-template-rows:repeat(7, 44px); gap:6px; }
+.floor{ display:flex; align-items:center; gap:6px; overflow-x:auto; scrollbar-width:none; }
+.floor::before{ content:""; flex:none; width:100%; height:1.5px; background:var(--line-soft); position:relative; }
+.floor > *{ position:relative; flex:none; }
+.win{
+  width:34px; height:34px; border-radius:9px; border:1.5px solid var(--line);
+  background:color-mix(in srgb, var(--slate) 14%, var(--surface-2));
+  display:grid; place-items:center; font-size:var(--fs-micro); font-weight:850;
+  transition:transform var(--t-fast) var(--ease-pop);
+  padding:0;
+}
+.win:hover{ transform:scale(1.12) rotate(-3deg); z-index:2; }
+.win::after{ content:""; position:absolute; inset:0; border-radius:7px; box-shadow:inset 0 -4px 0 color-mix(in srgb, var(--line) 18%, transparent); pointer-events:none; }
+.win.off{ color:var(--ink-soft); }
+.win.dim{ background:color-mix(in srgb, var(--tw) 35%, var(--surface-2)); color:var(--on-fill); border-color:var(--line); }
+.win.lit{ background:var(--tw); color:var(--on-fill); }
+.win.due::before{ content:""; position:absolute; inset:4px; border-radius:5px; background:var(--coin); animation:blink 1.3s steps(2,start) infinite; }
+.win.lock{ background:repeating-linear-gradient(45deg, var(--surface-2) 0 4px, var(--surface) 4px 8px); color:var(--ink-soft); }
+
+/* ---------- 8. VALIDATE ---------- */
+.vlayout{ display:grid; gap:1rem; grid-template-columns:1fr; }
+@media(min-width:900px){ .vlayout{ grid-template-columns:1.1fr .9fr; } }
+.claim-box{ display:flex; flex-direction:column; gap:.8rem; }
+.claim-input{
+  font:inherit; min-height:120px; resize:vertical; padding:.9rem 1rem;
+  border:var(--border-w) solid var(--line); border-radius:var(--radius-md);
+  background:var(--surface); color:var(--ink); box-shadow:var(--shadow-hard-sm);
+}
+.claim-input:focus-visible{ box-shadow:var(--ring-focus); }
+.sim-row{ display:flex; gap:.5rem; flex-wrap:wrap; }
+.sim-btn{ font-size:var(--fs-small); font-weight:750; border:1.5px solid var(--line); border-radius:99px; padding:.3rem .8rem; background:var(--surface-2); color:var(--ink); }
+.sim-btn[aria-pressed="true"]{ background:var(--ink); color:var(--bg); }
+
+.typing{ display:inline-flex; gap:5px; align-items:center; padding:.7rem 1.1rem; }
+.typing i{ width:9px; height:9px; border-radius:99px; background:var(--ink-soft); animation:bounce 1s infinite; }
+.typing i:nth-child(2){ animation-delay:.15s; } .typing i:nth-child(3){ animation-delay:.3s; }
+
+.verdict{ display:none; }
+.verdict.show{ display:block; animation:stampIn .5s var(--ease-pop) both; }
+.stamp{
+  display:inline-block; transform:rotate(-5deg);
+  font-weight:900; text-transform:uppercase; letter-spacing:.18em; font-size:1.15rem;
+  border:3px dashed var(--line); border-radius:14px; padding:.25em .9em;
+}
+.verdict.correct .stamp{ color:var(--mint); border-color:var(--mint); }
+.verdict.partial .stamp{ color:var(--amber); border-color:var(--amber); }
+.verdict.incorrect .stamp{ color:var(--red); border-color:var(--red); }
+.vnote{ border-left:5px solid var(--line); background:var(--surface-2); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:.7rem .9rem; font-size:var(--fs-small); }
+.vnote .src{ font-size:var(--fs-micro); color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em; font-weight:800; }
+.path{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; }
+.path .arrow{ font-weight:900; color:var(--ink-soft); }
+.reward-row{ display:flex; align-items:center; gap:.8rem; margin-top:.8rem; flex-wrap:wrap; }
+.reward-pill{
+  display:inline-flex; align-items:center; gap:.4rem; border:var(--border-w) solid var(--line);
+  border-radius:99px; padding:.35rem .9rem; font-weight:850; background:var(--surface); box-shadow:var(--shadow-hard-sm);
+  animation:popIn .5s var(--ease-pop) both;
+}
+.coin-ico{ width:18px; height:18px; border-radius:99px; background:radial-gradient(circle at 35% 30%, #FFE08A, var(--coin) 55%, var(--coin-deep)); border:1.5px solid var(--line); display:inline-block; }
+.xp-ledger{ list-style:none; margin:0; padding:0; display:grid; gap:.3rem; font-size:var(--fs-small); }
+.xp-ledger li{ display:flex; justify-content:space-between; border-bottom:1px dashed var(--line-soft); padding:.3rem 0; }
+
+/* ---------- 9. QUIZ ---------- */
+.quiz-shell{ max-width:760px; margin:0 auto; }
+.quiz-meta{ display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; flex-wrap:wrap; }
+.quiz-meta .bar{ flex:1; min-width:160px; }
+.combo{ display:inline-flex; align-items:center; gap:.35rem; font-weight:850; color:var(--coral); font-size:var(--fs-small); }
+.combo .flame{ width:16px; height:16px; animation:none; }
+.qcard{ border:var(--border-w) solid var(--line); border-radius:var(--radius-lg); background:var(--surface); box-shadow:var(--shadow-hard); padding:1.3rem; }
+.qcard .q{ font-size:1.2rem; font-weight:800; line-height:1.35; margin:.6rem 0 1rem; }
+.opts{ display:grid; gap:.6rem; }
+.opt{
+  display:flex; align-items:center; gap:.7rem; text-align:left; width:100%;
+  border:var(--border-w) solid var(--line); border-radius:var(--radius-md); background:var(--surface-2);
+  padding:.8rem 1rem; font-weight:650; transition:transform var(--t-fast) var(--ease-pop), background var(--t-fast);
+}
+.opt .letter{ font-weight:900; width:26px; height:26px; flex:none; display:grid; place-items:center; border-radius:99px; background:var(--surface); border:1.5px solid var(--line); font-size:var(--fs-small); }
+.opt:hover{ transform:translateX(4px); }
+.opt.right{ background:var(--mint); }
+.opt.wrong{ background:var(--red); animation:shake .4s var(--ease-out); }
+.opt.disabled{ pointer-events:none; opacity:.75; }
+.feedback{ display:none; margin-top:1rem; border-radius:var(--radius-md); padding:.8rem 1rem; border:var(--border-w) solid var(--line); }
+.feedback.show{ display:block; animation:slideUp .35s var(--ease-out) both; }
+.feedback.good{ background:var(--mint); }
+.feedback.bad{ background:var(--coral); color:var(--on-fill); }
+.feedback .fa{ font-weight:850; text-transform:uppercase; letter-spacing:.1em; font-size:var(--fs-small); }
+.quiz-results{ display:none; text-align:center; padding:2rem 1rem; }
+.quiz-results.show{ display:block; }
+.res-big{ font-size:3.4rem; font-weight:900; letter-spacing:-.03em; line-height:1; }
+
+/* ---------- 10. QUESTS ---------- */
+.quest-grid{ display:grid; gap:1rem; grid-template-columns:1fr; }
+@media(min-width:720px){ .quest-grid{ grid-template-columns:1fr 1fr; } }
+.quest{ position:relative; display:flex; flex-direction:column; gap:.7rem; }
+.quest .due-chip{ position:absolute; top:-10px; right:14px; }
+.ladder{ display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.ladder .rung{ width:24px; height:10px; border-radius:99px; background:var(--surface-2); border:1.5px solid var(--line); position:relative; }
+.ladder .rung.done{ background:var(--mint); }
+.ladder .rung.now{ background:var(--coin); transform:scale(1.15); }
+.ladder .rung span{ position:absolute; top:-16px; left:50%; transform:translateX(-50%); font-size:var(--fs-micro); font-weight:800; color:var(--ink-soft); }
+.quest-foot{ margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:.6rem; }
+.qstat{ font-size:var(--fs-small); color:var(--ink-soft); display:inline-flex; gap:.5rem; align-items:center; }
+
+/* ---------- 11. PROGRESS & CALIBRATION ---------- */
+.pgrid{ display:grid; gap:1rem; grid-template-columns:1fr; }
+@media(min-width:900px){
+  .p-cal{ grid-column:span 5; } .p-aim{ grid-column:span 7; }
+}
+.cal-flex{ display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap; }
+.cal-stats{ display:grid; gap:.6rem; flex:1; min-width:200px; }
+.aim-chart{ width:100%; height:auto; }
+.aim-chart text{ font-family:var(--font-sans); font-size:11px; font-weight:700; fill:var(--ink-soft); }
+.aim-chart .bar-p{ fill:var(--violet); }
+.aim-chart .bar-a{ fill:var(--mint); }
+.aim-chart .gridline{ stroke:var(--line-soft); stroke-dasharray:3 4; }
+.legend-row{ display:flex; gap:1rem; font-size:var(--fs-small); color:var(--ink-soft); flex-wrap:wrap; }
+.legend-row .sw{ width:12px; height:12px; border-radius:3px; display:inline-block; vertical-align:-1px; margin-right:.3rem; }
+.spark{ width:100%; height:56px; }
+.spark polyline{ fill:none; stroke:var(--coin); stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+.spark .fill{ fill:color-mix(in srgb, var(--coin) 18%, transparent); stroke:none; }
+.reflect textarea{ width:100%; min-height:80px; font:inherit; border:var(--border-w) solid var(--line); border-radius:var(--radius-md); background:var(--surface); color:var(--ink); padding:.8rem; resize:vertical; }
+
+/* ---------- 12. DIALOG ---------- */
+dialog{
+  border:var(--border-w) solid var(--line); border-radius:var(--radius-lg);
+  background:var(--surface); color:var(--ink); padding:0; width:min(560px, 92vw);
+  box-shadow:var(--shadow-soft);
+}
+dialog::backdrop{ background:color-mix(in srgb, var(--ink) 45%, transparent); backdrop-filter:blur(2px); }
+.dlg-inner{ padding:1.4rem; }
+.dlg-inner h3{ margin-bottom:.5rem; }
+.dlg-meta{ display:grid; gap:.45rem; font-size:var(--fs-small); margin:.8rem 0; }
+.dlg-meta .row{ display:flex; justify-content:space-between; gap:1rem; border-bottom:1px dashed var(--line-soft); padding:.3rem 0; }
+.dlg-meta .row dt{ color:var(--ink-soft); font-weight:700; }
+.dlg-meta .row dd{ margin:0; font-weight:650; text-align:right; }
+.dlg-actions{ display:flex; justify-content:flex-end; gap:.6rem; margin-top:1rem; }
+dialog[open]{ animation:popIn .35s var(--ease-pop) both; }
+
+/* toast */
+#toast{ position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(120%); z-index:100; transition:transform .4s var(--ease-out); }
+#toast.show{ transform:translateX(-50%) translateY(0); }
+.toast-body{ display:flex; align-items:center; gap:.7rem; border:var(--border-w) solid var(--line); border-radius:99px; background:var(--ink); color:var(--bg); padding:.7rem 1.3rem; font-weight:750; box-shadow:var(--shadow-soft); }
+.toast-body .coin-ico{ flex:none; }
+
+/* confetti */
+#fx{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:90; }
+.fx-piece{ position:absolute; top:-20px; width:10px; height:14px; border-radius:3px; opacity:0; animation:confettiFall 1.15s var(--ease-out) forwards; }
+
+/* ---------- 13. MOTION ---------- */
+@keyframes slideUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+@keyframes popIn{ 0%{ opacity:0; transform:scale(.7); } 70%{ transform:scale(1.06); } 100%{ opacity:1; transform:scale(1); } }
+@keyframes stampIn{ 0%{ opacity:0; transform:scale(1.9) rotate(-14deg); } 60%{ opacity:1; transform:scale(.92) rotate(-5deg); } 100%{ transform:scale(1) rotate(-5deg); } }
+@keyframes flameFlicker{ 0%,100%{ transform:scale(1) rotate(-2deg); } 40%{ transform:scale(1.09) rotate(2deg); } 70%{ transform:scale(.97) rotate(-1deg); } }
+@keyframes bounce{ 0%,60%,100%{ transform:none; } 30%{ transform:translateY(-6px); } }
+@keyframes shake{ 0%,100%{ transform:none; } 20%,60%{ transform:translateX(-7px); } 40%,80%{ transform:translateX(7px); } }
+@keyframes blink{ 50%{ opacity:0; } }
+@keyframes shimmer{ to{ background-position:-200% 0; } }
+@keyframes confettiFall{
+  0%{ opacity:1; transform:translate3d(0,0,0) rotate(0); }
+  100%{ opacity:.9; transform:translate3d(var(--dx,30px), 108vh, 0) rotate(var(--rot,720deg)); }
+}
+@keyframes pulseRing{
+  0%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--coin) 70%, transparent); }
+  100%{ box-shadow:0 0 0 26px transparent; }
+}
+.pulse{ animation:pulseRing 1s var(--ease-out) 2; }
+
+/* ---------- 14. REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+  html{ scroll-behavior:auto; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <a class="brand" href="#screen-dashboard" data-tab="screen-dashboard" aria-label="Strata Arcade — back to dashboard">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M3 20 L16 12 L29 20" fill="#7C6FF0" stroke="#191623" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M3 25 L16 17 L29 25" fill="#FFB703" stroke="#191623" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M3 15 L16 7 L29 15" fill="#2EC4B6" stroke="#191623" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-name">Strata</span>
+    <span class="brand-tag">Arcade</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <span class="hud-chip" title="Local learner alias — journey/profile.json">
+    <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <span class="mono">alex-dev</span>
+    <span class="lvl competent">R3 · Ship It</span>
+  </span>
+  <span class="hud-chip" id="hud-streak" title="Current streak — derived from session logs (MOCK)">
+    <svg class="flame small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FF5C39" stroke="#191623" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8.4c.9 2.2 3.2 3.6 3.2 6a3.2 3.2 0 0 1-6.4 0c0-1.6.9-3 2-4.6" fill="#FFE08A"/></svg>
+    <span class="num" id="hud-streak-n">6</span>
+    <span class="lbl">day streak</span>
+  </span>
+  <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+    <svg id="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg id="icon-moon" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+  </button>
+</header>
+
+<!-- ============ TAB NAV ============ -->
+<nav class="tabbar" role="tablist" aria-label="Screens">
+  <button class="tab" role="tab" id="tab-dashboard" aria-controls="screen-dashboard" aria-selected="true" data-tab="screen-dashboard">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="2" fill="currentColor"/></svg>
+    Dashboard
+  </button>
+  <button class="tab" role="tab" id="tab-explorer" aria-controls="screen-explorer" aria-selected="false" data-tab="screen-explorer">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    World map
+  </button>
+  <button class="tab" role="tab" id="tab-validate" aria-controls="screen-validate" aria-selected="false" data-tab="screen-validate">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.4 2.4L15.5 9.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Validate
+  </button>
+  <button class="tab" role="tab" id="tab-quiz" aria-controls="screen-quiz" aria-selected="false" data-tab="screen-quiz">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    Quiz
+  </button>
+  <button class="tab" role="tab" id="tab-quests" aria-controls="screen-quests" aria-selected="false" data-tab="screen-quests">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V4.5A1.5 1.5 0 0 1 5.5 3H20l-3 3.5 3 3.5H6.5V21z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    Quests
+    <span class="chip red" style="padding:.05em .5em" id="quest-count">2</span>
+  </button>
+  <button class="tab" role="tab" id="tab-progress" aria-controls="screen-progress" aria-selected="false" data-tab="screen-progress">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    Progress
+  </button>
+</nav>
+
+<main id="main">
+<!-- =================================================
+     SCREEN 1 · DASHBOARD
+================================================== -->
+<section class="screen is-active" id="screen-dashboard" role="tabpanel" aria-labelledby="h-dash">
+  <div class="screen-head">
+    <div>
+      <span class="kicker">Command Deck</span>
+      <h1 id="h-dash">Good morning, <span class="mono">alex-dev</span></h1>
+      <p>2 quests waiting · 1 overdue · your tower is <strong>62%</strong> lit. <span class="mock">MOCK overview numbers</span></p>
+    </div>
+    <div class="hero-cta">
+      <a class="btn" href="#screen-quests" data-tab="screen-quests">Start review quest</a>
+      <a class="btn ghost" href="#screen-quiz" data-tab="screen-quiz">Quick quiz</a>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <!-- streak -->
+    <article class="card dash-quests">
+      <div class="card-head"><h3>Streak forge</h3><span class="mock">MOCK</span></div>
+      <div style="display:flex; align-items:center; gap:1rem">
+        <svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FF5C39" stroke="#191623" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8.4c.9 2.2 3.2 3.6 3.2 6a3.2 3.2 0 0 1-6.4 0c0-1.6.9-3 2-4.6" fill="#FFE08A"/></svg>
+        <div>
+          <div class="stat"><span class="v num">6<span style="font-size:1.1rem;color:var(--ink-soft)">/7</span></span><span class="k">days this week</span></div>
+        </div>
+      </div>
+      <div class="streak-dots" aria-label="Last 7 days: six active, one grace">
+        <span class="streak-dot on" title="Mon · active"><svg class="flame small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FFE08A"/></svg></span>
+        <span class="streak-dot on" title="Tue · active"><svg class="flame small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FFE08A"/></svg></span>
+        <span class="streak-dot on" title="Wed · active"><svg class="flame small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FFE08A"/></svg></span>
+        <span class="streak-dot on" title="Thu · active"><svg class="flame small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FFE08A"/></svg></span>
+        <span class="streak-dot on" title="Fri · active"><svg class="flame small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FFE08A"/></svg></span>
+        <span class="streak-dot grace" title="Sat · grace (forgiven)"><svg class="flame small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FF8A66"/></svg></span>
+        <span class="streak-dot" title="Sun · today" aria-label="today"></span>
+      </div>
+      <p class="card-foot">Streak = one learning session per day. Miss a day and a weekly <strong>grace flame</strong> protects your run once. Streaks punish nobody — but the flame looks cool. <span class="mock">MOCK</span></p>
+    </article>
+
+    <!-- quests -->
+    <article class="card dash-mastery">
+      <div class="card-head"><h3>Today's quest board</h3><a class="chip" href="#screen-quests" data-tab="screen-quests">Open board →</a></div>
+      <ul class="quest-mini">
+        <li>
+          <span class="chip tier-T2">T2</span>
+          <span class="t"><code>programming/garbage-collection</code><br><small>Review #2 · interval 1d</small></span>
+          <span class="overdue">overdue</span>
+        </li>
+        <li>
+          <span class="chip tier-T2">T2</span>
+          <span class="t"><code>systems-software/http-caching</code><br><small>Review #3 · interval 3d</small></span>
+          <span class="chip amber" style="background:var(--amber)">due 08-19</span>
+        </li>
+        <li>
+          <span class="chip tier-T0">T0</span>
+          <span class="t"><code>systems-software/virtual-memory</code><br><small>Review #4 · interval 7d</small></span>
+          <span class="chip">due 08-20</span>
+          <span class="mock">MOCK</span>
+        </li>
+      </ul>
+      <p class="card-foot">Due items come from <code class="mono">.journey/state/review-queue.json</code> (2 real, 1 <span class="mock">MOCK</span>).</p>
+    </article>
+
+    <!-- mastery ring -->
+    <article class="card dash-xp">
+      <div class="card-head"><h3>Overall mastery</h3><span class="mock">MOCK avg</span></div>
+      <div style="display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap">
+        <div class="ring" aria-label="62 percent mastery">
+          <svg viewBox="0 0 110 110" aria-hidden="true">
+            <circle class="track" cx="55" cy="55" r="48"></circle>
+            <circle class="fill" cx="55" cy="55" r="48" data-pct="62"></circle>
+          </svg>
+          <div class="ring-label"><span class="big num" data-count="62">0%</span><span class="cap">mastery</span></div>
+        </div>
+        <ul class="xp-events" style="flex:1;min-width:200px">
+          <li><span>systems-software · http-caching</span><span class="pts">80</span></li>
+          <li><span>programming · garbage-collection</span><span class="pts">55</span></li>
+          <li><span>systems-software · virtual-memory <span class="mock">MOCK</span></span><span class="pts">41</span></li>
+          <li><span>hardware · cache-coherence <span class="mock">MOCK</span></span><span class="pts">68</span></li>
+        </ul>
+      </div>
+      <div class="bar mint" style="margin-top:.9rem"><span style="width:62%"></span></div>
+    </article>
+
+    <!-- XP / level -->
+    <article class="card dash-quests">
+      <div class="card-head"><h3>Rank &amp; XP</h3><span class="lvl proficient">R3 · Ship It</span></div>
+      <div class="stat" style="margin-bottom:.8rem"><span class="v num">2,480 <span style="font-size:1.1rem;color:var(--ink-soft)">/ 3,600</span></span><span class="k">XP to Rank 4 · Architect</span></div>
+      <div class="bar shimmer"><span style="width:69%" id="xp-bar"></span></div>
+      <ul class="xp-events">
+        <li><span>Claim verified · partial</span><span class="pts">+50</span></li>
+        <li><span>Coin Run quiz · 3/4</span><span class="pts">+120</span></li>
+        <li><span>Review completed</span><span class="pts">+40</span></li>
+        <li><span>Daily streak bonus</span><span class="pts">+25</span></li>
+      </ul>
+      <p class="card-foot">XP is <strong>participation</strong> — it rewards showing up. Mastery is the ring. Never conflate the two. <span class="mock">MOCK</span></p>
+    </article>
+
+    <!-- heatmap -->
+    <article class="card dash-heat">
+      <div class="card-head">
+        <h3>Skill heatmap</h3>
+        <span class="chip" title="Legend">lit = validated ≥70 · amber = 40–69 · dim = started · blank = untouched</span>
+      </div>
+      <div class="heat" id="heatmap" aria-label="Mastery heatmap by track" style="min-height:300px"></div>
+      <p class="card-foot">Real scores: http-caching <strong>80</strong> (validated ✓) and garbage-collection <strong>55</strong> from <code class="mono">skill-matrix.example.json</code>. Everything else <span class="mock">MOCK</span>.</p>
+    </article>
+
+    <!-- quick actions -->
+    <article class="card dash-actions">
+      <div class="card-head"><h3>Quick actions</h3></div>
+      <div class="action-grid">
+        <a class="action-item" href="#screen-validate" data-tab="screen-validate">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.4 2.4L15.5 9.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Verify a claim <small>get the badge</small>
+        </a>
+        <a class="action-item" href="#screen-quiz" data-tab="screen-quiz">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Coin Run <small>4-item quiz</small>
+        </a>
+        <a class="action-item" href="#screen-explorer" data-tab="screen-explorer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          World map <small>12 towers · 68 topics</small>
+        </a>
+        <a class="action-item" href="#screen-progress" data-tab="screen-progress">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          Scoreboard <small>calibration &amp; matrix</small>
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- =================================================
+     SCREEN 2 · WORLD MAP (STRATA CITY)
+================================================== -->
+<section class="screen" id="screen-explorer" role="tabpanel" aria-labelledby="h-map" hidden>
+  <div class="screen-head">
+    <div>
+      <span class="kicker">World map</span>
+      <h1 id="h-map">Strata City</h1>
+      <p>Every <strong>tower</strong> is a track. <strong>Floors</strong> are abstraction bands (B6 high → B0 low). <strong>Windows</strong> are topics — lit when you master them. Click a window.</p>
+    </div>
+  </div>
+
+  <div class="city-legend" aria-label="Window legend">
+    <span class="chip"><span class="swatch" style="background:var(--mint)"></span> Lit — validated</span>
+    <span class="chip"><span class="swatch" style="background:color-mix(in srgb, var(--slate) 35%, var(--surface-2))"></span> Dim — published, not yet validated</span>
+    <span class="chip"><span class="swatch" style="background:var(--surface-2);border-style:dashed"></span> Dark — draft</span>
+    <span class="chip"><span class="swatch" style="background:var(--coin)"></span> Blinking — due for review</span>
+    <span class="chip"><span class="swatch" style="background:repeating-linear-gradient(45deg,var(--surface-2) 0 3px,var(--surface) 3px 6px)"></span> Locked — prerequisite unmet</span>
+  </div>
+
+  <div class="skyline" id="city" aria-label="Knowledge map as towers with topic windows"></div>
+
+  <p style="color:var(--ink-soft);font-size:var(--fs-small);margin-top:1.2rem">
+    Topic data is REAL (68 topics from <code class="mono">INDEX.md</code> / <code class="mono">knowledge-graph.yml</code> — band, tier, status).
+    Validation state comes from <code class="mono">skill-matrix.example.json</code>; due-review blink from <code class="mono">review-queue.example.json</code>. <span class="mock">MOCK</span> mastery for untouched topics.
+  </p>
+</section>
+
+<!-- =================================================
+     SCREEN 3 · VALIDATE
+================================================== -->
+<section class="screen" id="screen-validate" role="tabpanel" aria-labelledby="h-val" hidden>
+  <div class="screen-head">
+    <div>
+      <span class="kicker">Verification arcade</span>
+      <h1 id="h-val">Settle it. Get the badge.</h1>
+      <p>Type a claim about a topic. The harness resolves it against <code class="mono">concept.md</code> claims and stamps a verdict — with the evidence tier, records, and a corrective path.</p>
+    </div>
+  </div>
+
+  <div class="vlayout">
+    <article class="card">
+      <h3>Your claim</h3>
+      <p class="sub">Prefilled with the real claim from <code class="mono">session.example.jsonl</code>.</p>
+      <div class="claim-box">
+        <label class="chip" for="claim-input">topic: <code>systems-software/http-caching</code></label>
+        <textarea class="claim-input" id="claim-input" aria-describedby="claim-hint">Cache-Control max-age makes a response reusable for that many seconds from origin</textarea>
+        <p class="sub" id="claim-hint">Editing the text still simulates the same verdict — this is a UI exploration, not a live resolver.</p>
+        <button class="btn" id="verify-btn" type="button">Verify claim <span class="coin-ico" aria-hidden="true"></span></button>
+        <div class="sim-row" role="group" aria-label="Simulate alternate verdicts">
+          <span class="chip">Simulate:</span>
+          <button class="sim-btn" type="button" data-sim="real" aria-pressed="true">REAL sample (partial)</button>
+          <button class="sim-btn" type="button" data-sim="correct">correct</button>
+          <button class="sim-btn" type="button" data-sim="incorrect">incorrect</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" aria-live="polite">
+      <h3>Verdict</h3>
+      <div id="verdict-slot">
+        <p class="sub">Submit a claim to see the verdict card.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- =================================================
+     SCREEN 4 · QUIZ (COIN RUN)
+================================================== -->
+<section class="screen" id="screen-quiz" role="tabpanel" aria-labelledby="h-quiz" hidden>
+  <div class="screen-head">
+    <div>
+      <span class="kicker">Coin Run</span>
+      <h1 id="h-quiz">HTTP Caching — 4 items</h1>
+      <p>Items are REAL from <code class="mono">knowledge/systems-software/http-caching/validation.md</code> (formative + review banks). Answer → instant feedback → confetti.</p>
+    </div>
+  </div>
+
+  <div class="quiz-shell">
+    <div class="quiz-meta">
+      <span class="chip sky">Item <span class="num" id="q-now">1</span>/4</span>
+      <div class="bar"><span id="q-progress" style="width:0%"></span></div>
+      <span class="combo" id="combo" aria-label="combo: 0">×<span class="num" id="combo-n">0</span>
+        <svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8C12 1.8 5.5 8.4 5.5 13.3a6.5 6.5 0 0 0 13 0c0-4.9-6.5-11.5-6.5-11.5z" fill="#FF5C39" stroke="#191623" stroke-width="1.8"/></svg>
+      </span>
+    </div>
+
+    <div id="q-card" class="qcard">
+      <div id="q-html"></div>
+      <div class="opts" id="q-opts"></div>
+      <div class="feedback" id="q-feedback" role="status"></div>
+    </div>
+
+    <div class="quiz-results" id="q-results">
+      <span class="kicker">Run complete</span>
+      <div class="res-big num" id="res-score">0/4</div>
+      <p class="sub" style="max-width:44ch;margin:1rem auto">Scores map to <code class="mono">quiz.attempted</code> events (bank + bloom_scores). A summative pass needs ≥80% at your <em>bloom target</em> — XP celebrates effort, mastery comes from the matrix.</p>
+      <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem">
+        <button class="btn" id="replay-btn" type="button">Run again</button>
+        <button class="btn ghost" id="res-quest-btn" type="button">Schedule review quest</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================
+     SCREEN 5 · QUESTS (REVIEW QUEUE)
+================================================== -->
+<section class="screen" id="screen-quests" role="tabpanel" aria-labelledby="h-quest" hidden>
+  <div class="screen-head">
+    <div>
+      <span class="kicker">Quest board</span>
+      <h1 id="h-quest">Reviews are quests</h1>
+      <p>Spaced repetition (1 → 3 → 7 → 14 → 30 → 60 → 120 days) turned into a board. Interleaved with prerequisites, per the spec's review bank design.</p>
+    </div>
+  </div>
+
+  <div class="quest-grid" id="quest-grid"></div>
+
+  <article class="card" style="margin-top:1.2rem">
+    <h3>How spacing works here</h3>
+    <p class="sub">The ladder below is the review interval ladder from <code class="mono">docs/spec.md §4.1</code>. Each completed review moves the topic one rung — the queue stores the interval you're on (<code class="mono">interval_days</code>, <code class="mono">reviews</code>).</p>
+    <div class="ladder" style="margin-top:.8rem" aria-label="Spacing ladder 1-3-7-14-30-60-120 days">
+      <span class="rung" data-day="1"><span>1</span></span>
+      <span class="rung" data-day="3"><span>3</span></span>
+      <span class="rung" data-day="7"><span>7</span></span>
+      <span class="rung" data-day="14"><span>14</span></span>
+      <span class="rung" data-day="30"><span>30</span></span>
+      <span class="rung" data-day="60"><span>60</span></span>
+      <span class="rung" data-day="120"><span>120</span></span>
+      <span class="chip" style="margin-left:.4rem">optimal gap ≈ 10–20% of retention interval</span>
+    </div>
+  </article>
+</section>
+
+<!-- =================================================
+     SCREEN 6 · PROGRESS & CALIBRATION
+================================================== -->
+<section class="screen" id="screen-progress" role="tabpanel" aria-labelledby="h-prog" hidden>
+  <div class="screen-head">
+    <div>
+      <span class="kicker">Scoreboard</span>
+      <h1 id="h-prog">Progress &amp; calibration</h1>
+      <p>Skill matrix from <code class="mono">skill-matrix.example.json</code> (2 REAL rows). Calibration = predicted vs actual — the honest meta-skill. <span class="mock">charts MOCK</span></p>
+    </div>
+  </div>
+
+  <div class="pgrid">
+    <article class="card p-cal">
+      <div class="card-head"><h3>Calibration</h3><span class="mock">MOCK</span></div>
+      <div class="cal-flex">
+        <div class="ring" aria-label="71 percent calibrated">
+          <svg viewBox="0 0 110 110" aria-hidden="true">
+            <circle class="track" cx="55" cy="55" r="48"></circle>
+            <circle class="fill coin" cx="55" cy="55" r="48" data-pct="71"></circle>
+          </svg>
+          <div class="ring-label"><span class="big num" data-count="71">0%</span><span class="cap">calibrated</span></div>
+        </div>
+        <div class="cal-stats">
+          <div class="stat"><span class="v num" style="font-size:1.5rem">+8%</span><span class="k">mean predicted − actual</span></div>
+          <p class="sub">Gently overconfident on <code>apply</code>-level items. Trend: improving since review #4.</p>
+          <span class="chip amber">insight · focus on apply</span>
+        </div>
+      </div>
+      <p class="card-foot">Derived from <code class="mono">logs/*.jsonl</code> → <code class="mono">calibration.updated</code> events. Never shown as a score you "lose" — it's a dial you tune.</p>
+    </article>
+
+    <article class="card p-aim">
+      <div class="card-head"><h3>Predicted vs actual</h3><span class="mock">MOCK data</span></div>
+      <svg class="aim-chart" id="aim-chart" viewBox="0 0 460 200" role="img" aria-label="Bar chart: predicted confidence vs actual quiz score across six sessions">
+        <line class="gridline" x1="40" y1="20" x2="440" y2="20"></line>
+        <line class="gridline" x1="40" y1="80" x2="440" y2="80"></line>
+        <line class="gridline" x1="40" y1="140" x2="440" y2="140"></line>
+      </svg>
+      <div class="legend-row">
+        <span><span class="sw" style="background:var(--violet)"></span>predicted (confidence)</span>
+        <span><span class="sw" style="background:var(--mint)"></span>actual (score)</span>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem">
+        <span class="chip mint">under 10% gap on remember</span>
+        <span class="chip amber">~18% gap on apply</span>
+        <span class="chip coral">overdue review → gap widens</span>
+      </div>
+    </article>
+
+    <article class="card p-cal">
+      <div class="card-head"><h3>Activity · last 14 days</h3><span class="mock">MOCK</span></div>
+      <svg class="spark" viewBox="0 0 400 56" preserveAspectRatio="none" aria-label="XP sparkline: rising trend">
+        <polygon class="fill" points="0,56 0,44 31,40 62,45 92,33 123,36 154,24 185,28 215,19 246,22 277,12 308,16 338,8 369,11 400,5 400,56"></polygon>
+        <polyline points="0,44 31,40 62,45 92,33 123,36 154,24 185,28 215,19 246,22 277,12 308,16 338,8 369,11 400,5"></polyline>
+      </svg>
+      <p class="card-foot">XP earned per day. Trend up — but the dial that matters is below.</p>
+    </article>
+
+    <article class="card p-aim">
+      <div class="card-head"><h3>Skill matrix</h3><span class="chip" id="matrix-rows">2 REAL + 6 MOCK</span></div>
+      <div style="overflow-x:auto">
+        <table class="tbl">
+          <thead><tr><th>Topic</th><th>Level</th><th>Score</th><th>Validated</th><th>Last attempt</th><th>Evidence</th></tr></thead>
+          <tbody id="matrix-body"></tbody>
+        </table>
+      </div>
+      <p class="card-foot">Schema: <code class="mono">journey/schema/skill-matrix.schema.json</code> — <code>level</code>, <code>score</code> 0–100, <code>validated</code>, <code>last_attempt</code>, <code>evidence[]</code>.</p>
+    </article>
+
+    <article class="card reflect" style="grid-column:1/-1">
+      <div class="card-head"><h3>Reflection pocket</h3><span class="chip">reflection.logged</span></div>
+      <p class="sub">Metacognition is a core mechanic here: what you think you know vs what the data says.</p>
+      <textarea aria-label="Reflection note">The Age-header question humbled me — I knew max-age but had never traced a full hop. I'll review with the queue.</textarea>
+      <p style="margin-top:.6rem;display:flex;gap:.6rem;align-items:center"><button class="btn small" type="button" id="reflect-btn">Log reflection</button><span class="mock">MOCK — writes <code>reflection.logged</code> to local log</span></p>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- ============ DIALOGS ============ -->
+<dialog id="topic-dialog" aria-labelledby="topic-dlg-title">
+  <div class="dlg-inner" id="topic-dlg-body"></div>
+</dialog>
+
+<dialog id="quest-dialog" aria-labelledby="quest-dlg-title">
+  <div class="dlg-inner" id="quest-dlg-body"></div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"><div class="toast-body"><span class="coin-ico" aria-hidden="true"></span><span id="toast-text"></span></div></div>
+<div id="fx" aria-hidden="true"></div>
+
+<noscript><p style="padding:1rem;text-align:center">This exploration needs JavaScript for its interactivity (tabs, quiz, confetti). The design tokens and layout are all plain CSS.</p></noscript>
+
+<footer>
+  <p><strong>Strata · Arcade</strong> — a design exploration, not the product. Local-first, no accounts, no telemetry. Reads <code class="mono">.journey/</code> + committed maps; writes only <code class="mono">.journey/</code> via the event schema (ADR-0001).</p>
+</footer>
+
+<script>
+/* ==========================================================================
+   STRATA ARCADE — behavior layer (vanilla JS)
+   ========================================================================== */
+(function(){
+"use strict";
+
+var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- theme ---------- */
+var root = document.documentElement;
+var stored = null;
+try { stored = localStorage.getItem("strata-arcade-theme"); } catch(e){}
+if (stored === "dark" || stored === "light") {
+  root.setAttribute("data-theme", stored);
+} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  root.setAttribute("data-theme", "dark");
+}
+var themeBtn = document.getElementById("theme-toggle");
+function paintTheme(){
+  var dark = root.getAttribute("data-theme") === "dark";
+  document.getElementById("icon-sun").style.display = dark ? "none" : "";
+  document.getElementById("icon-moon").style.display = dark ? "" : "none";
+}
+themeBtn.addEventListener("click", function(){
+  var dark = root.getAttribute("data-theme") === "dark";
+  root.setAttribute("data-theme", dark ? "light" : "dark");
+  try { localStorage.setItem("strata-arcade-theme", dark ? "light" : "dark"); } catch(e){}
+  paintTheme();
+});
+paintTheme();
+
+/* ---------- tabs (hash-routed) ---------- */
+var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+var screens = {};
+tabs.forEach(function(t){ screens[t.dataset.tab] = document.getElementById(t.dataset.tab); });
+
+function show(tabId, push){
+  tabs.forEach(function(t){
+    var on = t.dataset.tab === tabId;
+    t.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  Object.keys(screens).forEach(function(k){
+    var el = screens[k];
+    var on = k === tabId;
+    el.hidden = !on;
+    el.classList.toggle("is-active", on);
+  });
+  if (push && location.hash !== "#" + tabId) {
+    try { history.pushState(null, "", "#" + tabId); } catch(e){}
+  }
+  window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" });
+  if (tabId === "screen-progress") { fillRings(); fillChart(); }
+  if (tabId === "screen-dashboard") { fillRings(); }
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest ? e.target.closest("[data-tab]") : null;
+  if (t) {
+    e.preventDefault();
+    var openDlg = document.querySelector("dialog[open]");
+    if (openDlg) openDlg.close();
+    show(t.dataset.tab, true);
+  }
+});
+window.addEventListener("popstate", function(){
+  var id = (location.hash || "#screen-dashboard").slice(1);
+  if (screens[id]) show(id, false);
+});
+
+/* ---------- toast + confetti ---------- */
+var toastEl = document.getElementById("toast");
+var toastTimer = null;
+function toast(msg){
+  document.getElementById("toast-text").textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 2600);
+}
+var FX_COLORS = ["#FFB703","#2EC4B6","#FF5C39","#7C6FF0","#EC4899","#3A86FF","#84CC16"];
+function confetti(n){
+  if (REDUCED) return;
+  var fx = document.getElementById("fx");
+  for (var i = 0; i < (n || 60); i++){
+    var p = document.createElement("span");
+    p.className = "fx-piece";
+    p.style.left = (8 + Math.random() * 84) + "%";
+    p.style.background = FX_COLORS[(Math.random() * FX_COLORS.length) | 0];
+    p.style.setProperty("--dx", (Math.random() * 160 - 80) + "px");
+    p.style.setProperty("--rot", (Math.random() * 900 - 450) + "deg");
+    p.style.animationDelay = (Math.random() * 0.25) + "s";
+    fx.appendChild(p);
+    (function(el){ setTimeout(function(){ el.remove(); }, 1600); })(p);
+  }
+}
+
+/* ---------- rings ---------- */
+function fillRings(){
+  var C = 301.6;
+  document.querySelectorAll(".ring .fill[data-pct]").forEach(function(el){
+    var p = Math.min(100, Math.max(0, parseFloat(el.dataset.pct)));
+    el.style.strokeDashoffset = (C * (1 - p / 100)).toFixed(1);
+  });
+  document.querySelectorAll(".ring-label [data-count]").forEach(function(el){
+    var p = parseFloat(el.dataset.count);
+    el.textContent = p + "%";
+  });
+}
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(fillRings, 250); });
+
+/* ---------- heatmap (dash) ---------- */
+var HEAT = [
+  { t:"cs-foundations",  topics:[["algorithms","",null],["data-structures","",null],["discrete-math","",null],["logic-proof","",null],["complexity","",null],["computability","",null],["prob-stats","",null]] },
+  { t:"programming",     topics:[["garbage-collection","",55],["compiler-pipeline","",null],["concurrency","",null],["functions-types","",null],["memory-model","",null],["paradigms","",null]] },
+  { t:"data",            topics:[["relational","",null],["transactions","",null],["sql-optim","",null],["indexing","",null],["dist-db","",null]] },
+  { t:"architecture-design", topics:[["arch-styles","",null],["sys-design","",null],["caching-strategies","",null],["design-patterns","",null],["modularity","",null]] },
+  { t:"quality-testing", topics:[["testing-basics","",null],["code-review","",null],["perf-eng","",null],["test-design","",null],["test-automation","",null],["quality-models","",null]] },
+  { t:"security",        topics:[["web-security","",null],["authz","",null],["crypto","",null],["threat-modeling","",null],["secure-sdlc","",null]] },
+  { t:"systems-software",topics:[["http-caching","",80],["http-basics","",null],["virtual-memory","",41],["os-processes","",null],["os-scheduling","",null],["networking","",null],["containers","",null],["parallel","",null],["dist-sys","",null],["dist-consensus","",null]] },
+  { t:"hardware",        topics:[["cache-coherence","",68],["memory-hierarchy","",null],["isa-basics","",null],["pipelining","",null],["interrupts","",null],["storage","",null]] },
+  { t:"engineering-process", topics:[["lifecycle","",null],["requirements","",null],["agile","",null],["estimation","",null],["config-mgmt","",null],["ethics","",null]] },
+  { t:"operations",      topics:[["devops","",null],["observability","",null],["incident","",null],["maintenance","",null]] },
+  { t:"ai-ml",           topics:[["ml-fund","",null],["nn","",null],["supervised","",null],["llm-arch","",null]] },
+  { t:"frontiers",       topics:[["agentic","",null],["zk-proofs","",null],["formal-verif","",null],["post-quantum","",null]] }
+];
+function heatCell(topic, score){
+  var el = document.createElement("span");
+  el.className = "heat-cell";
+  var cls = "off", label = topic[0] + " · not started";
+  if (score !== null) {
+    if (score >= 70) { cls = "lit"; label = topic[0] + " · " + score + " · validated"; }
+    else if (score >= 40) { cls = "mid"; label = topic[0] + " · " + score; }
+    else { cls = "low"; label = topic[0] + " · " + score; }
+  }
+  el.classList.add(cls);
+  el.title = label;
+  if (topic[0] === "garbage-collection") el.classList.add("due"); /* overdue review */
+  return el;
+}
+var heatEl = document.getElementById("heatmap");
+var TRACK_LABELS = { "cs-foundations":"CS","programming":"PROG","data":"DATA","architecture-design":"ARCH","quality-testing":"QA","security":"SEC","systems-software":"SYS","hardware":"HW","engineering-process":"PROC","operations":"OPS","ai-ml":"ML","frontiers":"FX" };
+HEAT.forEach(function(track){
+  var col = document.createElement("div");
+  col.className = "heat-col";
+  var lab = document.createElement("span");
+  lab.className = "hlabel";
+  lab.textContent = TRACK_LABELS[track.t] || track.t;
+  col.appendChild(lab);
+  track.topics.forEach(function(topic){
+    col.appendChild(heatCell(topic, topic[2]));
+  });
+  heatEl.appendChild(col);
+});
+
+/* ---------- CITY (world map) ---------- */
+var TOWERS = [
+  { id:"cs-foundations", title:"CS Foundations", floors:["B3","B2"],
+    topics: [["algorithms","B3","T1","draft"],["data-structures","B3","T0","draft"],["discrete-mathematics","B3","T0","draft"],["logic-and-proof","B3","T0","draft"],["complexity-theory","B2","T0","draft"],["computability","B2","T0","draft"],["probability-statistics","B2","T1","draft"]] },
+  { id:"programming", title:"Programming & Languages", floors:["B3"],
+    topics: [["compiler-pipeline","B3","T3","draft"],["concurrency-primitives","B3","T1","draft"],["functions-and-types","B3","T0","draft"],["garbage-collection","B3","T1","published"],["memory-model-and-pointers","B3","T1","draft"],["programming-paradigms","B3","T3","draft"]] },
+  { id:"data", title:"Data & Data Management", floors:["B5","B4","B3"],
+    topics: [["distributed-databases","B5","T2","draft"],["relational-model","B4","T2","draft"],["sql-and-query-optimization","B4","T1","draft"],["transactions-and-isolation","B4","T0","draft"],["indexing-and-storage","B3","T2","draft"]] },
+  { id:"architecture-design", title:"Architecture & Design", floors:["B5","B4"],
+    topics: [["architectural-styles","B5","T2","draft"],["system-design-process","B5","T2","draft"],["caching-strategies","B4","T3","draft"],["design-patterns","B4","T3","draft"],["modularity","B4","T3","draft"]] },
+  { id:"quality-testing", title:"Quality & Testing", floors:["B5","B4"],
+    topics: [["quality-models","B5","T2","draft"],["code-review","B4","T1","draft"],["performance-engineering","B4","T1","draft"],["software-testing-basics","B4","T2","draft"],["test-automation","B4","T3","draft"],["test-design-techniques","B4","T1","draft"]] },
+  { id:"security", title:"Security", floors:["B5","B4","B2"],
+    topics: [["secure-sdlc","B5","T2","draft"],["threat-modeling","B5","T2","draft"],["authentication-authorization","B4","T2","draft"],["web-security","B4","T2","draft"],["cryptography-basics","B2","T0","draft"]] },
+  { id:"systems-software", title:"Systems Software", floors:["B5","B4","B3","B2"],
+    topics: [["distributed-consensus","B5","T0","published"],["distributed-systems-basics","B5","T2","draft"],["http-basics","B4","T2","draft"],["http-caching","B4","T2","published"],["containers-isolation","B3","T3","draft"],["parallel-programming","B3","T1","draft"],["networking-basics","B2","T2","draft"],["os-processes","B2","T2","draft"],["os-scheduling","B2","T1","draft"],["virtual-memory","B2","T0","published"]] },
+  { id:"hardware", title:"Hardware & Architecture", floors:["B1"],
+    topics: [["cache-coherence","B1","T0","published"],["cpu-pipelining","B1","T2","draft"],["interrupts-and-dma","B1","T2","draft"],["isa-basics","B1","T2","draft"],["memory-hierarchy","B1","T2","draft"],["storage-devices","B1","T2","draft"]] },
+  { id:"engineering-process", title:"Engineering Process & Mgmt", floors:["B5","B4"],
+    topics: [["agile-methods","B5","T3","draft"],["estimation-and-cost","B5","T1","draft"],["professional-ethics","B5","T2","draft"],["requirements-engineering","B5","T2","draft"],["software-lifecycle","B5","T2","draft"],["configuration-management","B4","T2","draft"]] },
+  { id:"operations", title:"Operations & Maintenance", floors:["B5","B4"],
+    topics: [["devops-pipeline","B5","T3","draft"],["incident-response","B5","T3","draft"],["observability","B5","T3","draft"],["software-maintenance","B4","T1","draft"]] },
+  { id:"ai-ml", title:"AI & ML", floors:["B5","B4"],
+    topics: [["llm-architectures","B5","T4","draft"],["ml-fundamentals","B4","T1","draft"],["neural-networks","B4","T1","draft"],["supervised-learning","B4","T1","draft"]] },
+  { id:"frontiers", title:"Frontiers (T4)", floors:["B5","B2"],
+    topics: [["agentic-systems","B5","T4","draft"],["formal-verification-scale","B5","T4","draft"],["zero-knowledge-proofs","B5","T4","draft"],["post-quantum-cryptography","B2","T4","draft"]] }
+];
+var FLOORS = ["B6","B5","B4","B3","B2","B1","B0"];
+var MATRIX = { "systems-software/http-caching": {score:80, validated:true}, "programming/garbage-collection": {score:55, validated:false} };
+var QUEUE = { "programming/garbage-collection": true, "systems-software/http-caching": true }; /* due blink */
+var city = document.getElementById("city");
+var cityPct = {};
+TOWERS.forEach(function(tower){
+  cityPct[tower.id] = 0;
+});
+
+function windowState(topicId, status, track){
+  var m = MATRIX[topicId];
+  if (m && m.validated) return "lit";
+  if (status === "published") return "dim";
+  return "off";
+}
+function renderCity(){
+  city.innerHTML = "";
+  TOWERS.forEach(function(tower){
+    var art = document.createElement("article");
+    art.className = "tower";
+    art.style.setProperty("--tw", "var(--track-" + tower.id + ")");
+    var lit = 0, total = tower.topics.length;
+    var head = document.createElement("div");
+    head.className = "tower-head";
+    var dot = document.createElement("span");
+    dot.className = "tower-dot";
+    dot.style.background = "var(--track-" + tower.id + ")";
+    var name = document.createElement("span");
+    name.className = "tower-name";
+    name.innerHTML = "<small>" + tower.id + " · track</small>" + tower.title.replace(/ & /g, " &amp; ");
+    var pct = document.createElement("span");
+    pct.className = "tower-pct num";
+    var body = document.createElement("div");
+    body.className = "tower-body";
+    var axis = document.createElement("div");
+    axis.className = "floor-axis";
+    var floors = document.createElement("div");
+    floors.className = "floors";
+    FLOORS.forEach(function(f){
+      var a = document.createElement("span");
+      a.textContent = f;
+      axis.appendChild(a);
+      var fl = document.createElement("div");
+      fl.className = "floor";
+      tower.topics.forEach(function(t){
+        if (t[1] !== f) return;
+        var id = tower.id + "/" + t[0];
+        var st = windowState(id, t[3], tower.id);
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "win " + st;
+        b.dataset.topic = id;
+        b.dataset.title = t[0].replace(/-/g, " ");
+        b.dataset.band = t[1]; b.dataset.tier = t[2]; b.dataset.status = t[3];
+        b.textContent = t[0].charAt(0).toUpperCase();
+        b.setAttribute("aria-label", t[0].replace(/-/g, " ") + " — floor " + t[1] + ", tier " + t[2] + ", " + t[3] + ". Click for details.");
+        b.title = t[0].replace(/-/g, " ") + " · " + t[1] + " · " + t[2] + " · " + t[3];
+        if (QUEUE[id]) b.classList.add("due");
+        if (st === "lit" || st === "dim") lit++;
+        fl.appendChild(b);
+      });
+      floors.appendChild(fl);
+    });
+    body.appendChild(axis);
+    body.appendChild(floors);
+    head.appendChild(dot); head.appendChild(name); head.appendChild(pct);
+    art.appendChild(head); art.appendChild(body);
+    city.appendChild(art);
+    cityPct[tower.id] = Math.round(lit / total * 100);
+    pct.textContent = (Math.round(lit / total * 100)) + "%";
+  });
+}
+renderCity();
+
+/* topic dialog */
+var topicDlg = document.getElementById("topic-dialog");
+var topicBody = document.getElementById("topic-dlg-body");
+city.addEventListener("click", function(e){
+  var w = e.target.closest(".win");
+  if (!w) return;
+  var p = [w.dataset.topic, w.dataset.title, w.dataset.band, w.dataset.tier, w.dataset.status];
+  var m = MATRIX[w.dataset.topic];
+  var due = QUEUE[w.dataset.topic];
+  topicBody.innerHTML =
+    "<h3 id=\"topic-dlg-title\">" + p[1] + "</h3>" +
+    "<p class=\"sub mono\">" + p[0] + "</p>" +
+    "<dl class=\"dlg-meta\">" +
+      "<div class=\"row\"><dt>Band (floor)</dt><dd>" + p[2] + "</dd></div>" +
+      "<div class=\"row\"><dt>Evidence tier</dt><dd><span class=\"chip tier-" + p[3] + "\">" + p[3] + "</span></dd></div>" +
+      "<div class=\"row\"><dt>Status</dt><dd><span class=\"chip\">" + p[4] + "</span></dd></div>" +
+      "<div class=\"row\"><dt>Bloom target</dt><dd>apply</dd></div>" +
+      (m ? "<div class=\"row\"><dt>Mastery score</dt><dd class=\"num\">" + m.score + (m.validated ? " ✓ validated" : "") + "</dd></div>" : "<div class=\"row\"><dt>Mastery</dt><dd>— <span class=\"mock\">MOCK</span></dd></div>") +
+      (due ? "<div class=\"row\"><dt>Review</dt><dd><span class=\"chip amber\">due</span></dd></div>" : "") +
+    "</dl>" +
+    "<p class=\"sub\">Frontmatter contract: <code class=\"mono\">knowledge/<track>/<topic>/concept.md</code>. Sources: <code class=\"mono\">sources[]</code> → evidence records.</p>" +
+    "<div class=\"dlg-actions\"><button class=\"btn ghost small\" id=\"dlg-close\" type=\"button\">Close</button>" +
+    "<a class=\"btn small\" href=\"#screen-quiz\" data-tab=\"screen-quiz\" data-topic=\"" + p[0] + "\">Quiz this topic</a></div>";
+  topicDlg.showModal();
+});
+document.addEventListener("click", function(e){
+  if (e.target && e.target.id === "dlg-close") topicDlg.close();
+});
+
+/* ---------- VALIDATE ---------- */
+var verdictSlot = document.getElementById("verdict-slot");
+var simBtns = document.querySelectorAll(".sim-btn");
+var simMode = "real";
+simBtns.forEach(function(b){
+  b.addEventListener("click", function(){
+    simBtns.forEach(function(x){ x.setAttribute("aria-pressed", "false"); });
+    b.setAttribute("aria-pressed", "true");
+    simMode = b.dataset.sim;
+  });
+});
+var VERDICTS = {
+  real: {
+    verdict:"partial", tier:"T2", stamp:"Partial",
+    note:"Correct for shared caches when freshness from origin is unconstrained; age counters and stale-while-revalidate nuances missing.",
+    src:"claim.verdict · session.example.jsonl · record S-0009",
+    records:[["S-0009","RFC 9111 · HTTP Caching"],["S-0023","RFC 9110 · HTTP Semantics"]],
+    xp:50, path:["http-basics","http-caching","caching-strategies"]
+  },
+  correct: {
+    verdict:"correct", tier:"T2", stamp:"Correct",
+    note:"The claim matches the RFC 9111 freshness model: max-age=N declares the response stale once its age exceeds N seconds from generation.",
+    src:"simulated verdict (UI demo)",
+    records:[["S-0009","RFC 9111 · HTTP Caching"]],
+    xp:100, path:["http-caching","caching-strategies"]
+  },
+  incorrect: {
+    verdict:"incorrect", tier:"T2", stamp:"Incorrect",
+    note:"max-age never guarantees reuse: no-store forbids it, method/status must be cacheable, and the Age already consumed by intermediate caches eats into the lifetime.",
+    src:"simulated verdict (UI demo)",
+    records:[["S-0009","RFC 9111 · HTTP Caching"]],
+    xp:15, path:["http-basics","http-caching"]
+  }
+};
+document.getElementById("verify-btn").addEventListener("click", function(){
+  verdictSlot.innerHTML = "<span class=\"typing\" role=\"status\"><i></i><i></i><i></i> resolving claim against concept.md…</span>";
+  setTimeout(function(){
+    var v = VERDICTS[simMode];
+    var vCard = document.createElement("div");
+    vCard.className = "verdict show " + v.verdict;
+    vCard.innerHTML =
+      "<span class=\"stamp\">" + v.stamp + "</span>" +
+      "<div style=\"display:flex;gap:.5rem;margin:.9rem 0 .6rem;flex-wrap:wrap\">" +
+        "<span class=\"chip tier-" + v.tier + "\">evidence tier <b>" + v.tier + "</b></span>" +
+        "<span class=\"chip\">topic tier T2 · upper bound of claim confidence</span>" +
+        "<span class=\"chip\">bloom target · apply</span>" +
+      "</div>" +
+      "<div class=\"vnote\"><span class=\"src\">verdict note</span><p style=\"margin:.3rem 0 0\">" + v.note + "</p></div>" +
+      "<div style=\"margin-top:.8rem\"><span class=\"src chip\">evidence records</span><div style=\"display:flex;gap:.5rem;margin-top:.4rem;flex-wrap:wrap\">" +
+        v.records.map(function(r){ return "<span class=\"chip mono\"><b>" + r[0] + "</b> · " + r[1] + "</span>"; }).join("") +
+      "</div></div>" +
+      "<div style=\"margin-top:.8rem\"><span class=\"src chip\">corrective path</span><div class=\"path\" style=\"margin-top:.4rem\">" +
+        v.path.map(function(p, i){ return "<span class=\"chip\">" + p + "</span>" + (i < v.path.length - 1 ? "<span class=\"arrow\" aria-hidden=\"true\">→</span>" : ""); }).join("") +
+      "</div></div>" +
+      "<div class=\"reward-row\">" +
+        "<span class=\"reward-pill\"><span class=\"coin-ico\" aria-hidden=\"true\"></span>+" + v.xp + " XP</span>" +
+        "<span class=\"reward-pill\">streak +1</span>" +
+        "<button class=\"btn small mint\" type=\"button\" data-sched=\"1\">Schedule review</button>" +
+      "</div>" +
+      "<p class=\"sub\" style=\"margin-top:.7rem\">" + v.src + "</p>";
+    verdictSlot.replaceChildren(vCard);
+    verdictSlot.querySelector("[data-sched]").addEventListener("click", function(e){
+      e.currentTarget.textContent = "Scheduled ✓";
+      toast("Review scheduled — 2 days out. This is how review.due events are born.");
+    });
+    if (simMode !== "incorrect") confetti(simMode === "real" ? 36 : 90);
+  }, 900);
+});
+
+/* ---------- QUIZ (Coin Run) ---------- */
+var QUIZ = [
+  { bank:"formative", bloom:"remember", q:"Which single Cache-Control directive truly prevents a response from being stored and reused by ANY cache?",
+    opts:["no-store","no-cache","private","must-revalidate"], correct:0,
+    explain:"no-store forbids storage entirely. no-cache still allows storage (it only forces revalidation before every reuse); private still allows the browser's own cache to store." },
+  { bank:"formative", bloom:"understand", q:"A response carries Cache-Control: max-age=600, an Expires header, and Date. In what order does a cache compute the freshness lifetime?",
+    opts:["s-maxage → max-age → Expires−Date → heuristic","max-age → s-maxage → Expires−Date → heuristic","Expires−Date → max-age → heuristic","heuristic first, then any explicit value"], correct:0,
+    explain:"s-maxage (shared caches) → max-age → Expires−Date → heuristic. Since max-age is present, Expires MUST be ignored." },
+  { bank:"formative", bloom:"apply", q:"At 12:00 a proxy stores a response with Date: 12:00, Age: 0, Cache-Control: public, max-age=300. It forwards at 12:03. What Age must it send — and is the response still fresh?",
+    opts:["Age = 180 · still fresh","Age = 300 · stale","Age = 180 · stale","Age = 0 · still fresh"], correct:0,
+    explain:"Age = 180 (3 min resident time added to prior Age 0). Freshness lifetime 300 s > current age 180 s → still fresh, served without contacting the origin." },
+  { bank:"review", bloom:"remember", q:"Which HTTP methods are cacheable by default?",
+    opts:["GET and HEAD","All methods","GET only","POST and PUT"], correct:0,
+    explain:"GET and HEAD are cacheable by default; a POST response may be cached only with explicit freshness information and a matching Content-Location." }
+];
+var qIdx = 0, combo = 0, correctCount = 0, answered = false;
+var qHtml = document.getElementById("q-html");
+var qOpts = document.getElementById("q-opts");
+var qFeed = document.getElementById("q-feedback");
+var qRes = document.getElementById("q-results");
+var qCard = document.getElementById("q-card");
+
+function renderQ(){
+  var item = QUIZ[qIdx];
+  qHtml.innerHTML =
+    "<span style=\"display:flex;gap:.5rem;flex-wrap:wrap\">" +
+      "<span class=\"chip sky\">bank · " + item.bank + "</span>" +
+      "<span class=\"chip violet\">bloom · " + item.bloom + "</span>" +
+      "<span class=\"chip\"><code>systems-software/http-caching</code></span>" +
+    "</span>" +
+    "<p class=\"q\">" + item.q + "</p>";
+  qOpts.innerHTML = "";
+  qFeed.className = "feedback";
+  qFeed.innerHTML = "";
+  answered = false;
+  var letters = ["A","B","C","D"];
+  item.opts.forEach(function(o, i){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.innerHTML = "<span class=\"letter\">" + letters[i] + "</span><span>" + o + "</span>";
+    b.addEventListener("click", function(){ answer(i); });
+    qOpts.appendChild(b);
+  });
+  document.getElementById("q-now").textContent = qIdx + 1;
+  document.getElementById("q-progress").style.width = (qIdx / QUIZ.length * 100) + "%";
+  document.getElementById("combo-n").textContent = combo;
+}
+function answer(i){
+  if (answered) return;
+  answered = true;
+  var item = QUIZ[qIdx];
+  var btns = qOpts.querySelectorAll(".opt");
+  var good = i === item.correct;
+  btns.forEach(function(b, j){
+    b.classList.add("disabled");
+    if (j === item.correct) b.classList.add("right");
+    if (j === i && !good) b.classList.add("wrong");
+  });
+  if (good) {
+    combo++; correctCount++;
+    qFeed.className = "feedback good show";
+    qFeed.innerHTML = "<span class=\"fa\">Nice!</span> <span>" + item.explain + "</span>";
+    if (combo >= 2) confetti(30);
+  } else {
+    combo = 0;
+    qFeed.className = "feedback bad show";
+    qFeed.innerHTML = "<span class=\"fa\">Miss</span> <span>" + item.explain + "</span>";
+  }
+  document.getElementById("combo-n").textContent = combo;
+  document.getElementById("combo").classList.toggle("pulse", good && combo >= 2);
+  setTimeout(next, good ? 1150 : 2100);
+}
+function next(){
+  qIdx++;
+  if (qIdx < QUIZ.length) { renderQ(); return; }
+  qCard.hidden = true;
+  qRes.classList.add("show");
+  document.getElementById("res-score").textContent = correctCount + "/" + QUIZ.length;
+  document.getElementById("q-progress").style.width = "100%";
+  if (correctCount >= 3) confetti(110);
+  var msg = correctCount >= 3 ? "Gold run — queue moves up a rung." : "Good run — re-route and retry.";
+  setTimeout(function(){ toast(msg); }, 400);
+}
+function resetQuiz(){
+  qIdx = 0; combo = 0; correctCount = 0;
+  qRes.classList.remove("show");
+  qCard.hidden = false;
+  renderQ();
+}
+document.getElementById("replay-btn").addEventListener("click", resetQuiz);
+document.getElementById("res-quest-btn").addEventListener("click", function(){
+  toast("Scheduled — review quest added to the board (simulated review.due event)");
+  confetti(40);
+});
+renderQ();
+
+/* ---------- QUESTS board ---------- */
+var QUESTS = [
+  { topic:"programming/garbage-collection", title:"Garbage Collection", tier:"T1", due:"2026-08-17", interval:1, reviews:1, real:true, overdue:true,
+    blurb:"Mark-sweep vs copying collectors, GC safepoints, and why pauses exist." },
+  { topic:"systems-software/http-caching", title:"HTTP Caching", tier:"T2", due:"2026-08-19", interval:3, reviews:2, real:true, overdue:false,
+    blurb:"Freshness, Age, Vary, and the 304 dance. Interleaves with http-basics." },
+  { topic:"systems-software/virtual-memory", title:"Virtual Memory & Paging", tier:"T0", due:"2026-08-20", interval:7, reviews:3, real:false, overdue:false,
+    blurb:"TLB, page tables, thrashing. Published topic — review interleaves cache hierarchy." },
+  { topic:"hardware/cache-coherence", title:"Cache Coherence", tier:"T0", due:"2026-08-25", interval:14, reviews:4, real:false, overdue:false,
+    blurb:"MESI, snooping vs directory, and memory-model fallout." }
+];
+function ladderMark(interval){
+  var marks = {1:0, 3:1, 7:2, 14:3, 30:4, 60:5, 120:6};
+  var idx = marks[interval] !== undefined ? marks[interval] : 1;
+  var out = "";
+  var days = [1,3,7,14,30,60,120];
+  days.forEach(function(d, i){
+    out += "<span class=\"rung" + (i < idx ? " done" : (i === idx ? " now" : "")) + "\" title=\"interval " + d + "d\"><span>" + d + "</span></span>";
+  });
+  return out;
+}
+var qGrid = document.getElementById("quest-grid");
+QUESTS.forEach(function(q){
+  var card = document.createElement("article");
+  card.className = "card quest";
+  var dueLabel = q.overdue
+    ? "<span class=\"chip red due-chip\">overdue · due " + q.due + "</span>"
+    : "<span class=\"chip amber due-chip\">due " + q.due + "</span>";
+  card.innerHTML =
+    dueLabel +
+    "<div><h3 style=\"display:block\">" + q.title + "</h3>" +
+    "<p class=\"sub mono\">" + q.topic + (q.real ? "" : " <span class=\"mock\">MOCK</span>") + "</p></div>" +
+    "<p class=\"sub\">" + q.blurb + "</p>" +
+    "<div style=\"display:flex;gap:.5rem;flex-wrap:wrap\">" +
+      "<span class=\"chip tier-" + q.tier + "\">tier " + q.tier + "</span>" +
+      "<span class=\"chip\">review #<b>" + q.reviews + "</b></span>" +
+      "<span class=\"chip\">interval <b>" + q.interval + "d</b></span>" +
+      "<span class=\"chip violet\">bloom · apply</span>" +
+    "</div>" +
+    "<div class=\"ladder\" aria-label=\"Spacing ladder progress\">" + ladderMark(q.interval) + "</div>" +
+    "<div class=\"quest-foot\">" +
+      "<span class=\"qstat\">~4 min · interleaved with prerequisites</span>" +
+      "<button class=\"btn small\" type=\"button\" data-start-quest=\"" + q.topic + "\">Start quest</button>" +
+    "</div>";
+  qGrid.appendChild(card);
+});
+var questDlg = document.getElementById("quest-dialog");
+var questBody = document.getElementById("quest-dlg-body");
+qGrid.addEventListener("click", function(e){
+  var b = e.target.closest("[data-start-quest]");
+  if (!b) return;
+  var q = QUESTS.filter(function(x){ return x.topic === b.dataset.startQuest; })[0];
+  questBody.innerHTML =
+    "<h3 id=\"quest-dlg-title\">Quest: " + q.title + "</h3>" +
+    "<p class=\"sub mono\">" + q.topic + "</p>" +
+    "<dl class=\"dlg-meta\">" +
+      "<div class=\"row\"><dt>Briefing</dt><dd>" + q.blurb + "</dd></div>" +
+      "<div class=\"row\"><dt>Session</dt><dd>review items from <code class=\"mono\">validation.md</code> · review bank</dd></div>" +
+      "<div class=\"row\"><dt>Interleave</dt><dd>prerequisites mixed in (spacing + interleaving, spec §4.1)</dd></div>" +
+      "<div class=\"row\"><dt>On success</dt><dd>ladder rung " + q.interval + "d → " + ladderNext(q.interval) + "d · <code class=\"mono\">review.completed</code></dd></div>" +
+    "</dl>" +
+    "<div class=\"dlg-actions\"><button class=\"btn ghost small\" id=\"qdlg-close\" type=\"button\">Not now</button>" +
+    "<button class=\"btn small mint\" id=\"qdlg-go\" type=\"button\">Begin review</button></div>";
+  questDlg.showModal();
+});
+function ladderNext(interval){
+  var days = [1,3,7,14,30,60,120];
+  var i = days.indexOf(interval);
+  return i >= 0 && i < days.length - 1 ? days[i + 1] : "…done";
+}
+document.addEventListener("click", function(e){
+  if (e.target && e.target.id === "qdlg-close") questDlg.close();
+  if (e.target && e.target.id === "qdlg-go") {
+    questDlg.close();
+    toast("Quest started — session events would log locally as session.started → review.completed");
+    confetti(50);
+  }
+});
+
+/* ---------- PROGRESS screen ---------- */
+function fillChart(){
+  var svg = document.getElementById("aim-chart");
+  var data = [[92,84],[88,64],[95,90],[70,58],[85,74],[90,82]];
+  var labels = ["Aug 06","Aug 08","Aug 10","Aug 12","Aug 14","Aug 16"];
+  var W = 460, H = 200, x0 = 44, y0 = 16, plotW = W - x0 - 16, plotH = H - y0 - 30;
+  var grp = plotW / data.length, bw = 18, gap = 6;
+  var g = svg.querySelector("g") || document.createElementNS("http://www.w3.org/2000/svg", "g");
+  svg.appendChild(g);
+  g.innerHTML = "";
+  data.forEach(function(d, i){
+    var cx = x0 + grp * i + grp / 2;
+    var hP = d[0] / 100 * plotH, hA = d[1] / 100 * plotH;
+    var r1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    r1.setAttribute("x", cx - bw - gap / 2); r1.setAttribute("y", H - y0 - hP); r1.setAttribute("width", bw); r1.setAttribute("height", hP);
+    r1.setAttribute("rx", 4); r1.setAttribute("class", "bar-p");
+    var r2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    r2.setAttribute("x", cx + gap / 2); r2.setAttribute("y", H - y0 - hA); r2.setAttribute("width", bw); r2.setAttribute("height", hA);
+    r2.setAttribute("rx", 4); r2.setAttribute("class", "bar-a");
+    var tx = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    tx.setAttribute("x", cx); tx.setAttribute("y", H - 8); tx.setAttribute("text-anchor", "middle");
+    tx.textContent = labels[i];
+    var ty = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    ty.setAttribute("x", x0 - 8); ty.setAttribute("y", y0 + 12); ty.setAttribute("text-anchor", "end"); ty.textContent = "100";
+    var t0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    t0.setAttribute("x", x0 - 8); t0.setAttribute("y", H - y0 + 10); t0.setAttribute("text-anchor", "end"); t0.textContent = "0";
+    g.appendChild(r1); g.appendChild(r2); g.appendChild(tx);
+    if (i === 0) { g.appendChild(ty); g.appendChild(t0); }
+  });
+}
+fillChart();
+
+/* skill matrix table */
+var MATRIX_ROWS = [
+  { topic:"systems-software/http-caching", level:"competent", score:80, validated:true,  last:"2026-08-16", ev:1, real:true },
+  { topic:"programming/garbage-collection", level:"advanced-beginner", score:55, validated:false, last:"2026-08-10", ev:0, real:true },
+  { topic:"systems-software/virtual-memory", level:"advanced-beginner", score:41, validated:false, last:"2026-08-15", ev:0, real:false },
+  { topic:"hardware/cache-coherence", level:"competent", score:68, validated:false, last:"2026-08-14", ev:0, real:false },
+  { topic:"systems-software/http-basics", level:"competent", score:72, validated:true,  last:"2026-08-13", ev:1, real:false },
+  { topic:"programming/functions-and-types", level:"novice", score:22, validated:false, last:"2026-08-11", ev:0, real:false },
+  { topic:"data/relational-model", level:"novice", score:18, validated:false, last:"2026-08-09", ev:0, real:false },
+  { topic:"architecture-design/caching-strategies", level:"advanced-beginner", score:47, validated:false, last:"2026-08-08", ev:0, real:false }
+];
+var mBody = document.getElementById("matrix-body");
+MATRIX_ROWS.forEach(function(r){
+  var tr = document.createElement("tr");
+  tr.innerHTML =
+    "<td><code>" + r.topic + "</code>" + (r.real ? "" : " <span class=\"mock\">MOCK</span>") + "</td>" +
+    "<td><span class=\"lvl " + r.level.replace("advanced-beginner","adv-beginner") + "\">" + r.level + "</span></td>" +
+    "<td><span class=\"num\">" + r.score + "</span> <span class=\"bar\" style=\"display:inline-block;width:70px;height:9px;vertical-align:middle\"><span style=\"width:" + r.score + "%;background:var(--" + (r.score >= 70 ? "mint" : (r.score >= 40 ? "amber" : "coral")) + ")\"></span></span></td>" +
+    "<td>" + (r.validated ? "<span class=\"chip mint\">✓ validated</span>" : "<span class=\"chip\">—</span>") + "</td>" +
+    "<td class=\"num\">" + r.last + "</td>" +
+    "<td class=\"num\">" + r.ev + "</td>";
+  mBody.appendChild(tr);
+});
+
+/* reflection */
+document.getElementById("reflect-btn").addEventListener("click", function(){
+  toast("Reflection logged locally (simulated reflection.logged event)");
+  confetti(24);
+});
+
+/* ---------- boot ---------- */
+document.addEventListener("DOMContentLoaded", function(){
+  var init = (location.hash || "#screen-dashboard").slice(1);
+  if (screens[init]) show(init, false);
+  else show("screen-dashboard", false);
+  setTimeout(function(){ fillRings(); }, 200);
+});
+})();
+</script>
+</body>
+</html>
