@@ -172,13 +172,13 @@ topics:
     title: Modularity
     track: architecture-design
     band: B4
-    tier: T3
+    tier: T2
     bloom_target: apply
     status: draft
     depth: 3
     prerequisites: [programming/programming-paradigms]
-    recommended: []
-    related: []
+    recommended: [architecture-design/design-patterns]
+    related: [architecture-design/design-patterns, architecture-design/architectural-styles]
   - id: cs-foundations/complexity-theory
     title: Complexity Theory
     track: cs-foundations
@@ -348,35 +348,35 @@ topics:
     title: Architectural Styles
     track: architecture-design
     band: B5
+    tier: T1
+    bloom_target: apply
+    status: draft
+    depth: 4
+    prerequisites: [architecture-design/modularity]
+    recommended: [architecture-design/system-design-process]
+    related: [architecture-design/design-patterns, architecture-design/system-design-process]
+  - id: architecture-design/caching-strategies
+    title: Caching Strategies
+    track: architecture-design
+    band: B4
+    tier: T1
+    bloom_target: apply
+    status: draft
+    depth: 4
+    prerequisites: [systems-software/http-caching]
+    recommended: []
+    related: [systems-software/http-caching]
+  - id: architecture-design/design-patterns
+    title: Design Patterns
+    track: architecture-design
+    band: B4
     tier: T2
     bloom_target: apply
     status: draft
     depth: 4
     prerequisites: [architecture-design/modularity]
     recommended: []
-    related: []
-  - id: architecture-design/caching-strategies
-    title: Caching Strategies
-    track: architecture-design
-    band: B4
-    tier: T3
-    bloom_target: apply
-    status: draft
-    depth: 4
-    prerequisites: [systems-software/http-caching]
-    recommended: []
-    related: []
-  - id: architecture-design/design-patterns
-    title: Design Patterns
-    track: architecture-design
-    band: B4
-    tier: T3
-    bloom_target: apply
-    status: draft
-    depth: 4
-    prerequisites: [architecture-design/modularity]
-    recommended: []
-    related: []
+    related: [architecture-design/architectural-styles]
   - id: cs-foundations/algorithms
     title: Algorithms
     track: cs-foundations
@@ -447,7 +447,7 @@ topics:
     title: DevOps Pipeline
     track: operations
     band: B5
-    tier: T3
+    tier: T1
     bloom_target: apply
     status: draft
     depth: 4
@@ -513,7 +513,7 @@ topics:
     title: OS Scheduling
     track: systems-software
     band: B2
-    tier: T1
+    tier: T0
     bloom_target: apply
     status: draft
     depth: 4
@@ -551,8 +551,8 @@ topics:
     status: draft
     depth: 5
     prerequisites: [architecture-design/architectural-styles, engineering-process/requirements-engineering]
-    recommended: []
-    related: []
+    recommended: [quality-testing/quality-models]
+    related: [engineering-process/software-lifecycle, quality-testing/quality-models]
   - id: frontiers/post-quantum-cryptography
     title: Post-Quantum Cryptography
     track: frontiers
@@ -579,7 +579,7 @@ topics:
     title: Observability
     track: operations
     band: B5
-    tier: T3
+    tier: T2
     bloom_target: apply
     status: draft
     depth: 5
@@ -623,18 +623,18 @@ topics:
     title: Containers & Isolation
     track: systems-software
     band: B3
-    tier: T3
+    tier: T2
     bloom_target: apply
     status: draft
     depth: 5
     prerequisites: [systems-software/virtual-memory, systems-software/os-processes]
     recommended: []
-    related: []
+    related: [systems-software/virtual-memory]
   - id: systems-software/distributed-systems-basics
     title: Distributed Systems Basics
     track: systems-software
     band: B5
-    tier: T2
+    tier: T0
     bloom_target: apply
     status: draft
     depth: 5
@@ -645,7 +645,7 @@ topics:
     title: Parallel Programming
     track: systems-software
     band: B3
-    tier: T1
+    tier: T0
     bloom_target: apply
     status: draft
     depth: 5
@@ -678,7 +678,7 @@ topics:
     title: Incident Response
     track: operations
     band: B5
-    tier: T3
+    tier: T2
     bloom_target: apply
     status: draft
     depth: 6

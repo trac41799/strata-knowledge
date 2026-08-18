@@ -53,7 +53,7 @@ topic.cs-foundations.algorithms.related: []
 
 topic.programming.programming-paradigms.title: Programming Paradigms
 topic.programming.programming-paradigms.band: B3
-topic.programming.programming-paradigms.tier: T3
+topic.programming.programming-paradigms.tier: T1
 topic.programming.programming-paradigms.bloom: apply
 topic.programming.programming-paradigms.prereqs: [cs-foundations/logic-and-proof]
 topic.programming.programming-paradigms.related: []
@@ -130,21 +130,21 @@ topic.data.distributed-databases.related: []
 
 topic.architecture-design.modularity.title: Modularity
 topic.architecture-design.modularity.band: B4
-topic.architecture-design.modularity.tier: T3
+topic.architecture-design.modularity.tier: T2
 topic.architecture-design.modularity.bloom: apply
 topic.architecture-design.modularity.prereqs: [programming/programming-paradigms]
 topic.architecture-design.modularity.related: []
 
 topic.architecture-design.design-patterns.title: Design Patterns
 topic.architecture-design.design-patterns.band: B4
-topic.architecture-design.design-patterns.tier: T3
+topic.architecture-design.design-patterns.tier: T2
 topic.architecture-design.design-patterns.bloom: apply
 topic.architecture-design.design-patterns.prereqs: [architecture-design/modularity]
 topic.architecture-design.design-patterns.related: []
 
 topic.architecture-design.architectural-styles.title: Architectural Styles
 topic.architecture-design.architectural-styles.band: B5
-topic.architecture-design.architectural-styles.tier: T2
+topic.architecture-design.architectural-styles.tier: T1
 topic.architecture-design.architectural-styles.bloom: apply
 topic.architecture-design.architectural-styles.prereqs: [architecture-design/modularity]
 topic.architecture-design.architectural-styles.related: []
@@ -158,7 +158,7 @@ topic.architecture-design.system-design-process.related: []
 
 topic.architecture-design.caching-strategies.title: Caching Strategies
 topic.architecture-design.caching-strategies.band: B4
-topic.architecture-design.caching-strategies.tier: T3
+topic.architecture-design.caching-strategies.tier: T1
 topic.architecture-design.caching-strategies.bloom: apply
 topic.architecture-design.caching-strategies.prereqs: [systems-software/http-caching]
 topic.architecture-design.caching-strategies.related: []
@@ -277,21 +277,21 @@ topic.systems-software.virtual-memory.related: [hardware/cache-coherence, system
 
 topic.systems-software.os-scheduling.title: OS Scheduling
 topic.systems-software.os-scheduling.band: B2
-topic.systems-software.os-scheduling.tier: T1
+topic.systems-software.os-scheduling.tier: T0
 topic.systems-software.os-scheduling.bloom: apply
 topic.systems-software.os-scheduling.prereqs: [systems-software/os-processes]
 topic.systems-software.os-scheduling.related: []
 
 topic.systems-software.containers-isolation.title: Containers & Isolation
 topic.systems-software.containers-isolation.band: B3
-topic.systems-software.containers-isolation.tier: T3
+topic.systems-software.containers-isolation.tier: T2
 topic.systems-software.containers-isolation.bloom: apply
 topic.systems-software.containers-isolation.prereqs: [systems-software/virtual-memory, systems-software/os-processes]
 topic.systems-software.containers-isolation.related: []
 
 topic.systems-software.distributed-systems-basics.title: Distributed Systems Basics
 topic.systems-software.distributed-systems-basics.band: B5
-topic.systems-software.distributed-systems-basics.tier: T2
+topic.systems-software.distributed-systems-basics.tier: T0
 topic.systems-software.distributed-systems-basics.bloom: apply
 topic.systems-software.distributed-systems-basics.prereqs: [systems-software/networking-basics, programming/concurrency-primitives]
 topic.systems-software.distributed-systems-basics.related: []
@@ -305,7 +305,7 @@ topic.systems-software.distributed-consensus.related: []
 
 topic.systems-software.parallel-programming.title: Parallel Programming
 topic.systems-software.parallel-programming.band: B3
-topic.systems-software.parallel-programming.tier: T1
+topic.systems-software.parallel-programming.tier: T0
 topic.systems-software.parallel-programming.bloom: apply
 topic.systems-software.parallel-programming.prereqs: [programming/concurrency-primitives, hardware/cache-coherence]
 topic.systems-software.parallel-programming.related: []
@@ -396,21 +396,21 @@ topic.engineering-process.professional-ethics.related: []
 
 topic.operations.devops-pipeline.title: DevOps Pipeline
 topic.operations.devops-pipeline.band: B5
-topic.operations.devops-pipeline.tier: T3
+topic.operations.devops-pipeline.tier: T1
 topic.operations.devops-pipeline.bloom: apply
 topic.operations.devops-pipeline.prereqs: [engineering-process/configuration-management, engineering-process/software-lifecycle]
 topic.operations.devops-pipeline.related: []
 
 topic.operations.observability.title: Observability
 topic.operations.observability.band: B5
-topic.operations.observability.tier: T3
+topic.operations.observability.tier: T2
 topic.operations.observability.bloom: apply
 topic.operations.observability.prereqs: [operations/devops-pipeline]
 topic.operations.observability.related: []
 
 topic.operations.incident-response.title: Incident Response
 topic.operations.incident-response.band: B5
-topic.operations.incident-response.tier: T3
+topic.operations.incident-response.tier: T2
 topic.operations.incident-response.bloom: apply
 topic.operations.incident-response.prereqs: [operations/observability]
 topic.operations.incident-response.related: []

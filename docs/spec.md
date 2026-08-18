@@ -266,7 +266,10 @@ Tier is assigned by **Evidence & Fact-Check agents** (L2), not by authors.
 **Topic-level `tier` convention (v1.1):** a topic's tier is the *strongest* tier among its
 claims — an upper bound on the confidence available in that pack. Individual claims carry
 authoritative per-claim tiers; learner-facing displays and filters may use either, but must
-state which.
+state which. The rule applies uniformly: standard-membership/framing claims (e.g., "the
+SWEBOK design KA covers X" [T2]) count, so a T3 practice pack citing a T2 standard for
+membership is a T2 pack. When drafting raises a pack's strongest claim above its scaffolded
+tier, the tier is raised (all three files) and the inventory is synced.
 
 ### 6.4 Learner levels (placement protocol)
 
