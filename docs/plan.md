@@ -102,6 +102,7 @@ Execution loop per wave (L0 dispatches; all artifacts through workspace/claims o
 Wave 1 priority (fills coverage + high learner demand): `cs-foundations` core units, `programming` fundamentals, `data` core, `quality-testing` core, `security` core.
 **Wave 1 status: COMPLETED 2026-08-18** — 14 packs drafted by 7 L1 agents, L2 review by `deepseek/deepseek-v4-pro` (report: `docs/reviews/l2-wave1-review-2026-08-18.md`; verdicts: 11 pass, 3 pass-with-fixes, 0 fail), all fixes applied (critical R(3,3) model-answer rewrite, 29148 characteristics correction, NAT claim record, single-tier-tag convention + lint rule, ISO 12207:2026 supersession note, Peano duplicate merge), paradigms tier raise T3→T1 validated, published. Coverage 16/311 (5%) — wave 2 next.
 Wave 2: `systems-software` core (OS/networking/distributed), `architecture-design` core, `operations` core.
+**Wave 2 status: COMPLETED 2026-08-18** — 14 packs (5 systems, 5 architecture, 4 operations) drafted by 7 L1 agents, L2 review by `deepseek/deepseek-v4-pro` (report: `docs/reviews/l2-wave2-review-2026-08-18.md`; 3 pass, 11 pass-with-fixes, 0 fail), fixes applied (bijection gaps closed, 8 tier raises under the now-uniform strongest-tier rule, SRE-book duplicate merged, DORA numbers verified, technical-debt record re-typed), published. Published total: 33 packs. Coverage 16/311 (5%).
 Wave 3: `engineering-process` core (CMMI/12207), `hardware` core, `ai-ml` core, first `frontiers` T4 packs.
 
 ---
