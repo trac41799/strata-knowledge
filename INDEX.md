@@ -37,11 +37,11 @@ Track order: `cs-foundations`, `programming`, `data`, `architecture-design`, `qu
 
 | id | title | band | tier | bloom | status |
 |---|---|---|---|---|---|
-| `data/distributed-databases` | Distributed Databases | B5 | T2 | apply | draft |
-| `data/relational-model` | Relational Model | B4 | T2 | apply | draft |
+| `data/distributed-databases` | Distributed Databases | B5 | T0 | apply | draft |
+| `data/relational-model` | Relational Model | B4 | T0 | apply | draft |
 | `data/sql-and-query-optimization` | SQL & Query Optimization | B4 | T1 | apply | draft |
 | `data/transactions-and-isolation` | Transactions & Isolation | B4 | T0 | apply | draft |
-| `data/indexing-and-storage` | Indexing & Storage | B3 | T2 | apply | draft |
+| `data/indexing-and-storage` | Indexing & Storage | B3 | T0 | apply | draft |
 
 ## architecture-design
 
@@ -60,8 +60,8 @@ Track order: `cs-foundations`, `programming`, `data`, `architecture-design`, `qu
 | `quality-testing/quality-models` | Quality Models | B5 | T2 | understand | published |
 | `quality-testing/code-review` | Code Review | B4 | T1 | apply | draft |
 | `quality-testing/performance-engineering` | Performance Engineering | B4 | T1 | apply | draft |
-| `quality-testing/software-testing-basics` | Software Testing Basics | B4 | T2 | apply | draft |
-| `quality-testing/test-automation` | Test Automation | B4 | T3 | apply | draft |
+| `quality-testing/software-testing-basics` | Software Testing Basics | B4 | T1 | apply | draft |
+| `quality-testing/test-automation` | Test Automation | B4 | T1 | apply | draft |
 | `quality-testing/test-design-techniques` | Test Design Techniques | B4 | T1 | apply | draft |
 
 ## security
@@ -72,7 +72,7 @@ Track order: `cs-foundations`, `programming`, `data`, `architecture-design`, `qu
 | `security/threat-modeling` | Threat Modeling | B5 | T2 | apply | draft |
 | `security/authentication-authorization` | Authentication & Authorization | B4 | T2 | apply | draft |
 | `security/web-security` | Web Security | B4 | T2 | apply | draft |
-| `security/cryptography-basics` | Cryptography Basics | B2 | T0 | apply | draft |
+| `security/cryptography-basics` | Cryptography Basics | B2 | T2 | apply | draft |
 
 ## systems-software
 

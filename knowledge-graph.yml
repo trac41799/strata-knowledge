@@ -205,7 +205,7 @@ topics:
     title: Relational Model
     track: data
     band: B4
-    tier: T2
+    tier: T0
     bloom_target: apply
     status: draft
     depth: 3
@@ -304,13 +304,13 @@ topics:
     title: Software Testing Basics
     track: quality-testing
     band: B4
-    tier: T2
+    tier: T1
     bloom_target: apply
     status: draft
     depth: 3
     prerequisites: [programming/programming-paradigms]
     recommended: []
-    related: []
+    related: [quality-testing/test-design-techniques, quality-testing/test-automation, quality-testing/code-review, quality-testing/quality-models]
   - id: systems-software/http-caching
     title: HTTP Caching
     track: systems-software
@@ -343,7 +343,7 @@ topics:
     depth: 4
     prerequisites: [cs-foundations/probability-statistics]
     recommended: []
-    related: []
+    related: [ai-ml/supervised-learning, ai-ml/neural-networks]
   - id: architecture-design/architectural-styles
     title: Architectural Styles
     track: architecture-design
@@ -392,13 +392,13 @@ topics:
     title: Indexing & Storage
     track: data
     band: B3
-    tier: T2
+    tier: T0
     bloom_target: apply
     status: draft
     depth: 4
     prerequisites: [data/relational-model, hardware/memory-hierarchy]
-    recommended: []
-    related: []
+    recommended: [data/transactions-and-isolation]
+    related: [data/sql-and-query-optimization, hardware/storage-devices, data/distributed-databases]
   - id: data/sql-and-query-optimization
     title: SQL & Query Optimization
     track: data
@@ -420,7 +420,7 @@ topics:
     depth: 4
     prerequisites: [data/relational-model]
     recommended: []
-    related: []
+    related: [systems-software/distributed-consensus, data/distributed-databases]
   - id: frontiers/formal-verification-scale
     title: Formal Verification at Scale
     track: frontiers
@@ -496,19 +496,19 @@ topics:
     status: draft
     depth: 4
     prerequisites: [quality-testing/software-testing-basics]
-    recommended: []
-    related: []
+    recommended: [quality-testing/test-automation]
+    related: [quality-testing/test-automation, quality-testing/code-review, quality-testing/quality-models]
   - id: security/cryptography-basics
     title: Cryptography Basics
     track: security
     band: B2
-    tier: T0
+    tier: T2
     bloom_target: apply
     status: draft
     depth: 4
     prerequisites: [cs-foundations/probability-statistics, cs-foundations/logic-and-proof]
-    recommended: []
-    related: []
+    recommended: [security/authentication-authorization]
+    related: [frontiers/post-quantum-cryptography, security/threat-modeling]
   - id: systems-software/os-scheduling
     title: OS Scheduling
     track: systems-software
@@ -541,7 +541,7 @@ topics:
     depth: 5
     prerequisites: [ai-ml/ml-fundamentals]
     recommended: []
-    related: []
+    related: [ai-ml/neural-networks]
   - id: architecture-design/system-design-process
     title: System Design Process
     track: architecture-design
@@ -601,13 +601,13 @@ topics:
     title: Test Automation
     track: quality-testing
     band: B4
-    tier: T3
+    tier: T1
     bloom_target: apply
     status: draft
     depth: 5
     prerequisites: [quality-testing/test-design-techniques]
-    recommended: []
-    related: []
+    recommended: [operations/devops-pipeline]
+    related: [operations/devops-pipeline, quality-testing/performance-engineering, quality-testing/code-review]
   - id: security/threat-modeling
     title: Threat Modeling
     track: security
@@ -617,8 +617,8 @@ topics:
     status: draft
     depth: 5
     prerequisites: [architecture-design/architectural-styles, systems-software/networking-basics]
-    recommended: []
-    related: []
+    recommended: [security/secure-sdlc]
+    related: [security/cryptography-basics, security/web-security]
   - id: systems-software/containers-isolation
     title: Containers & Isolation
     track: systems-software
@@ -662,18 +662,18 @@ topics:
     depth: 6
     prerequisites: [ai-ml/supervised-learning]
     recommended: []
-    related: []
+    related: [cs-foundations/probability-statistics]
   - id: data/distributed-databases
     title: Distributed Databases
     track: data
     band: B5
-    tier: T2
+    tier: T0
     bloom_target: apply
     status: draft
     depth: 6
     prerequisites: [data/transactions-and-isolation, systems-software/distributed-systems-basics]
     recommended: []
-    related: []
+    related: [systems-software/distributed-consensus, data/sql-and-query-optimization, data/indexing-and-storage]
   - id: operations/incident-response
     title: Incident Response
     track: operations
@@ -694,8 +694,8 @@ topics:
     status: draft
     depth: 6
     prerequisites: [security/threat-modeling, security/cryptography-basics]
-    recommended: []
-    related: []
+    recommended: [security/web-security]
+    related: [security/web-security, security/secure-sdlc]
   - id: security/secure-sdlc
     title: Secure SDLC
     track: security
@@ -706,7 +706,7 @@ topics:
     depth: 6
     prerequisites: [security/threat-modeling, engineering-process/requirements-engineering]
     recommended: []
-    related: []
+    related: [security/web-security, security/authentication-authorization, security/cryptography-basics]
   - id: systems-software/distributed-consensus
     title: Distributed Consensus
     track: systems-software
@@ -739,7 +739,7 @@ topics:
     depth: 7
     prerequisites: [security/authentication-authorization, systems-software/http-basics]
     recommended: []
-    related: []
+    related: [security/threat-modeling, security/secure-sdlc]
   - id: frontiers/agentic-systems
     title: Agentic Systems
     track: frontiers

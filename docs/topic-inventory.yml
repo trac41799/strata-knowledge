@@ -95,7 +95,7 @@ topic.programming.compiler-pipeline.related: []
 
 topic.data.relational-model.title: Relational Model
 topic.data.relational-model.band: B4
-topic.data.relational-model.tier: T2
+topic.data.relational-model.tier: T0
 topic.data.relational-model.bloom: apply
 topic.data.relational-model.prereqs: [cs-foundations/discrete-mathematics, cs-foundations/logic-and-proof]
 topic.data.relational-model.related: []
@@ -116,7 +116,7 @@ topic.data.transactions-and-isolation.related: []
 
 topic.data.indexing-and-storage.title: Indexing & Storage
 topic.data.indexing-and-storage.band: B3
-topic.data.indexing-and-storage.tier: T2
+topic.data.indexing-and-storage.tier: T0
 topic.data.indexing-and-storage.bloom: apply
 topic.data.indexing-and-storage.prereqs: [data/relational-model, hardware/memory-hierarchy]
 topic.data.indexing-and-storage.related: []
@@ -186,7 +186,7 @@ topic.quality-testing.test-design-techniques.related: []
 
 topic.quality-testing.test-automation.title: Test Automation
 topic.quality-testing.test-automation.band: B4
-topic.quality-testing.test-automation.tier: T3
+topic.quality-testing.test-automation.tier: T1
 topic.quality-testing.test-automation.bloom: apply
 topic.quality-testing.test-automation.prereqs: [quality-testing/test-design-techniques]
 topic.quality-testing.test-automation.related: []
@@ -207,7 +207,7 @@ topic.quality-testing.performance-engineering.related: []
 
 topic.security.cryptography-basics.title: Cryptography Basics
 topic.security.cryptography-basics.band: B2
-topic.security.cryptography-basics.tier: T0
+topic.security.cryptography-basics.tier: T2
 topic.security.cryptography-basics.bloom: apply
 topic.security.cryptography-basics.prereqs: [cs-foundations/probability-statistics, cs-foundations/logic-and-proof]
 topic.security.cryptography-basics.related: []
