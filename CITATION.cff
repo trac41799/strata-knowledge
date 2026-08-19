@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use Strata in your learning or research, please cite it as:"
+title: "Strata — Software Engineering Knowledge & Agent Context Layer"
+abstract: >-
+  Standards-grounded, evidence-tiered knowledge base for software engineering
+  (SWEBOK v4.0, CS2023, ISO/IEC 25010:2023, ISO/IEC/IEEE 12207, CMMI V3.0) with a
+  progressive-disclosure agent harness for validating understanding, spaced-retrieval
+  learning, and a local-first journey layer.
+keywords:
+  - software engineering
+  - knowledge base
+  - agent harness
+  - evidence-based learning
+  - spaced repetition
+  - system design
+license: CC-BY-4.0
+repository-code: "https://github.com/trac41799/strata-knowledge"
+date-released: "2026-08-18"
+preferred-citation:
+  type: software
+  title: "Strata — Software Engineering Knowledge & Agent Context Layer"
+  repository: "https://github.com/trac41799/strata-knowledge"
+  version: 0.3.0
+  year: 2026
