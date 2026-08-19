@@ -1,4 +1,7 @@
 <p align="center">
+  <img alt="Strata" src="app-icon.png" width="128" height="128">
+</p>
+<p align="center">
   <strong>Strata</strong>
 </p>
 <p align="center">
