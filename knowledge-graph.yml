@@ -207,7 +207,7 @@ topics:
     band: B4
     tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 3
     prerequisites: [cs-foundations/discrete-mathematics, cs-foundations/logic-and-proof]
     recommended: []
@@ -306,7 +306,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 3
     prerequisites: [programming/programming-paradigms]
     recommended: []
@@ -339,7 +339,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [cs-foundations/probability-statistics]
     recommended: []
@@ -394,7 +394,7 @@ topics:
     band: B3
     tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [data/relational-model, hardware/memory-hierarchy]
     recommended: [data/transactions-and-isolation]
@@ -405,7 +405,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [data/relational-model]
     recommended: []
@@ -416,7 +416,7 @@ topics:
     band: B4
     tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [data/relational-model]
     recommended: []
@@ -427,7 +427,7 @@ topics:
     band: B5
     tier: T4
     bloom_target: understand
-    status: draft
+    status: published
     depth: 4
     prerequisites: [cs-foundations/computability, cs-foundations/complexity-theory]
     recommended: []
@@ -482,7 +482,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [quality-testing/software-testing-basics]
     recommended: []
@@ -493,7 +493,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [quality-testing/software-testing-basics]
     recommended: [quality-testing/test-automation]
@@ -504,7 +504,7 @@ topics:
     band: B2
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [cs-foundations/probability-statistics, cs-foundations/logic-and-proof]
     recommended: [security/authentication-authorization]
@@ -537,7 +537,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [ai-ml/ml-fundamentals]
     recommended: []
@@ -559,7 +559,7 @@ topics:
     band: B2
     tier: T4
     bloom_target: understand
-    status: draft
+    status: published
     depth: 5
     prerequisites: [security/cryptography-basics]
     recommended: []
@@ -570,7 +570,7 @@ topics:
     band: B5
     tier: T4
     bloom_target: understand
-    status: draft
+    status: published
     depth: 5
     prerequisites: [security/cryptography-basics]
     recommended: []
@@ -592,7 +592,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [quality-testing/quality-models, systems-software/os-scheduling]
     recommended: []
@@ -603,7 +603,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [quality-testing/test-design-techniques]
     recommended: [operations/devops-pipeline]
@@ -614,7 +614,7 @@ topics:
     band: B5
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [architecture-design/architectural-styles, systems-software/networking-basics]
     recommended: [security/secure-sdlc]
@@ -658,7 +658,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 6
     prerequisites: [ai-ml/supervised-learning]
     recommended: []
@@ -669,7 +669,7 @@ topics:
     band: B5
     tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 6
     prerequisites: [data/transactions-and-isolation, systems-software/distributed-systems-basics]
     recommended: []
@@ -691,7 +691,7 @@ topics:
     band: B4
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 6
     prerequisites: [security/threat-modeling, security/cryptography-basics]
     recommended: [security/web-security]
@@ -702,7 +702,7 @@ topics:
     band: B5
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 6
     prerequisites: [security/threat-modeling, engineering-process/requirements-engineering]
     recommended: []
@@ -724,7 +724,7 @@ topics:
     band: B5
     tier: T4
     bloom_target: understand
-    status: draft
+    status: published
     depth: 7
     prerequisites: [ai-ml/neural-networks]
     recommended: []
@@ -735,7 +735,7 @@ topics:
     band: B4
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 7
     prerequisites: [security/authentication-authorization, systems-software/http-basics]
     recommended: []
@@ -746,7 +746,7 @@ topics:
     band: B5
     tier: T4
     bloom_target: apply
-    status: draft
+    status: published
     depth: 8
     prerequisites: [ai-ml/llm-architectures]
     recommended: []

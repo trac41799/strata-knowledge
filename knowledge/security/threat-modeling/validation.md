@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [architecture-design/architectural-styles, systems-software/networking-basics]
 related: [security/cryptography-basics, security/web-security]
 recommended: [security/secure-sdlc]
-status: draft
+status: published
 schema-version: 1
 owner: l1-threat-modeling
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0017, S-0019, S-0237, S-0238, S-0239]
 ---

@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [security/authentication-authorization, systems-software/http-basics]
 related: [security/threat-modeling, security/secure-sdlc]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-web-security
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0017, S-0019, S-0023, S-0247, S-0248, S-0249]
 ---

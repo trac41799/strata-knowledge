@@ -8,10 +8,10 @@ bloom_target: understand
 prerequisites: [security/cryptography-basics]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-zero-knowledge-proofs
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0292, S-0293, S-0294, S-0233]
 review_after: 2027-02-17

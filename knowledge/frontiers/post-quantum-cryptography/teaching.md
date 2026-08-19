@@ -8,10 +8,10 @@ bloom_target: understand
 prerequisites: [security/cryptography-basics]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-post-quantum-cryptography
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0287, S-0288, S-0291]
 review_after: 2027-02-17

@@ -8,10 +8,10 @@ bloom_target: understand
 prerequisites: [ai-ml/neural-networks]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-llm-architectures
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0269, S-0273, S-0274, S-0278]
 review_after: 2027-02-17

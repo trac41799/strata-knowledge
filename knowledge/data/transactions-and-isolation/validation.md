@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [data/relational-model]
 related: [systems-software/distributed-consensus, data/distributed-databases]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-transactions-and-isolation
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0192, S-0193, S-0194, S-0199, S-0203, S-0034]
 ---

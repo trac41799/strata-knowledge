@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [data/transactions-and-isolation, systems-software/distributed-systems-basics]
 related: [systems-software/distributed-consensus, data/sql-and-query-optimization, data/indexing-and-storage]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-distributed-databases
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0018, S-0034, S-0035, S-0128, S-0202, S-0203, S-0204]
 ---

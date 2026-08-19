@@ -8,10 +8,10 @@ bloom_target: understand
 prerequisites: [cs-foundations/computability, cs-foundations/complexity-theory]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-formal-verification-scale
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0282, S-0283, S-0284, S-0058]
 review_after: 2027-02-17

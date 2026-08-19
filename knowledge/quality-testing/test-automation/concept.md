@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [quality-testing/test-design-techniques]
 related: [operations/devops-pipeline, quality-testing/performance-engineering, quality-testing/code-review]
 recommended: [operations/devops-pipeline]
-status: draft
+status: published
 schema-version: 1
 owner: l1-test-automation
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0017, S-0207, S-0217, S-0218, S-0219, S-0220]
 ---

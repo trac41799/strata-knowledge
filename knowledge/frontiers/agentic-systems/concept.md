@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [ai-ml/llm-architectures]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-agentic-systems
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0277, S-0278, S-0279, S-0280]
 review_after: 2027-02-17

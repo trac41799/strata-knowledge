@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [data/relational-model, hardware/memory-hierarchy]
 related: [data/sql-and-query-optimization, hardware/storage-devices, data/distributed-databases]
 recommended: [data/transactions-and-isolation]
-status: draft
+status: published
 schema-version: 1
 owner: l1-indexing-and-storage
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0197, S-0198, S-0199, S-0128, S-0200]
 ---

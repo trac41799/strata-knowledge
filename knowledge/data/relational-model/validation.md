@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [cs-foundations/discrete-mathematics, cs-foundations/logic-and-proof]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-relational-model
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0182, S-0183, S-0184, S-0199, S-0194, S-0018]
 ---

@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [quality-testing/quality-models, systems-software/os-scheduling]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-performance-engineering
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0017, S-0019, S-0110, S-0227, S-0228, S-0229]
 ---

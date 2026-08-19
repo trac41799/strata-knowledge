@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [data/relational-model]
 related: []
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-sql-and-query-optimization
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0187, S-0188, S-0189, S-0199, S-0197, S-0194]
 ---

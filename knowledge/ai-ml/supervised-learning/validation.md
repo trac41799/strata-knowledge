@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [ai-ml/ml-fundamentals]
 related: [ai-ml/neural-networks]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-supervised-learning
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0257, S-0259, S-0262, S-0263, S-0264, S-0268]
 ---

@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [cs-foundations/probability-statistics, cs-foundations/logic-and-proof]
 related: [frontiers/post-quantum-cryptography, security/threat-modeling]
 recommended: [security/authentication-authorization]
-status: draft
+status: published
 schema-version: 1
 owner: l1-cryptography-basics
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0017, S-0019, S-0232, S-0233, S-0234]
 ---

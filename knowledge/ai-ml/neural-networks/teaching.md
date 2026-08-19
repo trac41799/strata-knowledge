@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [ai-ml/supervised-learning]
 related: [cs-foundations/probability-statistics]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-neural-networks
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0257, S-0267, S-0268, S-0269]
 ---

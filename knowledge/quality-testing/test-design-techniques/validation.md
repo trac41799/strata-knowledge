@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [quality-testing/software-testing-basics]
 related: [quality-testing/test-automation, quality-testing/code-review, quality-testing/quality-models]
 recommended: [quality-testing/test-automation]
-status: draft
+status: published
 schema-version: 1
 owner: l1-test-design-techniques
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0017, S-0208, S-0212, S-0213, S-0214]
 ---

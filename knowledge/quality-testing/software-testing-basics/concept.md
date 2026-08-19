@@ -8,10 +8,10 @@ bloom_target: apply
 prerequisites: [programming/programming-paradigms]
 related: [quality-testing/test-design-techniques, quality-testing/test-automation, quality-testing/code-review, quality-testing/quality-models]
 recommended: []
-status: draft
+status: published
 schema-version: 1
 owner: l1-software-testing-basics
-reviewed-by: []
+reviewed-by: [l2-deepseek-v4-pro]
 updated: 2026-08-18
 sources: [S-0017, S-0139, S-0207, S-0208, S-0209]
 ---
