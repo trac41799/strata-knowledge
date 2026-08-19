@@ -100,16 +100,22 @@ and event log — gitignored, schema-validated by
 
 ## ⚡ Quick Start
 
-# 1. Clone and point your coding agent at the repo (as its working directory)
-# 2. Paste a prompt from `harness/prompts/` — e.g. validate a claim:
-#    "Validate my understanding of systems-software/http-caching: 'no-cache means
-#     the response must not be stored.' Follow AGENTS.md — verdict, tiers, records,
-#     corrected model, then schedule my review (ask first)."
-# 3. Learn a topic: `harness/prompts/teach-topic.md` · `quiz-me.md` · `explain-back.md`
-# 4. Plan a curriculum: `harness/prompts/plan-curriculum.md` (topological path from
-#    your skill matrix to any target topic)
-# 5. Review your work: `harness/prompts/review-project.md` against standards-mapped rubrics
-# 6. Track it all: every session is logged to `.journey/` per the committed schemas
+1. **Clone and point your coding agent at the repo** (as its working directory)
+   ```bash
+   git clone https://github.com/trac41799/strata-knowledge.git
+   cd strata-knowledge
+   ```
+2. **Paste a prompt from [`harness/prompts/`](harness/prompts/)** — e.g. validate a claim:
+   ```
+   I want to validate my understanding of systems-software/http-caching.
+   My claim: "Cache-Control: no-cache means the response must not be stored."
+   Follow AGENTS.md and give me a verdict with tiers, evidence records, and the
+   corrected model. Schedule my spaced review and log the session (ask first).
+   ```
+3. **Learn a topic** — [`teach-topic.md`](harness/prompts/teach-topic.md) · [`quiz-me.md`](harness/prompts/quiz-me.md) · [`explain-back.md`](harness/prompts/explain-back.md)
+4. **Plan a curriculum** — [`plan-curriculum.md`](harness/prompts/plan-curriculum.md) (topological path from your skill matrix to any target topic)
+5. **Review your work** — [`review-project.md`](harness/prompts/review-project.md) against standards-mapped rubrics
+6. **Track it all** — every session is logged to `.journey/` per the committed schemas
 
 ## 🧩 Supported Agents
 
