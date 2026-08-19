@@ -174,7 +174,7 @@ topics:
     band: B4
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 3
     prerequisites: [programming/programming-paradigms]
     recommended: [architecture-design/design-patterns]
@@ -273,7 +273,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 3
     prerequisites: [engineering-process/software-lifecycle]
     recommended: []
@@ -328,7 +328,7 @@ topics:
     band: B2
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 3
     prerequisites: [programming/memory-model-and-pointers]
     recommended: []
@@ -350,7 +350,7 @@ topics:
     band: B5
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [architecture-design/modularity]
     recommended: [architecture-design/system-design-process]
@@ -361,7 +361,7 @@ topics:
     band: B4
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [systems-software/http-caching]
     recommended: []
@@ -372,7 +372,7 @@ topics:
     band: B4
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [architecture-design/modularity]
     recommended: []
@@ -449,7 +449,7 @@ topics:
     band: B5
     tier: T1
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [engineering-process/configuration-management, engineering-process/software-lifecycle]
     recommended: []
@@ -515,7 +515,7 @@ topics:
     band: B2
     tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 4
     prerequisites: [systems-software/os-processes]
     recommended: []
@@ -548,7 +548,7 @@ topics:
     band: B5
     tier: T2
     bloom_target: analyze
-    status: draft
+    status: published
     depth: 5
     prerequisites: [architecture-design/architectural-styles, engineering-process/requirements-engineering]
     recommended: [quality-testing/quality-models]
@@ -581,7 +581,7 @@ topics:
     band: B5
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [operations/devops-pipeline]
     recommended: []
@@ -625,7 +625,7 @@ topics:
     band: B3
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [systems-software/virtual-memory, systems-software/os-processes]
     recommended: []
@@ -636,7 +636,7 @@ topics:
     band: B5
     tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [systems-software/networking-basics, programming/concurrency-primitives]
     recommended: []
@@ -647,7 +647,7 @@ topics:
     band: B3
     tier: T0
     bloom_target: apply
-    status: draft
+    status: published
     depth: 5
     prerequisites: [programming/concurrency-primitives, hardware/cache-coherence]
     recommended: []
@@ -680,7 +680,7 @@ topics:
     band: B5
     tier: T2
     bloom_target: apply
-    status: draft
+    status: published
     depth: 6
     prerequisites: [operations/observability]
     recommended: []

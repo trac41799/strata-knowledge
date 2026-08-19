@@ -463,7 +463,7 @@ Mandatory behaviors for any coding agent pointed at this repo:
 
 ### 9.3 Prompt library (`harness/prompts/`)
 
-Copy-paste recipes making the harness agent-agnostic:
+Copy-paste recipes making the harness agent-agnostic (all 11 shipped as of 2026-08-18):
 
 ```
 validate-claim.md    teach-topic.md      quiz-me.md         plan-curriculum.md
